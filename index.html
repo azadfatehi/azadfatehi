@@ -26,39 +26,17 @@
             background: rgba(0, 0, 0, 0.55); z-index: -1;
         }
         
-        /* دکمه تنظیمات در بالاترین نقطه صفحه، گوشه سمت چپ */
+        /* کلید تنظیمات در بالاترین نقطه صفحه، گوشه سمت چپ */
         #gearBtn {
             position: absolute; top: 20px; left: 20px;
             background: rgba(33, 150, 243, 0.85); border: none; border-radius: 50%; 
-            width: 48px; height: 52px; font-size: 22px; color: white; cursor: pointer; 
+            width: 50px; height: 50px; font-size: 22px; color: white; cursor: pointer; 
             display: flex; align-items: center; justify-content: center; 
             box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 25;
         }
 
-        /* کادر ویدیوی دمو بازی */
-        .promo-banner {
-            width: 100%; max-width: 340px; height: 160px; border: 3px solid #ffeb3b;
-            border-radius: 15px; margin-bottom: 30px; overflow: hidden; position: relative;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5); background: #000;
-        }
-        .promo-slider {
-            display: flex; width: 300%; height: 100%;
-            animation: autoScrollVideo 12s infinite linear;
-        }
-        .promo-slider img { width: 33.33%; height: 100%; object-fit: cover; }
-        
-        @keyframes autoScrollVideo {
-            0% { transform: translateX(0); }
-            30% { transform: translateX(0); }
-            33% { transform: translateX(33.33%); }
-            63% { transform: translateX(33.33%); }
-            66% { transform: translateX(66.66%); }
-            96% { transform: translateX(66.66%); }
-            100% { transform: translateX(0); }
-        }
-
         #startBtn { 
-            width: 100%; max-width: 340px; padding: 14px 20px; font-size: 19px; font-weight: bold;
+            width: 100%; max-width: 340px; padding: 16px 20px; font-size: 20px; font-weight: bold;
             background: #4caf50; color: white; border: none; border-radius: 25px; cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.4); text-align: center;
         }
@@ -106,6 +84,7 @@
         
         .count-preview { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 2px 4px #000; }
 
+        /* بوم بازی عمودی */
         #canvas { 
             border: 4px solid white; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none; touch-action: none; 
             image-rendering: crisp-edges; background-color: #222;
@@ -116,21 +95,9 @@
 </head>
 <body>
 
-    <!-- منوی اصلی بازی -->
+    <!-- منوی اصلی بازی بدون دمو -->
     <div id="setupMenu">
-        <!-- کلید تنظیمات در گوشه بالا سمت چپ -->
         <button id="gearBtn">⚙️</button>
-        
-        <!-- کادر اسکرول دمو بازی -->
-        <div class="promo-banner">
-            <div class="promo-slider">
-                <img src="grass.jpg" alt="دمو ۱">
-                <img src="asphalt.jpg" alt="دمو ۲">
-                <img src="dirt.jpg" alt="دمو ۳">
-            </div>
-        </div>
-
-        <!-- دکمه شروع خالص -->
         <button id="startBtn">شروع</button>
     </div>
 
@@ -141,7 +108,6 @@
         <h3 style="margin-top: 0; color: #ffeb3b;">تنظیمات مسابقه</h3>
         
         <div class="menu-row">
-            <label>انتخاب زمین بازی (ورق بزنید ↔️):</label>
             <div class="scroll-container" id="groundGrid">
                 <div class="scroll-item active" data-val="grass"><canvas id="pre_grass"></canvas></div>
                 <div class="scroll-item" data-val="carpet"><canvas id="pre_carpet"></canvas></div>
@@ -152,7 +118,6 @@
         </div>
 
         <div class="menu-row">
-            <label>شکل و تصویر تیله هدف:</label>
             <div class="grid-select" id="targetGrid">
                 <div class="grid-item active" data-val="1.png"><canvas id="pre_t_red"></canvas></div>
                 <div class="grid-item" data-val="2.png"><canvas id="pre_t_green"></canvas></div>
@@ -161,7 +126,6 @@
         </div>
 
         <div class="menu-row">
-            <label>تعداد تیله‌های داخل کادر:</label>
             <div class="grid-select" id="countGrid">
                 <div class="grid-item active" data-val="3"><div class="count-preview">3</div></div>
                 <div class="grid-item" data-val="5"><div class="count-preview">5</div></div>
@@ -204,7 +168,7 @@
         let dragEnd = { x: 0, y: 0 };
         let windX = 0; 
 
-        // کادر وسط زمین (ابعاد فیکس شده برای تناسب بهتر با نمای عمودی)
+        // کادر بسته وسط زمین (ابعاد فیکس شده برای فضا و نمای عمودی)
         const box = { x: 40, y: 70, w: 320, h: 220 };
         let player = { x: 200, y: 440, r: 24, vx: 0, vy: 0 }; 
         let targets = [];
@@ -235,7 +199,6 @@
             canvas.width = 400;
             canvas.height = 560;
             
-            // قرار دادن تیله بزرگ درست در کف زمین برای باز کردن فضای شلیک چشمی
             player.x = canvas.width / 2;
             player.y = canvas.height - 50;
 
@@ -296,15 +259,14 @@
 
         window.addEventListener("DOMContentLoaded", () => {
             generateMenuPreviews();
-            setupGridSelection("groundGrid", true, (val) => { selectedGroundVal = val; startBtn.innerText = "شروع"; });
-            setupGridSelection("targetGrid", false, (val) => { selectedTargetSrc = val; startBtn.innerText = "شروع"; });
-            setupGridSelection("countGrid", false, (val) => { selectedCountVal = parseInt(val); startBtn.innerText = "شروع"; });
+            setupGridSelection("groundGrid", true, (val) => { selectedGroundVal = val; });
+            setupGridSelection("targetGrid", false, (val) => { selectedTargetSrc = val; });
+            setupGridSelection("countGrid", false, (val) => { selectedCountVal = parseInt(val); });
         });
 
         startBtn.addEventListener("click", () => {
-            // مکانیزم شیک انتخاب کاملاً تصادفی در صورت عدم دستکاری تنظیمات دستی
-            if (startBtn.innerText === "شروع" && !document.querySelector('.drawer').classList.contains('manually-changed')) {
-                // اگر دکمه مستقیما فشرده شد، یک حالت رندم اعمال کن
+            // مکانیزم اصلاح شده و بدون خطای انتخاب تصادفی در صورت عدم تغییر دستی تنظیمات
+            if (!settingsDrawer.classList.contains('manually-changed')) {
                 const groundKeys = ["grass", "carpet", "asphalt", "cement", "dirt"];
                 const targetKeys = ["1.png", "2.png", "3.png"];
                 const countKeys =;
@@ -326,9 +288,8 @@
             loadLevel(currentLevel);
         });
 
-        // ردیابی تغییر دستی کاربر برای غیرفعال کردن سیستم رندم
         document.querySelectorAll('.drawer .scroll-item, .drawer .grid-item').forEach(el => {
-            el.addEventListener('click', () => { document.querySelector('.drawer').classList.add('manually-changed'); });
+            el.addEventListener('click', () => { settingsDrawer.classList.add('manually-changed'); });
         });
 
         function loadLevel(lvl) {
@@ -388,7 +349,6 @@
                     setupMenu.style.display = "flex";
                     canvas.style.display = "none";
                     document.getElementById("info").style.display = "none";
-                    startBtn.innerText = "شروع";
                 } else {
                     loadLevel(currentLevel);
                 }
@@ -409,7 +369,7 @@
             ctx.lineWidth = currentGround.borderWidth;
 
             if (currentGround.borderStyle === 'chalk') {
-                ctx.setLineDash([5, 15]); // خط گچی پهن و مقطع روی آسفالت
+                ctx.setLineDash([6, 6]); // خط گچی مقطع روی آسفالت
                 ctx.shadowColor = "rgba(240,240,240,0.5)";
                 ctx.shadowBlur = 4;
                 ctx.strokeRect(box.x, box.y, box.w, box.h);
@@ -504,7 +464,7 @@
                 ctx.strokeStyle = "rgba(255, 235, 59, 0.6)"; ctx.lineWidth = 3; ctx.stroke();
             }
 
-            // ۴. رسم تصاویر خالص و دایره‌ای تیله‌های هدف (بدون کادر مستطیلی سفید دور تصویر)
+            // ۴. رسم تصاویر خالص و دایره‌ای تیله‌های هدف
             targets.forEach(t => {
                 if (!t.isOut) {
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) {
@@ -563,4 +523,3 @@
     </script>
 </body>
 </html>
-
