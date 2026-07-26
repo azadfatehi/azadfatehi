@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تیله بازی مرحله‌ای پیشرفته</title>
+    <title>تیله بازی مهارتی عمودی</title>
     <style>
         * { box-sizing: border-box; user-select: none; }
         body { 
@@ -11,6 +11,7 @@
             display: flex; flex-direction: column; align-items: center; justify-content: center; 
             height: 100vh; font-family: sans-serif; color: white; overflow: hidden;
         }
+        /* منوی اصلی بازی */
         #setupMenu {
             position: absolute; background-color: #3e2723;
             background-image: url('menu_bg.jpg'); 
@@ -60,7 +61,7 @@
             justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
-        /* منوی کشویی تنظیمات */
+        /* کشوی تنظیمات تصویری خالص */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 30; display: none;
@@ -85,7 +86,6 @@
         }
         .scroll-container::-webkit-scrollbar { display: none; }
         
-        /* دکمه‌های تصویری خالص بدون متن تزیینی */
         .scroll-item { 
             flex: 0 0 100px; border: 3px solid #555; border-radius: 12px; overflow: hidden; cursor: pointer; 
             position: relative; aspect-ratio: 1; box-shadow: 0 4px 8px rgba(0,0,0,0.4); transition: transform 0.2s; background: #2e7d32;
@@ -102,10 +102,13 @@
         .grid-item canvas { width: 100%; height: 100%; object-fit: cover; }
         .grid-item.active { border-color: #4caf50; box-shadow: 0 0 12px #4caf50; }
         
-        /* استایل خاص برای نمایش تصویری تعداد تیله‌ها */
         .count-preview { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 2px 4px #000; }
 
-        #canvas { border: 4px solid white; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none; touch-action: none; image-rendering: crisp-edges; }
+        /* بوم بازی به شکل مستطیل فیکس عمودی لود خواهد شد */
+        #canvas { 
+            border: 4px solid white; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none; touch-action: none; 
+            image-rendering: crisp-edges; background-color: #222;
+        }
         #info { margin-bottom: 5px; font-size: 18px; font-weight: bold; text-align: center; display: none; width: 100%; max-width: 400px; direction: rtl;}
         .stats-bar { display: flex; justify-content: space-around; background: rgba(0,0,0,0.5); padding: 8px; border-radius: 10px; margin-bottom: 5px; }
     </style>
@@ -114,7 +117,6 @@
 
     <div id="setupMenu">
         <h2>تیله بازی مرحله‌ای</h2>
-        
         <div class="promo-banner">
             <div class="promo-slider">
                 <img src="grass.jpg" alt="دمو ۱">
@@ -122,7 +124,6 @@
                 <img src="dirt.jpg" alt="دمو ۳">
             </div>
         </div>
-
         <div class="action-row">
             <button id="gearBtn">⚙️</button>
             <button id="startBtn">شروع بازی 🎯</button>
@@ -135,7 +136,6 @@
         <button class="drawer-close" id="closeDrawer">تایید ×</button>
         <h3 style="margin-top: 0; color: #ffeb3b;">تنظیمات مسابقه</h3>
         
-        <!-- ۱. انتخاب زمین کاملاً تصویری -->
         <div class="menu-row">
             <label>انتخاب زمین بازی (ورق بزنید ↔️):</label>
             <div class="scroll-container" id="groundGrid">
@@ -147,7 +147,6 @@
             </div>
         </div>
 
-        <!-- ۲. انتخاب تصویر تیله کاملاً تصویری -->
         <div class="menu-row">
             <label>شکل و تصویر تیله هدف:</label>
             <div class="grid-select" id="targetGrid">
@@ -157,7 +156,6 @@
             </div>
         </div>
 
-        <!-- ۳. انتخاب تعداد تیله‌ها به صورت نماد عددی تصویری بدون متن اضافی -->
         <div class="menu-row">
             <label>تعداد تیله‌های داخل کادر:</label>
             <div class="grid-select" id="countGrid">
@@ -202,11 +200,12 @@
         let dragEnd = { x: 0, y: 0 };
         let windX = 0; 
 
-        const box = { x: 60, y: 80, w: 280, h: 220 };
+        // کادر وسط زمین (ابعاد فیکس شده برای تناسب بهتر با نمای عمودی)
+        const box = { x: 40, y: 70, w: 320, h: 220 };
         let player = { x: 200, y: 440, r: 24, vx: 0, vy: 0 }; 
         let targets = [];
 
-        // مشخصات فنی زمین‌ها و خط‌کشی کادر دور هر کدام
+        // مشخصات زمین‌ها، فیزیک اصطکاک و مدل خط‌کشی کادر دور هر کدام
         const grounds = {
             grass: { friction: 0.96, wind: 0.08, src: 'grass.jpg', borderStyle: 'rope', borderColor: '#ffffff', borderWidth: 4, fallbackColor: '#2e7d32' },
             carpet: { friction: 0.97, wind: 0.02, src: 'carpet.jpg', borderStyle: 'thread', borderColor: '#ffeb3b', borderWidth: 2, fallbackColor: '#b71c1c' },
@@ -223,20 +222,22 @@
         
         let imgTarget = new Image();
 
-        // مقادیر پیش‌فرض برای کنترل دستی کاربران
         let selectedGroundVal = "grass";
         let selectedTargetSrc = "1.png"; 
         let selectedCountVal = 3;
 
+        // تنظیم رزولوشن فیکس عمودی موبایل برای باز شدن فضای پرتاب تیرکمانی در پایین
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            canvas.width = 400;
+            canvas.height = 560;
+            
+            // قرار دادن تیله بزرگ درست در کف زمین برای باز کردن فضای شلیک چشمی
             player.x = canvas.width / 2;
-            player.y = canvas.height - 80;
-        }
-        window.addEventListener('resize', resizeCanvas);
+            player.y = canvas.height - 50;
 
-        // تولید تصاویر منو بدون نیاز به اینترنت
+            box.x = (canvas.width - box.w) / 2;
+        }
+
         function generateMenuPreviews() {
             setupMenu.style.backgroundImage = "url('menu_bg.jpg')";
             
@@ -276,7 +277,6 @@
             });
         }
 
-        // انیمیشن‌های باز و بسته شدن کشوی تنظیمات
         gearBtn.addEventListener("click", () => {
             settingsDrawer.classList.add("open");
             overlay.style.display = "block";
@@ -297,9 +297,8 @@
             setupGridSelection("countGrid", false, (val) => { selectedCountVal = parseInt(val); startBtn.innerText = "شروع با تغییرات شما 🎯"; });
         });
 
-        // کلیک روی دکمه شروع بازی (سیستم رندم یا انتخاب شده توسط کاربر)
         startBtn.addEventListener("click", () => {
-            // اگر دکمه روی شروع بازی رندم بود، همه‌چیز را تصادفی انتخاب کن
+            // مکانیزم شیک انتخاب کاملاً تصادفی در صورت عدم استفاده از دکمه تنظیمات ⚙️
             if (startBtn.innerText === "شروع بازی 🎯") {
                 const groundKeys = ["grass", "carpet", "asphalt", "cement", "dirt"];
                 const targetKeys = ["1.png", "2.png", "3.png"];
@@ -324,17 +323,13 @@
 
         function loadLevel(lvl) {
             player.x = canvas.width / 2;
-            player.y = canvas.height - 80;
+            player.y = canvas.height - 50; 
             player.vx = 0; player.vy = 0;
             targets = [];
-            
-            box.x = (canvas.width - box.w) / 2;
-            box.y = (canvas.height - box.h) / 2 - 40;
             
             let cx = box.x + box.w / 2;
             let cy = box.y + box.h / 2;
             
-            // چیدمان فیزیکی تیله‌ها بر اساس تعداد انتخابی دستی یا تصادفی کاربر
             if (selectedCountVal === 3) {
                 shotsLeft = 4;
                 targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
@@ -347,7 +342,7 @@
                 targets.push({ x: cx + 28, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
                 targets.push({ x: cx, y: cy - 28, r: 14, vx: 0, vy: 0, isOut: false });
                 targets.push({ x: cx, y: cy + 28, r: 14, vx: 0, vy: 0, isOut: false });
-            } else { // ۷ تیله شلوغ و سخت
+            } else { 
                 shotsLeft = 5;
                 targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
                 for(let i=1; i<=3; i++) {
@@ -367,7 +362,7 @@
         }
         function resetRound() {
             player.x = canvas.width / 2;
-            player.y = canvas.height - 80;
+            player.y = canvas.height - 50;
             player.vx = 0; player.vy = 0;
             windX = (Math.random() - 0.5) * currentGround.wind;
             isMoving = false;
@@ -404,7 +399,7 @@
             ctx.lineWidth = currentGround.borderWidth;
 
             if (currentGround.borderStyle === 'chalk') {
-                ctx.setLineDash([10, 15]); // خط گچی پهن و مقطع روی آسفالت
+                ctx.setLineDash([8, 8]); // خط گچی پهن و مقطع روی آسفالت
                 ctx.shadowColor = "rgba(240,240,240,0.5)";
                 ctx.shadowBlur = 4;
                 ctx.strokeRect(box.x, box.y, box.w, box.h);
@@ -482,7 +477,7 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // ۱. تصویر زمین تمام‌صفحه
+            // ۱. تصویر زمین عمودی
             if (imgBg.complete && imgBg.naturalWidth !== 0) {
                 ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
             } else {
