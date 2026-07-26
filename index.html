@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تیله بازی مهارتی عمودی</title>
+    <title>تیله بازی مهارتی</title>
     <style>
         * { box-sizing: border-box; user-select: none; }
         body { 
@@ -23,14 +23,22 @@
         }
         #setupMenu::before {
             content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); z-index: -1;
+            background: rgba(0, 0, 0, 0.55); z-index: -1;
         }
-        #setupMenu h2 { color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.8); margin-bottom: 20px; font-size: 26px; }
         
+        /* دکمه تنظیمات در بالاترین نقطه صفحه، گوشه سمت چپ */
+        #gearBtn {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(33, 150, 243, 0.85); border: none; border-radius: 50%; 
+            width: 48px; height: 52px; font-size: 22px; color: white; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 25;
+        }
+
         /* کادر ویدیوی دمو بازی */
         .promo-banner {
             width: 100%; max-width: 340px; height: 160px; border: 3px solid #ffeb3b;
-            border-radius: 15px; margin-bottom: 25px; overflow: hidden; position: relative;
+            border-radius: 15px; margin-bottom: 30px; overflow: hidden; position: relative;
             box-shadow: 0 4px 15px rgba(0,0,0,0.5); background: #000;
         }
         .promo-slider {
@@ -49,19 +57,13 @@
             100% { transform: translateX(0); }
         }
 
-        .action-row { display: flex; align-items: center; gap: 15px; width: 100%; max-width: 340px; }
         #startBtn { 
-            flex: 1; padding: 14px 20px; font-size: 18px; font-weight: bold;
+            width: 100%; max-width: 340px; padding: 14px 20px; font-size: 19px; font-weight: bold;
             background: #4caf50; color: white; border: none; border-radius: 25px; cursor: pointer;
             box-shadow: 0 5px 15px rgba(0,0,0,0.4); text-align: center;
         }
-        #gearBtn {
-            background: #2196f3; border: none; border-radius: 50%; width: 52px; height: 52px;
-            font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center;
-            justify-content: center; box-shadow: 0 5px 15px rgba(0,0,0,0.4);
-        }
 
-        /* کشوی تنظیمات تصویری خالص */
+        /* کشوی تنظیمات تصویری */
         .drawer-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.7); z-index: 30; display: none;
@@ -104,7 +106,6 @@
         
         .count-preview { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 2px 4px #000; }
 
-        /* بوم بازی به شکل مستطیل فیکس عمودی لود خواهد شد */
         #canvas { 
             border: 4px solid white; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none; touch-action: none; 
             image-rendering: crisp-edges; background-color: #222;
@@ -115,8 +116,12 @@
 </head>
 <body>
 
+    <!-- منوی اصلی بازی -->
     <div id="setupMenu">
-        <h2>تیله بازی مرحله‌ای</h2>
+        <!-- کلید تنظیمات در گوشه بالا سمت چپ -->
+        <button id="gearBtn">⚙️</button>
+        
+        <!-- کادر اسکرول دمو بازی -->
         <div class="promo-banner">
             <div class="promo-slider">
                 <img src="grass.jpg" alt="دمو ۱">
@@ -124,10 +129,9 @@
                 <img src="dirt.jpg" alt="دمو ۳">
             </div>
         </div>
-        <div class="action-row">
-            <button id="gearBtn">⚙️</button>
-            <button id="startBtn">شروع بازی 🎯</button>
-        </div>
+
+        <!-- دکمه شروع خالص -->
+        <button id="startBtn">شروع</button>
     </div>
 
     <div class="drawer-overlay" id="overlay"></div>
@@ -292,14 +296,15 @@
 
         window.addEventListener("DOMContentLoaded", () => {
             generateMenuPreviews();
-            setupGridSelection("groundGrid", true, (val) => { selectedGroundVal = val; startBtn.innerText = "شروع با تغییرات شما 🎯"; });
-            setupGridSelection("targetGrid", false, (val) => { selectedTargetSrc = val; startBtn.innerText = "شروع با تغییرات شما 🎯"; });
-            setupGridSelection("countGrid", false, (val) => { selectedCountVal = parseInt(val); startBtn.innerText = "شروع با تغییرات شما 🎯"; });
+            setupGridSelection("groundGrid", true, (val) => { selectedGroundVal = val; startBtn.innerText = "شروع"; });
+            setupGridSelection("targetGrid", false, (val) => { selectedTargetSrc = val; startBtn.innerText = "شروع"; });
+            setupGridSelection("countGrid", false, (val) => { selectedCountVal = parseInt(val); startBtn.innerText = "شروع"; });
         });
 
         startBtn.addEventListener("click", () => {
-            // مکانیزم شیک انتخاب کاملاً تصادفی در صورت عدم استفاده از دکمه تنظیمات ⚙️
-            if (startBtn.innerText === "شروع بازی 🎯") {
+            // مکانیزم شیک انتخاب کاملاً تصادفی در صورت عدم دستکاری تنظیمات دستی
+            if (startBtn.innerText === "شروع" && !document.querySelector('.drawer').classList.contains('manually-changed')) {
+                // اگر دکمه مستقیما فشرده شد، یک حالت رندم اعمال کن
                 const groundKeys = ["grass", "carpet", "asphalt", "cement", "dirt"];
                 const targetKeys = ["1.png", "2.png", "3.png"];
                 const countKeys =;
@@ -319,6 +324,11 @@
             
             resizeCanvas(); 
             loadLevel(currentLevel);
+        });
+
+        // ردیابی تغییر دستی کاربر برای غیرفعال کردن سیستم رندم
+        document.querySelectorAll('.drawer .scroll-item, .drawer .grid-item').forEach(el => {
+            el.addEventListener('click', () => { document.querySelector('.drawer').classList.add('manually-changed'); });
         });
 
         function loadLevel(lvl) {
@@ -378,7 +388,7 @@
                     setupMenu.style.display = "flex";
                     canvas.style.display = "none";
                     document.getElementById("info").style.display = "none";
-                    startBtn.innerText = "شروع بازی 🎯";
+                    startBtn.innerText = "شروع";
                 } else {
                     loadLevel(currentLevel);
                 }
@@ -399,7 +409,7 @@
             ctx.lineWidth = currentGround.borderWidth;
 
             if (currentGround.borderStyle === 'chalk') {
-                ctx.setLineDash([8, 8]); // خط گچی پهن و مقطع روی آسفالت
+                ctx.setLineDash([5, 15]); // خط گچی پهن و مقطع روی آسفالت
                 ctx.shadowColor = "rgba(240,240,240,0.5)";
                 ctx.shadowBlur = 4;
                 ctx.strokeRect(box.x, box.y, box.w, box.h);
@@ -553,3 +563,4 @@
     </script>
 </body>
 </html>
+
