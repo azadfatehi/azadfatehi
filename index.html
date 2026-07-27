@@ -26,7 +26,6 @@
             background: rgba(0, 0, 0, 0.55); z-index: -1;
         }
         
-        /* کلید تنظیمات در بالاترین نقطه صفحه، گوشه سمت چپ */
         #gearBtn {
             position: absolute; top: 20px; left: 20px;
             background: rgba(33, 150, 243, 0.85); border: none; border-radius: 50%; 
@@ -84,7 +83,6 @@
         
         .count-preview { font-size: 24px; font-weight: bold; color: #fff; text-shadow: 0 2px 4px #000; }
 
-        /* بوم بازی عمودی فیکس شده */
         #canvas { 
             border: 4px solid white; box-shadow: 0 0 15px rgba(0,0,0,0.5); display: none; touch-action: none; 
             image-rendering: crisp-edges; background-color: #222;
@@ -95,7 +93,6 @@
 </head>
 <body>
 
-    <!-- منوی اصلی بازی بدون دمو و متن اضافی -->
     <div id="setupMenu">
         <button id="gearBtn">⚙️</button>
         <button id="startBtn">شروع</button>
@@ -174,19 +171,16 @@
         let targets = [];
 
         const grounds = {
-            grass: { friction: 0.96, wind: 0.08, src: 'grass.jpg', borderStyle: 'rope', borderColor: '#ffffff', borderWidth: 4, fallbackColor: '#2e7d32' },
-            carpet: { friction: 0.97, wind: 0.02, src: 'carpet.jpg', borderStyle: 'thread', borderColor: '#ffeb3b', borderWidth: 2, fallbackColor: '#b71c1c' },
-            asphalt: { friction: 0.93, wind: 0.05, src: 'asphalt.jpg', borderStyle: 'chalk', borderColor: 'rgba(240,240,240,0.85)', borderWidth: 8, fallbackColor: '#424242' },
-            cement: { friction: 0.98, wind: 0.04, src: 'cement.jpg', borderStyle: 'marker', borderColor: '#111111', borderWidth: 5, fallbackColor: '#9e9e9e' },
-            dirt: { friction: 0.94, wind: 0.15, src: 'dirt.jpg', borderStyle: 'scratched', borderColor: '#4e342e', borderWidth: 6, fallbackColor: '#8d6e63' }
+            grass: { friction: 0.96, wind: 0.02, src: 'grass.jpg', borderStyle: 'rope', borderColor: '#ffffff', borderWidth: 4, fallbackColor: '#2e7d32' },
+            carpet: { friction: 0.97, wind: 0.00, src: 'carpet.jpg', borderStyle: 'thread', borderColor: '#ffeb3b', borderWidth: 2, fallbackColor: '#b71c1c' },
+            asphalt: { friction: 0.93, wind: 0.01, src: 'asphalt.jpg', borderStyle: 'chalk', borderColor: 'rgba(240,240,240,0.85)', borderWidth: 8, fallbackColor: '#424242' },
+            cement: { friction: 0.98, wind: 0.01, src: 'cement.jpg', borderStyle: 'marker', borderColor: '#111111', borderWidth: 5, fallbackColor: '#9e9e9e' },
+            dirt: { friction: 0.94, wind: 0.04, src: 'dirt.jpg', borderStyle: 'scratched', borderColor: '#4e342e', borderWidth: 6, fallbackColor: '#8d6e63' }
         };
 
         let currentGround = grounds.grass;
         let imgBg = new Image();
-        
-        let imgPlayer = new Image();
-        imgPlayer.src = '6.png'; 
-        
+        let imgPlayer = new Image(); imgPlayer.src = '6.png'; 
         let imgTarget = new Image();
 
         let selectedGroundVal = "grass";
@@ -200,11 +194,10 @@
             player.y = canvas.height - 50;
             box.x = (canvas.width - box.w) / 2;
         }
+        resizeCanvas();
         window.addEventListener('resize', resizeCanvas);
 
         function generateMenuPreviews() {
-            setupMenu.style.backgroundImage = "url('menu_bg.jpg')";
-            
             let applyImgToGrid = (id, src, fallbackColor) => {
                 let cnv = document.getElementById(id);
                 if(cnv) {
@@ -216,13 +209,11 @@
                     img.onerror = () => { cCtx.fillStyle = fallbackColor || "#333"; cCtx.fillRect(0, 0, 100, 100); };
                 }
             };
-            
             applyImgToGrid("pre_grass", "grass.jpg", "#2e7d32");
             applyImgToGrid("pre_carpet", "carpet.jpg", "#b71c1c");
             applyImgToGrid("pre_asphalt", "asphalt.jpg", "#424242");
             applyImgToGrid("pre_cement", "cement.jpg", "#9e9e9e");
             applyImgToGrid("pre_dirt", "dirt.jpg", "#8d6e63");
-            
             applyImgToGrid("pre_t_red", "1.png", "#e53935");
             applyImgToGrid("pre_t_green", "2.png", "#2e7d32");
             applyImgToGrid("pre_t_gold", "3.png", "#ffb300");
@@ -242,18 +233,9 @@
             });
         }
 
-        gearBtn.addEventListener("click", () => {
-            settingsDrawer.classList.add("open");
-            overlay.style.display = "block";
-        });
-        closeDrawer.addEventListener("click", () => {
-            settingsDrawer.classList.remove("open");
-            overlay.style.display = "none";
-        });
-        overlay.addEventListener("click", () => {
-            settingsDrawer.classList.remove("open");
-            overlay.style.display = "none";
-        });
+        gearBtn.addEventListener("click", () => { settingsDrawer.classList.add("open"); overlay.style.display = "block"; });
+        closeDrawer.addEventListener("click", () => { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; });
+        overlay.addEventListener("click", () => { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; });
 
         window.addEventListener("DOMContentLoaded", () => {
             generateMenuPreviews();
@@ -262,202 +244,164 @@
             setupGridSelection("countGrid", false, (val) => { selectedCountVal = parseInt(val); });
         });
 
-        startBtn.addEventListener("click", () => {
-            if (!isManuallyChanged) {
-                const groundKeys = ["grass", "carpet", "asphalt", "cement", "dirt"];
-                const targetKeys = ["1.png", "2.png", "3.png"];
-                const countKeys =;
-                
-                selectedGroundVal = groundKeys[Math.floor(Math.random() * groundKeys.length)];
-                selectedTargetSrc = targetKeys[Math.floor(Math.random() * targetKeys.length)];
-                selectedCountVal = countKeys[Math.floor(Math.random() * countKeys.length)];
-            }
-
+startBtn.addEventListener("click", () => {
+    if (!isManuallyChanged) {
+        const groundKeys = ["grass", "carpet", "asphalt", "cement", "dirt"];
+        const targetKeys = ["1.png", "2.png", "3.png"];
+        const countKeys =;
+        selectedGroundVal = groundKeys[Math.floor(Math.random() * groundKeys.length)];
+        selectedTargetSrc = targetKeys[Math.floor(Math.random() * targetKeys.length)];
+        selectedCountVal = countKeys[Math.floor(Math.random() * countKeys.length)];
+    }
+    
+    // اعمال تنظیمات زمین و هدف
+    currentGround = grounds[selectedGroundVal];
+    imgBg.src = currentGround.src;
+    imgTarget.src = selectedTargetSrc;
+    
+    // پنهان کردن منو و نمایش بوم بازی
+    setupMenu.style.display = "none";
+    canvas.style.display = "block";
+    document.getElementById("info").style.display = "block";
+    
+    // راه‌اندازی و شروع بازی
+    currentLevel = 1;
+    initGame();
+    gameLoop();
+});
+            
             currentGround = grounds[selectedGroundVal];
             imgBg.src = currentGround.src;
             imgTarget.src = selectedTargetSrc;
-
+            
             setupMenu.style.display = "none";
             canvas.style.display = "block";
             document.getElementById("info").style.display = "block";
             
-            resizeCanvas(); 
-            loadLevel(currentLevel);
+            currentLevel = 1;
+            initGame();
+            gameLoop();
         });
-
-        function loadLevel(lvl) {
+        function initGame() {
+            shotsLeft = 3;
+            isMoving = false;
+            hitSuccessInTurn = false;
+            
             player.x = canvas.width / 2;
-            player.y = canvas.height - 50; 
+            player.y = canvas.height - 50;
             player.vx = 0; player.vy = 0;
+            
+            windX = (Math.random() - 0.5) * currentGround.wind * 10;
+            
             targets = [];
-            
-            let cx = box.x + box.w / 2;
-            let cy = box.y + box.h / 2;
-            
-            if (selectedCountVal === 3) {
-                shotsLeft = 4;
-                targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                targets.push({ x: cx - 25, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                targets.push({ x: cx + 25, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-            } else if (selectedCountVal === 5) {
-                shotsLeft = 4;
-                targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                targets.push({ x: cx - 28, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                targets.push({ x: cx + 28, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                targets.push({ x: cx, y: cy - 28, r: 14, vx: 0, vy: 0, isOut: false });
-                targets.push({ x: cx, y: cy + 28, r: 14, vx: 0, vy: 0, isOut: false });
-            } else { 
-                shotsLeft = 5;
-                targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                for(let i=1; i<=3; i++) {
-                    targets.push({ x: cx - (i * 26), y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                    targets.push({ x: cx + (i * 26), y: cy, r: 14, vx: 0, vy: 0, isOut: false });
-                }
+            for (let i = 0; i < selectedCountVal; i++) {
+                let radius = 16;
+                let tx = box.x + radius + Math.random() * (box.w - radius * 2);
+                let ty = box.y + radius + Math.random() * (box.h - radius * 2);
+                targets.push({ x: tx, y: ty, r: radius, vx: 0, vy: 0, isOut: false });
             }
-
             updateUI();
-            if (lvl === 1) gameLoop();
         }
 
         function updateUI() {
             lvlTxt.innerText = currentLevel;
             shotsTxt.innerText = shotsLeft;
-            remTxt.innerText = targets.filter(t => !t.isOut).length;
-        }
-        function resetRound() {
-            player.x = canvas.width / 2;
-            player.y = canvas.height - 50;
-            player.vx = 0; player.vy = 0;
-            windX = (Math.random() - 0.5) * currentGround.wind;
-            isMoving = false;
-
             let activeTargets = targets.filter(t => !t.isOut).length;
-
+            remTxt.innerText = activeTargets;
+            
             if (activeTargets === 0) {
-                alert("آفرین! مرحله " + currentLevel + " را با موفقیت رد کردی! 🎉");
                 currentLevel++;
-                if (currentLevel > 5) {
-                    alert("تبریک فراوان! شما تمام مراحل را با موفقیت تمام کردید و قهرمان کل بازی شدید! 🏆");
-                    currentLevel = 1;
-                    setupMenu.style.display = "flex";
-                    canvas.style.display = "none";
-                    document.getElementById("info").style.display = "none";
-                } else {
-                    loadLevel(currentLevel);
-                }
-            } 
-            else if (shotsLeft <= 0 && !hitSuccessInTurn) {
-                alert("شلیک‌های شما در این مرحله تمام شد! دوباره تلاش کنید. ↩️");
-                loadLevel(currentLevel);
+                setTimeout(() => { alert("مرحله با موفقیت به پایان رسید! رفتن به مرحله بعد..."); initGame(); }, 500);
+            } else if (shotsLeft <= 0 && !isMoving) {
+                setTimeout(() => { alert("شلیک‌های شما تمام شد! بازی از اول شروع می‌شود."); setupMenu.style.display = "flex"; canvas.style.display = "none"; document.getElementById("info").style.display = "none"; }, 500);
             }
-
-            hitSuccessInTurn = false;
-            updateUI();
         }
 
-        // نقاشی کادر اختصاصی تزیینی متناسب با جنس زمین بازی
         function drawDynamicBorder() {
-            ctx.save();
-            ctx.strokeStyle = currentGround.borderColor;
             ctx.lineWidth = currentGround.borderWidth;
-
-            if (currentGround.borderStyle === 'chalk') {
-                ctx.setLineDash([4, 4]); // خط گچی مقطع روی آسفالت
-                ctx.shadowColor = "rgba(240,240,240,0.5)";
-                ctx.shadowBlur = 4;
-                ctx.strokeRect(box.x, box.y, box.w, box.h);
-            } 
-            else if (currentGround.borderStyle === 'marker') {
-                ctx.setLineDash([]); // خط ماژیکی کاملاً ممتد و تیره روی سیمان
-                ctx.strokeRect(box.x, box.y, box.w, box.h);
-            } 
-            else if (currentGround.borderStyle === 'scratched') {
-                ctx.beginPath(); // خط نامنظم و تراشیده شده روی خاک با چوب
-                let steps = 15;
-                let stepW = box.w / steps; let stepH = box.h / steps;
-                ctx.moveTo(box.x, box.y);
-                for (let i = 1; i <= steps; i++) { ctx.lineTo(box.x + i * stepW, box.y + (Math.random() - 0.5) * 4); }
-                for (let i = 1; i <= steps; i++) { ctx.lineTo(box.x + box.w + (Math.random() - 0.5) * 4, box.y + i * stepH); }
-                for (let i = 1; i <= steps; i++) { ctx.lineTo(box.x + box.w - i * stepW, box.y + box.h + (Math.random() - 0.5) * 4); }
-                for (let i = 1; i <= steps; i++) { ctx.lineTo(box.x + (Math.random() - 0.5) * 4, box.y + box.h - i * stepH); }
-                ctx.closePath(); ctx.stroke();
-            } 
-            else {
-                ctx.setLineDash([]);
-                ctx.strokeRect(box.x, box.y, box.w, box.h);
-            }
-            ctx.restore();
-            ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
-            ctx.fillRect(box.x, box.y, box.w, box.h);
+            ctx.strokeStyle = currentGround.borderColor;
+            ctx.strokeRect(box.x, box.y, box.w, box.h);
         }
 
-        function gameLoop() {
-            let anyMoving = false;
-            player.r = 24; 
-
+        function updatePhysics() {
+            let moving = false;
+            
             if (Math.abs(player.vx) > 0.05 || Math.abs(player.vy) > 0.05) {
-                player.vx += windX; player.x += player.vx; player.y += player.vy;
-                player.vx *= currentGround.friction; player.vy *= currentGround.friction; 
-                anyMoving = true;
-            } else { player.vx = 0; player.vy = 0; }
+                player.x += player.vx; player.y += player.vy;
+                player.vx *= currentGround.friction; player.vy *= currentGround.friction;
+                player.vx += windX; 
+                moving = true;
+                
+                if (player.x - player.r < 0 || player.x + player.r > canvas.width) player.vx *= -1;
+                if (player.y - player.r < 0 || player.y + player.r > canvas.height) player.vy *= -1;
+            } else {
+                player.vx = 0; player.vy = 0;
+            }
 
             targets.forEach(t => {
-                if (!t.isOut) {
-                    if (Math.abs(t.vx) > 0.05 || Math.abs(t.vy) > 0.05) {
-                        t.x += t.vx; t.y += t.vy;
-                        t.vx *= currentGround.friction; t.vy *= currentGround.friction;
-                        anyMoving = true;
-                    } else { t.vx = 0; t.vy = 0; }
+                if (t.isOut) return;
+                
+                if (Math.abs(t.vx) > 0.05 || Math.abs(t.vy) > 0.05) {
+                    t.x += t.vx; t.y += t.vy;
+                    t.vx *= currentGround.friction; t.vy *= currentGround.friction;
+                    moving = true;
+                } else {
+                    t.vx = 0; t.vy = 0;
+                }
 
-                    let dx = t.x - player.x; let dy = t.y - player.y;
-                    let dist = Math.sqrt(dx*dx + dy*dy);
-                    
-                    if (dist < player.r + t.r) {
-                        let angle = Math.atan2(dy, dx);
-                        let speed = Math.sqrt(player.vx*player.vx + player.vy*player.vy);
-                        t.vx = Math.cos(angle) * speed * 0.85; t.vy = Math.sin(angle) * speed * 0.85;
-                        player.vx *= -0.2; player.vy *= -0.2; 
-                    }
+                if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) {
+                    t.isOut = true;
+                    hitSuccessInTurn = true; 
+                    updateUI();
+                }
 
-                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) {
-                        t.isOut = true;
-                        hitSuccessInTurn = true;
-                    }
+                let dx = t.x - player.x;
+                let dy = t.y - player.y;
+                let dist = Math.sqrt(dx*dx + dy*dy);
+                if (dist < player.r + t.r) {
+                    let angle = Math.atan2(dy, dx);
+                    let speed = Math.sqrt(player.vx*player.vx + player.vy*player.vy);
+                    t.vx = Math.cos(angle) * speed * 0.8;
+                    t.vy = Math.sin(angle) * speed * 0.8;
+                    player.vx *= -0.4; player.vy *= -0.4; 
                 }
             });
 
-            if (isMoving && !anyMoving) {
-                if (hitSuccessInTurn) {
-                    msgSlot.style.display = "block";
+            if (isMoving && !moving) {
+                isMoving = false;
+                if (!hitSuccessInTurn) {
+                    shotsLeft--;
                 } else {
-                    msgSlot.style.display = "none";
-                    shotsLeft--; 
+                    msgSlot.style.display = "block";
+                    setTimeout(() => { msgSlot.style.display = "none"; }, 2000);
                 }
                 updateUI();
-                setTimeout(resetRound, 400);
+                player.x = canvas.width / 2; player.y = canvas.height - 50; 
+                player.vx = 0; player.vy = 0;
             }
-            if (anyMoving) isMoving = true;
+        }
 
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function gameLoop() {
+            if (canvas.style.display === "none") return;
             
-            // ۱. تصویر زمین عمودی
+            updatePhysics();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
             if (imgBg.complete && imgBg.naturalWidth !== 0) {
                 ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
             } else {
-                ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = currentGround.fallbackColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
             }
 
-            // ۲. رسم خطوط دور کادر
             drawDynamicBorder();
 
-            // ۳. خط نشانه‌گیری زرد کمرنگ
             if (isAiming) {
                 ctx.beginPath(); ctx.moveTo(player.x, player.y);
                 ctx.lineTo(player.x + (dragStart.x - dragEnd.x), player.y + (dragStart.y - dragEnd.y));
                 ctx.strokeStyle = "rgba(255, 235, 59, 0.6)"; ctx.lineWidth = 3; ctx.stroke();
             }
 
-            // ۴. رسم تصاویر خالص و دایره‌ای تیله‌های هدف
             targets.forEach(t => {
                 if (!t.isOut) {
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) {
@@ -472,7 +416,6 @@
                 }
             });
 
-            // ۵. رسم تصویر خالص دایره‌ای تیله دست بزرگ (6.png)
             if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) {
                 ctx.save();
                 ctx.beginPath(); ctx.arc(player.x, player.y, player.r, 0, Math.PI * 2); ctx.clip();
@@ -507,9 +450,16 @@
         }
 
         function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
-        function handleEnd() { if (!isAiming) return; isAiming = false; player.vx = (dragStart.x - dragEnd.x) * 0.11; player.vy = (dragStart.y - dragEnd.y) * 0.11; }
+        
+        function handleEnd() { 
+            if (!isAiming) return; 
+            isAiming = false; 
+            isMoving = true;
+            hitSuccessInTurn = false;
+            player.vx = (dragStart.x - dragEnd.x) * 0.11; 
+            player.vy = (dragStart.y - dragEnd.y) * 0.11; 
+        }
 
-        // اتصال رویدادهای همزمان موس و تاچ برای پشتیبانی دسکتاپ و موبایل
         canvas.addEventListener("mousedown", handleStart); 
         canvas.addEventListener("mousemove", handleMove); 
         window.addEventListener("mouseup", handleEnd);
@@ -518,4 +468,5 @@
         canvas.addEventListener("touchmove", function(e) { e.preventDefault(); handleMove(e); }, { passive: false });
         window.addEventListener("touchend", handleEnd);
     </script>
-
+</body>
+</html>
