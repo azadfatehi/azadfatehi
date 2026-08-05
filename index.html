@@ -48,6 +48,16 @@
             text-shadow: 0 2px 5px rgba(0,0,0,0.9); transition: transform 0.2s, box-shadow 0.2s;
         }
         #startBtn:active { transform: scale(0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
+        
+        /* 🔔 باکس اعلان متنی لایو و بدون نیاز به کلیک تایید برای سرعت بخشیدن به بازی */
+        .game-toast {
+            position: fixed; top: 75px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.85); color: #ffeb3b; padding: 10px 24px;
+            border-radius: 20px; border: 2px solid #ffeb3b; font-size: 14px; font-weight: bold;
+            z-index: 99; pointer-events: none; transition: opacity 0.3s ease, top 0.3s ease;
+            opacity: 0; direction: rtl; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .game-toast.show { opacity: 1; top: 85px; }
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 30; display: none; }
         .drawer {
             position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; 
@@ -185,6 +195,7 @@
         let windY = 0;
         let selectedWeather = "sunny";
         let weatherParticles = [];
+        let windLines = [];
 
         let box = { x: 40, y: 60, w: 320, h: 220 };
         
@@ -221,6 +232,10 @@
         let audioCtx = null;
         let ambientOsc = null; 
         let ambientGain = null;
+        let ambientSource = null;
+        let ambientFilter = null;
+        let ambientLFO = null;
+
         function initAudio() {
             if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
             if (audioCtx.state === 'suspended') { audioCtx.resume(); }
@@ -266,52 +281,74 @@
             } catch(e){}
         }
 
-        function playWeatherPreviewSound(type) {
-            try {
-                initAudio(); stopAmbientSound();
-                if (type === "sunny") return;
-                ambientOsc = audioCtx.createOscillator(); ambientGain = audioCtx.createGain();
-                if (type === "windy") {
-                    ambientOsc.type = "sawtooth"; ambientOsc.frequency.setValueAtTime(80, audioCtx.currentTime);
-                    let lfo = audioCtx.createOscillator(); lfo.frequency.setValueAtTime(0.8, audioCtx.currentTime);
-                    let lfoGain = audioCtx.createGain(); lfoGain.gain.setValueAtTime(30, audioCtx.currentTime);
-                    lfo.connect(lfoGain); lfoGain.connect(ambientOsc.frequency); lfo.start();
-                    ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                } else if (type === "rainy") {
-                    ambientOsc.type = "triangle"; ambientOsc.frequency.setValueAtTime(140, audioCtx.currentTime);
-                    ambientGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-                } else if (type === "snowy") {
-                    ambientOsc.type = "sine"; ambientOsc.frequency.setValueAtTime(50, audioCtx.currentTime);
-                    ambientGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
-                }
-                ambientOsc.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientOsc.start();
-            } catch(e){}
-        }
-
         function startAmbientSound(weather) {
             try {
-                initAudio(); stopAmbientSound();
-                if (weather === "sunny") return;
-                ambientOsc = audioCtx.createOscillator(); ambientGain = audioCtx.createGain();
-                if (weather === "windy") {
-                    ambientOsc.type = "sawtooth"; ambientOsc.frequency.setValueAtTime(80, audioCtx.currentTime);
-                    let lfo = audioCtx.createOscillator(); lfo.frequency.setValueAtTime(0.5, audioCtx.currentTime);
-                    let lfoGain = audioCtx.createGain(); lfoGain.gain.setValueAtTime(40, audioCtx.currentTime);
-                    lfo.connect(lfoGain); lfoGain.connect(ambientOsc.frequency); lfo.start();
-                    ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                } else if (weather === "rainy") {
-                    ambientOsc.type = "triangle"; ambientOsc.frequency.setValueAtTime(140, audioCtx.currentTime);
-                    ambientGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
-                } else if (weather === "snowy") {
-                    ambientOsc.type = "sine"; ambientOsc.frequency.setValueAtTime(50, audioCtx.currentTime);
-                    ambientGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                initAudio(); 
+                stopAmbientSound(); 
+
+                let bufferSize = audioCtx.sampleRate * 2;
+                let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                let data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) { 
+                    data[i] = Math.random() * 2 - 1; 
                 }
-                ambientOsc.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientOsc.start();
+
+                ambientSource = audioCtx.createBufferSource();
+                ambientSource.buffer = buffer; 
+                ambientSource.loop = true; 
+
+                ambientFilter = audioCtx.createBiquadFilter();
+                ambientGain = audioCtx.createGain();
+
+                if (weather === "sunny") {
+                    ambientFilter.type = "lowpass";
+                    ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                } 
+                else if (weather === "windy") {
+                    ambientFilter.type = "bandpass";
+                    ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime);
+                    ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime);
+
+                    ambientLFO = audioCtx.createOscillator(); 
+                    ambientLFO.frequency.setValueAtTime(0.18, audioCtx.currentTime); 
+                    let lfoGain = audioCtx.createGain(); 
+                    lfoGain.gain.setValueAtTime(280, audioCtx.currentTime);
+                    
+                    ambientLFO.connect(lfoGain); 
+                    lfoGain.connect(ambientFilter.frequency); 
+                    ambientLFO.start();
+                } 
+                else if (weather === "rainy") {
+                    ambientFilter.type = "lowpass";
+                    ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime);
+                } 
+                else if (weather === "snowy") {
+                    ambientFilter.type = "lowpass";
+                    ambientFilter.frequency.setValueAtTime(180, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                }
+
+                ambientSource.connect(ambientFilter);
+                ambientFilter.connect(ambientGain);
+                ambientGain.connect(audioCtx.destination);
+                
+                ambientSource.start(0);
             } catch(e){}
         }
 
+        function playWeatherPreviewSound(type) { 
+            startAmbientSound(type); 
+        }
+        
         function stopAmbientSound() {
-            try { if(ambientOsc) { ambientOsc.stop(); ambientOsc.disconnect(); ambientOsc = null; } } catch(e){}
+            try { 
+                if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } 
+                if (ambientFilter) { ambientFilter.disconnect(); ambientFilter = null; }
+                if (ambientLFO) { ambientLFO.stop(); ambientLFO.disconnect(); ambientLFO = null; }
+            } catch(e){}
         }
         function initWeatherParticles() {
             weatherParticles = [];
@@ -326,15 +363,36 @@
             }
         }
 
+        function initWindLines() {
+            windLines = [];
+            if (selectedWeather === "sunny") return;
+            let count = selectedWeather === "windy" ? 25 : 10;
+            for (let i = 0; i < count; i++) {
+                windLines.push({
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    w: Math.random() * 80 + 40, h: Math.random() * 1.5 + 0.5,
+                    v: Math.random() * 4 + 3, opacity: Math.random() * 0.2 + 0.05
+                });
+            }
+        }
+
         function updateWeatherParticles() {
             weatherParticles.forEach(p => {
-                p.y += p.v; p.x += windX * 10;
+                p.y += p.v; p.x += windX * 12;
                 if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
+            });
+            windLines.forEach(w => {
+                w.x += w.v + windX * 20; w.y += windY * 5;
+                if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; }
             });
         }
 
         function drawWeather() {
             ctx.save();
+            windLines.forEach(w => {
+                ctx.strokeStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.lineWidth = w.h;
+                ctx.beginPath(); ctx.moveTo(w.x, w.y); ctx.lineTo(w.x + w.w, w.y + windY * 20); ctx.stroke();
+            });
             if(selectedWeather === "rainy") {
                 weatherParticles.forEach(p => {
                     ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r;
@@ -349,6 +407,17 @@
             ctx.restore();
         }
 
+        // 🌟 سیستم جدید اعلان متنی لایو و خودکار برای حذف کامل مکث‌ها و تایید دکمه‌ها
+        function showGameToast(message) {
+            let toast = document.getElementById("gameToast");
+            if (!toast) {
+                toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast";
+                document.body.appendChild(toast);
+            }
+            toast.innerText = message; toast.classList.add("show");
+            setTimeout(() => { toast.classList.remove("show"); }, 1500); 
+        }
+
         function resetRound() {
             player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
             isMoving = false;
@@ -356,58 +425,43 @@
             let activeTargets = targets.filter(t => !t.isOut).length;
             
             if (activeTargets > 0) {
-                // 🎯 وضعیت اول: تیله هدف با موفقیت از خط بیرون رفته است (کسب جایزه و فعال شدن زنجیره)
                 if (targetOutInTurn) {
                     if (selectedPlayerCount === 1) {
-                        alert("🎉 عالی بود! یک شلیک جایزه گرفتید!");
+                        showGameToast("🎉 عالی بود! یک شلیک جایزه گرفتید!");
                     } else {
-                        alert(`🎉 عالی بود ${playerNames[currentPlayerIndex]}! تیله بیرون رفت و شلیک جایزه گرفتی!`);
+                        showGameToast(`🎉 عالی بود ${playerNames[currentPlayerIndex]}! شلیک جایزه گرفتی!`);
                     }
-                    hasBonusShot = true; 
-                    isChainMode = true; // فعال شدن حالت زنجیره‌ای مهارتی برای قفل ماندن تیله در محل توقف جاری
+                    hasBonusShot = true; isChainMode = true; 
                 } 
-                // 🎯 وضعیت دوم: شلیک ناموفق بوده و هیچ تیله هدفی بیرون نرفته است
                 else {
                     if (selectedPlayerCount === 1) {
                         if (hasBonusShot) {
-                            // 💀 بازی تک‌نفره: خطا در شلیک جایزه باعث باخت فوری و ریست کل بازی می‌شود
-                            alert("💀 خطا در شلیک جایزه! شما فرصت طلایی را از دست دادید. بازی تمام شد و ریست می‌شود.");
+                            showGameToast("💀 خطا در شلیک جایزه! بازی تمام شد و ریست می‌شود.");
                             hasBonusShot = false; isChainMode = false;
-                            exitBtn.click(); 
-                            return;
+                            setTimeout(() => { exitBtn.click(); }, 1200); return;
                         } else {
-                            // ❌ بازی تک‌نفره: اگر شلیک عادی خطا برود، تیله به نقطه شروع پایین زمین بازمی‌گردد
-                            alert("❌ شما نتوانستید تیله‌ای را از خط بیرون بینذازید! دوباره تلاش کنید.");
-                            
-                            let newStartX = canvas.width / 2;
-                            let newStartY = canvas.height - 120; 
+                            showGameToast("❌ نتوانستید تیله‌ای را بیرون بیندازید! دوباره تلاش کنید.");
+                            let newStartX = canvas.width / 2; let newStartY = canvas.height - 120; 
                             player.x = newStartX; player.y = newStartY;
                             player.startX = newStartX; player.startY = newStartY;
                             player.targetX = newStartX; player.targetY = newStartY;
-                            player.angle = 0;
-                            hasBonusShot = false;
+                            player.angle = 0; hasBonusShot = false;
                         }
                     } 
                     else {
-                        // 👥 بازی چندنفره (پیاده‌سازی دقیق قانون توالی زنجیره‌ای شما):
                         if (isChainMode) {
-                            // 🌟 چون قبلاً حداقل یک تیله بیرون رفته، بازی در حالت زنجیره‌ای است. نوبت عوض می‌شود اما تیله از همان نقطه توقف ادامه می‌یابد.
-                            alert(`❌ بازیکن ${playerNames[currentPlayerIndex]} موفق نشد! نوبت بازیکن بعدی است و بازی از همین نقطه توقف ادامه پیدا می‌کند.`);
+                            showGameToast(`❌ بازیکن ${playerNames[currentPlayerIndex]} موفق نشد! نوبت نفر بعد (ادامه از جای جاری)`);
                             currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
-                            hasBonusShot = false; // بازیکن جدید پرتاب عادی‌اش را از همین جا می‌زند و شانس جایزه دارد
+                            hasBonusShot = false; 
                         } 
                         else {
-                            // 🌟 فاز اول بازی: هنوز هیچ تیله هدفی در کل مسابقه بیرون نرفته و پرتاب خراب شده است. تیله به نقطه شروع بازمی‌گردد.
-                            alert(`❌ بازیکن ${playerNames[currentPlayerIndex]} نتوانست تیله‌ای را بیرون بیندازد! نوبت بازیکن بعدی از نقطه شروع است.`);
+                            showGameToast(`❌ بازیکن ${playerNames[currentPlayerIndex]} موفق نشد! نوبت نفر بعد از نقطه شروع`);
                             currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
-                            
-                            let newStartX = canvas.width / 2;
-                            let newStartY = canvas.height - 120; 
+                            let newStartX = canvas.width / 2; let newStartY = canvas.height - 120; 
                             player.x = newStartX; player.y = newStartY;
                             player.startX = newStartX; player.startY = newStartY;
                             player.targetX = newStartX; player.targetY = newStartY;
-                            player.angle = 0;
-                            hasBonusShot = false;
+                            player.angle = 0; hasBonusShot = false;
                         }
                     }
                 }
@@ -417,11 +471,11 @@
                     let maxScore = Math.max(...playerScores.slice(0, selectedPlayerCount));
                     let winners = [];
                     playerScores.slice(0, selectedPlayerCount).forEach((score, idx) => { if(score === maxScore) winners.push(playerNames[idx]); });
-                    alert("🎯 مسابقه تمام شد!\n" + winners.join(" و ") + " با کسب " + maxScore + " تیله برنده شدند! 🏆");
+                    showGameToast("🎯 مسابقه تمام شد! در حال بازگشت به منو...");
                 } else {
-                    alert(`🎉 آفرین ${playerNames[currentPlayerIndex]}! تمام تیله‌ها را بردی!`);
+                    showGameToast(`🎉 آفرین ${playerNames[currentPlayerIndex]}! تمام تیله‌ها را بردی!`);
                 }
-                exitBtn.click(); return;
+                setTimeout(() => { exitBtn.click(); }, 1500); return;
             }
             
             if (turnIndicator) turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]}`;
@@ -466,6 +520,7 @@
                 targets.push({ x: startX + (i * targetDiameter), y: centerY, r: targetRadius, vx: 0, vy: 0, angle: 0, isOut: false });
             }
             initWeatherParticles();
+            initWindLines();
         }
 
         function resizeCanvas() {
@@ -596,13 +651,14 @@
                             }
                         }
                     });
-                    setTimeout(() => { resetRound(); }, 1000);
+                    
+                    // 🌟 حذف تاخیر ۱ ثانیه‌ای برای روان‌سازی و سرعت مطلق بازی بدون کوچک‌ترین مکث
+                    resetRound();
                 }
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // 🌟 رندر هوشمند لایو: حل باگ سیاه یا سفید شدن صفحه در زمان عدم بارگذاری تصاویر روی موبایل
             if (imgBg.complete && imgBg.src && imgBg.naturalWidth !== 0) { 
                 ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); 
             } else { 
@@ -700,7 +756,6 @@
             });
         }
 
-        // 🌟 شنونده‌های کاملاً کالیبره شده کامپیوتر و گوشی با قفل اکید اسکرول لایه زیرین موبایل
         canvas.addEventListener("mousedown", handleStart); 
         canvas.addEventListener("mousemove", handleMove); 
         canvas.addEventListener("mouseup", handleEnd);
