@@ -364,11 +364,7 @@
                         alert(`🎉 عالی بود ${playerNames[currentPlayerIndex]}! تیله بیرون رفت و شلیک جایزه گرفتی!`);
                     }
                     hasBonusShot = true; 
-                    
-                    // 🌟 فعال کردن حالت زنجیره‌ای برای کل بازی: از این لحظه به بعد تیله دیگر هرگز به پایین برنمی‌گردد
-                    isChainMode = true; 
-                    
-                    // تیله دست دست‌نخورده می‌ماند و پرتاب بعدی دقیقاً از همان نقطه توقف انجام می‌شود.
+                    isChainMode = true; // فعال شدن حالت زنجیره‌ای مهارتی برای قفل ماندن تیله در محل توقف جاری
                 } 
                 // 🎯 وضعیت دوم: شلیک ناموفق بوده و هیچ تیله هدفی بیرون نرفته است
                 else {
@@ -393,22 +389,16 @@
                         }
                     } 
                     else {
-                        // 👥 بازی چندنفره (پیاده‌سازی مو به موی قانون توالی زنجیره‌ای شما):
+                        // 👥 بازی چندنفره (پیاده‌سازی دقیق قانون توالی زنجیره‌ای شما):
                         if (isChainMode) {
-                            // 🌟 قانون مهارتی شما: چون قبلاً حداقل یک تیله بیرون رفته، بازی در حالت زنجیره‌ای است.
-                            // نوبت عوض می‌شود اما تیله دست برای بازیکن بعدی هرگز به پایین زمین برنمی‌گردد و از جای توقف جاری ادامه می‌یابد.
+                            // 🌟 چون قبلاً حداقل یک تیله بیرون رفته، بازی در حالت زنجیره‌ای است. نوبت عوض می‌شود اما تیله از همان نقطه توقف ادامه می‌یابد.
                             alert(`❌ بازیکن ${playerNames[currentPlayerIndex]} موفق نشد! نوبت بازیکن بعدی است و بازی از همین نقطه توقف ادامه پیدا می‌کند.`);
-                            
                             currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
                             hasBonusShot = false; // بازیکن جدید پرتاب عادی‌اش را از همین جا می‌زند و شانس جایزه دارد
-                            
-                            // هیچ کدی برای بازگشت تیله به پایین نوشته نشده تا مختصات فیکس بماند
                         } 
                         else {
-                            // 🌟 فاز اول بازی: هنوز هیچ تیله هدفی در کل مسابقه بیرون نرفته و شلیک اولِ اول خراب شده است.
-                            // نوبت عوض می‌شود و تیله دست بازیکن بعدی حتماً به نقطه شروع پایین زمین بازمی‌گردد.
+                            // 🌟 فاز اول بازی: هنوز هیچ تیله هدفی در کل مسابقه بیرون نرفته و پرتاب خراب شده است. تیله به نقطه شروع بازمی‌گردد.
                             alert(`❌ بازیکن ${playerNames[currentPlayerIndex]} نتوانست تیله‌ای را بیرون بیندازد! نوبت بازیکن بعدی از نقطه شروع است.`);
-                            
                             currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
                             
                             let newStartX = canvas.width / 2;
@@ -422,7 +412,6 @@
                     }
                 }
             } else {
-                // 🎉 وضعیت سوم: اتمام تمام اهداف و پیروزی در مسابقه
                 hasBonusShot = false; isChainMode = false;
                 if (selectedPlayerCount > 1) {
                     let maxScore = Math.max(...playerScores.slice(0, selectedPlayerCount));
@@ -438,6 +427,7 @@
             if (turnIndicator) turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]}`;
             isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; 
         }
+
         function drawDynamicBorder() {
             ctx.save(); ctx.strokeStyle = currentGround.borderColor || '#fff'; ctx.lineWidth = 4;
             ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.restore();
@@ -484,24 +474,36 @@
         }
 
         function getEventPos(e) {
-            let r = canvas.getBoundingClientRect(); let singleTouch = null;
-            if (e.touches && e.touches.length > 0) { singleTouch = e.touches; }
-            else if (e.changedTouches && e.changedTouches.length > 0) { singleTouch = e.changedTouches; }
-            let clientX = singleTouch ? singleTouch.clientX : e.clientX; let clientY = singleTouch ? singleTouch.clientY : e.clientY;
-            return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
+            let r = canvas.getBoundingClientRect();
+            let clientX = e.clientX;
+            let clientY = e.clientY;
+            
+            // 🌟 کالیبراسیون و استخراج دقیق مختصات انگشت روی لایه‌های تاچ موبایل با آرایه صفرم (Index 0)
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else if (e.changedTouches && e.changedTouches.length > 0) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
+            }
+            
+            return { 
+                x: (clientX - r.left) * (canvas.width / r.width), 
+                y: (clientY - r.top) * (canvas.height / r.height) 
+            };
         }
 
         function handleStart(e) {
+            if (e.cancelable) e.preventDefault();
             if (isMoving || player.inAir) return;
             let pos = getEventPos(e); isAiming = true; 
             dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; 
-            if(e.cancelable) e.preventDefault(); 
         }
         
         function handleMove(e) { 
+            if (e.cancelable) e.preventDefault();
             if (!isAiming) return; 
             let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; 
-            if(e.cancelable) e.preventDefault(); 
         }
         
         function handleEnd() { 
@@ -594,15 +596,19 @@
                             }
                         }
                     });
-                    
-                    // 🌟 بررسی و فراخوانی تعویض نوبت پس از توقف قطعی فیزیک حرکت و فرود تیله اصلی بازیکن
                     setTimeout(() => { resetRound(); }, 1000);
                 }
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (imgBg.complete && imgBg.src) { ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); }
-            else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            
+            // 🌟 رندر هوشمند لایو: حل باگ سیاه یا سفید شدن صفحه در زمان عدم بارگذاری تصاویر روی موبایل
+            if (imgBg.complete && imgBg.src && imgBg.naturalWidth !== 0) { 
+                ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); 
+            } else { 
+                ctx.fillStyle = currentGround.fallbackColor; 
+                ctx.fillRect(0, 0, canvas.width, canvas.height); 
+            }
             
             drawDynamicBorder();
 
@@ -619,13 +625,23 @@
                     
                     ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle);
                     ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
-                    ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2); ctx.restore();
+                    if (imgTarget.complete && imgTarget.src && imgTarget.naturalWidth !== 0) {
+                        ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
+                    } else {
+                        ctx.fillStyle = "#ff5722"; ctx.fill();
+                    }
+                    ctx.restore();
                 }
             });
 
             ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle);
             ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
-            ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2); ctx.restore();
+            if (imgPlayer.complete && imgPlayer.src && imgPlayer.naturalWidth !== 0) {
+                ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
+            } else {
+                ctx.fillStyle = "#2196f3"; ctx.fill();
+            }
+            ctx.restore();
 
             if (isAiming) {
                 ctx.beginPath(); ctx.strokeStyle = "rgba(255, 255, 255, 0.5)"; ctx.lineWidth = 3;
@@ -684,8 +700,13 @@
             });
         }
 
-        canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
-        canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
+        // 🌟 شنونده‌های کاملاً کالیبره شده کامپیوتر و گوشی با قفل اکید اسکرول لایه زیرین موبایل
+        canvas.addEventListener("mousedown", handleStart); 
+        canvas.addEventListener("mousemove", handleMove); 
+        canvas.addEventListener("mouseup", handleEnd);
+        canvas.addEventListener("touchstart", handleStart, { passive: false }); 
+        canvas.addEventListener("touchmove", handleMove, { passive: false }); 
+        canvas.addEventListener("touchend", handleEnd, { passive: false });
 
         setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; imgBg.src = currentGround.src; playGroundPreviewSound(val); });
         setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val === 'sunny') { windX = 0; windY = 0; } else if(val === 'windy') { windX = 0.08; windY = 0.02; } else if(val === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; } playWeatherPreviewSound(val); });
