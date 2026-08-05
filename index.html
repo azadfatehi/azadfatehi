@@ -2,71 +2,85 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>تیله بازی مهارتی هلال پرواز</title>
     <style>
         * { 
             box-sizing: border-box; 
             user-select: none; 
             -webkit-user-select: none; 
+            margin: 0; padding: 0;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
         }
         body { 
-            background-color: #111; margin: 0; padding: 0; 
+            background-color: #111;
             display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
-            height: 100vh; font-family: sans-serif; color: white; overflow: hidden;
+            height: 100vh; height: -webkit-fill-available;
+            font-family: sans-serif; color: white; overflow: hidden;
             touch-action: none;
         }
-        /* منوی اصلی بازی */
+        /* 🖼️ تنظیم تصویر منوی اصلی به عنوان بک‌گراند صفحه اول */
         #setupMenu {
-            position: absolute; top: 0; left: 0; background-color: #3e2723;
-            background-image: url('menu_bg.jpg'); background-size: cover; background-position: center;
+            position: absolute; top: 0; left: 0; 
+            background-image: url('menu_bg.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
             image-rendering: crisp-edges; width: 100%; height: 100%; display: flex; flex-direction: column; 
             align-items: center; justify-content: center; z-index: 20; padding: 20px; direction: rtl;
         }
-        #setupMenu::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.55); z-index: -1; }
+        #setupMenu::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: -1; }
+        
         #gearBtn {
-            position: absolute; top: 20px; left: 20px; background: rgba(33, 150, 243, 0.85); border: none; border-radius: 50%; 
+            position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.25); 
+            border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; backdrop-filter: blur(5px);
             width: 50px; height: 50px; font-size: 22px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; 
-            box-shadow: 0 4px 10px rgba(0,0,0,0.4); z-index: 25;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); z-index: 25; transition: transform 0.2s;
         }
+        #gearBtn:active { transform: scale(0.9); background: rgba(255, 255, 255, 0.4); }
+        /* 🖼️ تنظیم تصویر تیله به عنوان پس‌زمینه دکمه شروع */
         #startBtn { 
-            width: 100%; max-width: 340px; padding: 16px 20px; font-size: 20px; font-weight: bold; background: #4caf50; color: white; border: none; border-radius: 25px; cursor: pointer; box-shadow: 0 5px 15px rgba(0,0,0,0.4); text-align: center;
+            position: relative; width: 140px; height: 140px; border-radius: 50%;
+            background-image: url('start-bg.jpg'); 
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+            border: 4px solid #fff; color: white; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 25;
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.6), inset 0 -8px 20px rgba(0,0,0,0.6), inset 0 8px 20px rgba(255,255,255,0.3);
+            text-shadow: 0 2px 5px rgba(0,0,0,0.9); transition: transform 0.2s, box-shadow 0.2s;
         }
+        #startBtn:active { transform: scale(0.95); box-shadow: 0 5px 15px rgba(0,0,0,0.4); }
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 30; display: none; }
         .drawer {
-            position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; background: rgba(34, 34, 34, 0.96); border-radius: 25px 25px 0 0; padding: 20px; z-index: 31; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl;
-            touch-action: pan-y !important;
+            position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; 
+            background: #222; border-radius: 25px 25px 0 0; padding: 20px; z-index: 31; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl;
+            touch-action: pan-y !important; display: flex; flex-direction: column; align-items: center;
         }
         .drawer.open { bottom: 0; }
-        .drawer-close { background: #e53935; border: none; color: white; padding: 6px 16px; border-radius: 15px; float: left; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .menu-row { margin: 15px 0; text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .menu-row label { display: block; font-size: 16px; margin-bottom: 10px; font-weight: bold; color: #ffeb3b; }
         
+        .drawer-close-btn { 
+            background: #2196f3; border: none; color: white; padding: 14px 28px; width: 100%; max-width: 320px;
+            border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 16px; text-align: center;
+            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3); margin-top: 20px; margin-bottom: 10px;
+        }
+        .drawer-close-btn:active { background: #1976d2; }
+        
+        .menu-row { margin: 15px 0; text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .menu-row label { display: block; font-size: 16px; margin-bottom: 10px; font-weight: bold; color: #ffeb3b; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
         .scroll-container { display: flex; justify-content: flex-start; overflow-x: auto; gap: 12px; padding: 10px 5px; width: 100%; max-width: 360px; -webkit-overflow-scrolling: touch; touch-action: pan-x !important; }
-        .scroll-item { flex: 0 0 70px; border: 3px solid #555; border-radius: 12px; overflow: hidden; cursor: pointer; aspect-ratio: 1; }
+        .scroll-item { flex: 0 0 70px; border: 3px solid #555; border-radius: 12px; overflow: hidden; cursor: pointer; aspect-ratio: 1; background: rgba(0,0,0,0.4); }
         .scroll-item canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
         .scroll-item.active { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
         
-        .target-column-select { display: flex; flex-direction: row; justify-content: center; gap: 12px; width: 100%; }
-        .target-marble-item { border: none !important; background: transparent !important; box-shadow: none !important; cursor: pointer; width: 70px; height: 70px; border-radius: 50% !important; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-        .target-marble-item canvas { width: 100% !important; height: 100% !important; border-radius: 50% !important; display: block; }
-        .target-marble-item.active { filter: drop-shadow(0 0 10px #4caf50) !important; }
-        
         .count-column-select { display: flex; justify-content: center; gap: 10px; width: 100%; }
-        .count-button-item { width: 70px; padding: 10px; font-size: 14px; font-weight: bold; background: #252525; border: 2px solid #444; border-radius: 12px; color: white; cursor: pointer; text-align: center; }
+        .count-button-item { width: 70px; padding: 10px; font-size: 14px; font-weight: bold; background: rgba(37,37,37,0.85); border: 2px solid #444; border-radius: 12px; color: white; cursor: pointer; text-align: center; }
         .count-button-item.active { background: #4caf50; border-color: #fff; box-shadow: 0 0 12px #4caf50; }
 
         .name-input-container { display: flex; flex-direction: column; gap: 8px; width: 100%; max-width: 260px; margin-top: 5px; }
-        .name-input-container input {
-            width: 100%; padding: 10px; font-size: 14px; background: #1a1a1a; border: 2px solid #444;
-            border-radius: 10px; color: white; text-align: center; direction: rtl;
-            user-select: text !important; -webkit-user-select: text !important;
-        }
+        .name-input-container input { width: 100%; padding: 10px; font-size: 14px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; direction: rtl; user-select: text !important; -webkit-user-select: text !important; }
         .name-input-container input:focus { border-color: #4caf50; outline: none; }
 
-        #canvas { border: 3px solid white; box-shadow: 0 0 20px rgba(0,0,0,0.6); display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 92vw; height: 80vh; max-width: 430px; max-height: 680px; border-radius: 15px; margin-top: 15px; }
+        #canvas { display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
         
-        #gameHeader { display: none; width: 92vw; max-width: 430px; justify-content: space-between; align-items: center; margin-top: 15px; direction: rtl; }
+        #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: absolute; top: 15px; z-index: 10; direction: rtl; }
         #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
         #exitBtn:active { background: #b71c1c; }
         #turnIndicator { font-size: 16px; font-weight: bold; color: #ffeb3b; background: rgba(0,0,0,0.6); padding: 6px 14px; border-radius: 10px; }
@@ -82,8 +96,7 @@
     <div class="drawer-overlay" id="overlay"></div>
 
     <div class="drawer" id="settingsDrawer">
-        <button class="drawer-close" id="closeDrawer">تایید ×</button>
-        <h3 style="margin-top: 0; margin-bottom: 20px; color: #ffeb3b; text-align: center;">تنظیمات مسابقه</h3>
+        <h3 style="margin-top: 10px; margin-bottom: 10px; color: #ffeb3b; text-align: center;">تنظیمات مسابقه</h3>
         
         <div class="menu-row">
             <label>نوع زمین مسابقه</label>
@@ -100,18 +113,9 @@
             <label>شرایط آب و هوا</label>
             <div class="count-column-select" id="weatherGrid">
                 <div class="count-button-item active" data-val="sunny">☀️ آفتابی</div>
+                <div class="count-button-item" data-val="windy">💨 باد شدید</div>
                 <div class="count-button-item" data-val="rainy">🌧️ بارانی</div>
-                <div class="count-button-item" data-val="windy">💨 بادی</div>
                 <div class="count-button-item" data-val="snowy">❄️ برفی</div>
-            </div>
-        </div>
-
-        <div class="menu-row">
-            <label>شکل تیله‌های هدف</label>
-            <div class="target-column-select" id="targetGrid">
-                <div class="target-marble-item active" data-val="1.png"><canvas id="pre_t_red"></canvas></div>
-                <div class="target-marble-item" data-val="2.png"><canvas id="pre_t_green"></canvas></div>
-                <div class="target-marble-item" data-val="3.png"><canvas id="pre_t_gold"></canvas></div>
             </div>
         </div>
 
@@ -123,28 +127,32 @@
                 <div class="count-button-item" data-val="3">۳ نفره</div>
                 <div class="count-button-item" data-val="4">۴ نفره</div>
             </div>
-        </div>
-
-        <div class="menu-row" id="namesRow">
-            <label>نام بازیکنان</label>
             <div class="name-input-container" id="namesContainer">
-                <input type="text" id="pInput0" value="بازیکن ۱" placeholder="نام بازیکن اول">
+                <input type="text" id="pInput0" value="بازیکن ۱">
             </div>
         </div>
 
         <div class="menu-row">
             <label>تعداد تیله‌های هدف</label>
             <div class="count-column-select" id="countGrid">
-                <div class="count-button-item active" data-val="3">۳ تا</div>
-                <div class="count-button-item" data-val="5">۵ تا</div>
-                <div class="count-button-item" data-val="7">۷ تا</div>
+                <div class="count-button-item" data-val="3">۳ تیله</div>
+                <div class="count-button-item active" data-val="5">۵ تیله</div>
+                <div class="count-button-item" data-val="7">۷ تیله</div>
             </div>
         </div>
+
+        <div class="menu-row" style="display:none;" id="targetGridContainer">
+            <div id="targetGrid"><div data-val="1.png"></div></div>
+        </div>
+
+        <button class="drawer-close-btn" id="closeDrawer">ثبت و تایید</button>
     </div>
+
     <div id="gameHeader">
-        <span id="turnIndicator">نوبت: بازیکن ۱</span>
-        <button id="exitBtn">خروج از بازی</button>
+        <button id="exitBtn">خروج</button>
+        <div id="turnIndicator">نوبت: بازیکن ۱</div>
     </div>
+
     <canvas id="canvas"></canvas>
 
     <script>
@@ -161,11 +169,14 @@
         const namesContainer = document.getElementById("namesContainer");
         const turnIndicator = document.getElementById("turnIndicator");
 
+        let isFirstShotOfTurn = true;
         let currentLevel = 1;
         let isAiming = false;
         let isMoving = false;
         let hitSuccessInTurn = false;
         let targetOutInTurn = false; 
+        let hasBonusShot = false;
+        let isChainMode = false;
         
         let dragStart = { x: 0, y: 0 };
         let dragEnd = { x: 0, y: 0 };
@@ -175,10 +186,10 @@
         let selectedWeather = "sunny";
         let weatherParticles = [];
 
-        const box = { x: 40, y: 40, w: 320, h: 180 };
+        let box = { x: 40, y: 60, w: 320, h: 220 };
         
         let player = { 
-            x: 200, y: 440, startX: 200, startY: 440, targetX: 200, targetY: 440,
+            x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480,
             baseR: 22, r: 22, vx: 0, vy: 0, angle: 0,
             z: 0, progress: 0, arcHeight: 0, inAir: false 
         }; 
@@ -190,11 +201,11 @@
         let playerNames = ["بازیکن ۱"]; 
 
         const grounds = {
-            grass: { friction: 0.96, wind: 0.08, src: 'grass.jpg', borderStyle: 'rope', borderColor: '#ffffff', borderWidth: 4, fallbackColor: '#2e7d32' },
-            carpet: { friction: 0.97, wind: 0.02, src: 'carpet.jpg', borderStyle: 'thread', borderColor: '#ffeb3b', borderWidth: 2, fallbackColor: '#b71c1c' },
-            asphalt: { friction: 0.93, wind: 0.05, src: 'asphalt.jpg', borderStyle: 'chalk', borderColor: 'rgba(240,240,240,0.85)', borderWidth: 8, fallbackColor: '#424242' },
-            cement: { friction: 0.98, wind: 0.04, src: 'cement.jpg', borderStyle: 'marker', borderColor: '#111111', borderWidth: 5, fallbackColor: '#9e9e9e' },
-            dirt: { friction: 0.94, wind: 0.15, src: 'dirt.jpg', borderStyle: 'scratched', borderColor: '#4e342e', borderWidth: 6, fallbackColor: '#8d6e63' }
+            grass:   { friction: 0.98, wind: 0.08, src: 'grass.jpg',   fallbackColor: '#2e7d32', soundFreq: 280,  soundWave: 'triangle', soundDecay: 0.04, borderColor: '#4caf50' },
+            carpet:  { friction: 0.99, wind: 0.02, src: 'carpet.jpg',  fallbackColor: '#b71c1c', soundFreq: 140,  soundWave: 'sine',     soundDecay: 0.06, borderColor: '#e91e63' },
+            asphalt: { friction: 0.96, wind: 0.05, src: 'asphalt.jpg', fallbackColor: '#424242', soundFreq: 600,  soundWave: 'sawtooth', soundDecay: 0.02, borderColor: '#9e9e9e' },
+            cement:  { friction: 0.99, wind: 0.04, src: 'cement.jpg',  fallbackColor: '#9e9e9e', soundFreq: 800,  soundWave: 'triangle', soundDecay: 0.03, borderColor: '#00bcd4' },
+            dirt:    { friction: 0.97, wind: 0.15, src: 'dirt.jpg',    fallbackColor: '#8d6e63', soundFreq: 340,  soundWave: 'sine',     soundDecay: 0.05, borderColor: '#ff9800' }
         };
 
         let currentGround = grounds.grass;
@@ -206,263 +217,365 @@
 
         let selectedGroundVal = "grass";
         let selectedTargetSrc = "1.png"; 
-        let selectedCountVal = 3;
-
+        let selectedCountVal = 5;
         let audioCtx = null;
+        let ambientOsc = null; 
+        let ambientGain = null;
+        function initAudio() {
+            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
+        }
+
         function playClickSound(volume = 1) {
             try {
-                if (!audioCtx) {
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                initAudio();
+                let now = audioCtx.currentTime;
+                let osc1 = audioCtx.createOscillator();
+                let gain1 = audioCtx.createGain();
+                osc1.type = "sine"; osc1.frequency.setValueAtTime(3200, now);
+                osc1.frequency.exponentialRampToValueAtTime(1800, now + 0.003);
+                gain1.gain.setValueAtTime(volume * 0.6, now); gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.005);
+                osc1.connect(gain1); gain1.connect(audioCtx.destination); osc1.start(now); osc1.stop(now + 0.005);
+
+                let osc2 = audioCtx.createOscillator();
+                let gain2 = audioCtx.createGain();
+                osc2.type = "triangle"; osc2.frequency.setValueAtTime(900, now);
+                osc2.frequency.exponentialRampToValueAtTime(400, now + 0.015);
+                gain2.gain.setValueAtTime(volume * 0.3, now); gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.02);
+                osc2.connect(gain2); gain2.connect(audioCtx.destination); osc2.start(now); osc2.stop(now + 0.02);
+
+                let bufferSize = audioCtx.sampleRate * 0.003; 
+                let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+                let data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+                let noise = audioCtx.createBufferSource(); noise.buffer = buffer;
+                let noiseFilter = audioCtx.createBiquadFilter(); noiseFilter.type = "highpass"; noiseFilter.frequency.setValueAtTime(2000, now); 
+                let noiseGain = audioCtx.createGain(); noiseGain.gain.setValueAtTime(volume * 0.2, now); noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.003);
+                noise.connect(noiseFilter); noiseFilter.connect(noiseGain); noiseGain.connect(audioCtx.destination);
+                noise.start(now); noise.stop(now + 0.003);
+            } catch(e) {}
+        }
+
+        function playGroundPreviewSound(type) {
+            try {
+                initAudio();
+                let osc = audioCtx.createOscillator(); let gainNode = audioCtx.createGain();
+                osc.type = grounds[type].soundWave; osc.frequency.setValueAtTime(grounds[type].soundFreq, audioCtx.currentTime);
+                gainNode.gain.setValueAtTime(0.3, audioCtx.currentTime); gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
+                osc.connect(gainNode); gainNode.connect(audioCtx.destination); osc.start(); osc.stop(audioCtx.currentTime + 0.1);
+            } catch(e){}
+        }
+
+        function playWeatherPreviewSound(type) {
+            try {
+                initAudio(); stopAmbientSound();
+                if (type === "sunny") return;
+                ambientOsc = audioCtx.createOscillator(); ambientGain = audioCtx.createGain();
+                if (type === "windy") {
+                    ambientOsc.type = "sawtooth"; ambientOsc.frequency.setValueAtTime(80, audioCtx.currentTime);
+                    let lfo = audioCtx.createOscillator(); lfo.frequency.setValueAtTime(0.8, audioCtx.currentTime);
+                    let lfoGain = audioCtx.createGain(); lfoGain.gain.setValueAtTime(30, audioCtx.currentTime);
+                    lfo.connect(lfoGain); lfoGain.connect(ambientOsc.frequency); lfo.start();
+                    ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                } else if (type === "rainy") {
+                    ambientOsc.type = "triangle"; ambientOsc.frequency.setValueAtTime(140, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                } else if (type === "snowy") {
+                    ambientOsc.type = "sine"; ambientOsc.frequency.setValueAtTime(50, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
                 }
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
+                ambientOsc.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientOsc.start();
+            } catch(e){}
+        }
+
+        function startAmbientSound(weather) {
+            try {
+                initAudio(); stopAmbientSound();
+                if (weather === "sunny") return;
+                ambientOsc = audioCtx.createOscillator(); ambientGain = audioCtx.createGain();
+                if (weather === "windy") {
+                    ambientOsc.type = "sawtooth"; ambientOsc.frequency.setValueAtTime(80, audioCtx.currentTime);
+                    let lfo = audioCtx.createOscillator(); lfo.frequency.setValueAtTime(0.5, audioCtx.currentTime);
+                    let lfoGain = audioCtx.createGain(); lfoGain.gain.setValueAtTime(40, audioCtx.currentTime);
+                    lfo.connect(lfoGain); lfoGain.connect(ambientOsc.frequency); lfo.start();
+                    ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                } else if (weather === "rainy") {
+                    ambientOsc.type = "triangle"; ambientOsc.frequency.setValueAtTime(140, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                } else if (weather === "snowy") {
+                    ambientOsc.type = "sine"; ambientOsc.frequency.setValueAtTime(50, audioCtx.currentTime);
+                    ambientGain.gain.setValueAtTime(0.05, audioCtx.currentTime);
                 }
-                let osc = audioCtx.createOscillator();
-                let gainNode = audioCtx.createGain();
-                osc.type = 'triangle';
-                osc.frequency.setValueAtTime(800, audioCtx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.04);
-                gainNode.gain.setValueAtTime(volume * 0.6, audioCtx.currentTime);
-                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
-                osc.connect(gainNode);
-                gainNode.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + 0.04);
-            } catch(e) { console.log("Audio Error:", e); }
+                ambientOsc.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientOsc.start();
+            } catch(e){}
+        }
+
+        function stopAmbientSound() {
+            try { if(ambientOsc) { ambientOsc.stop(); ambientOsc.disconnect(); ambientOsc = null; } } catch(e){}
         }
         function initWeatherParticles() {
             weatherParticles = [];
-            if (selectedWeather === "sunny") return;
-            
-            let count = selectedWeather === "rainy" ? 60 : 40;
-            for (let i = 0; i < count; i++) {
+            let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80);
+            for(let i=0; i<count; i++) {
                 weatherParticles.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    speed: Math.random() * 4 + 2,
-                    r: Math.random() * 2 + 1,
+                    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                    v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1),
+                    r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2),
                     opacity: Math.random() * 0.5 + 0.3
                 });
             }
         }
 
-        function drawWeatherFX() {
-            if (selectedWeather === "sunny") return;
-            ctx.save();
-            
+        function updateWeatherParticles() {
             weatherParticles.forEach(p => {
-                ctx.beginPath();
-                if (selectedWeather === "rainy") {
-                    ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`;
-                    ctx.lineWidth = 1.5;
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p.x + (windX * 15), p.y + p.speed * 2);
-                    ctx.stroke();
-                    
-                    p.y += p.speed * 2;
-                    p.x += windX * 5;
-                } else if (selectedWeather === "snowy") {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
-                    ctx.arc(p.x, p.y, p.r + 1, 0, Math.PI * 2);
-                    ctx.fill();
-                    
-                    p.y += p.speed * 0.4;
-                    p.x += Math.sin(p.y / 10) * 0.5 + (windX * 2);
-                } else if (selectedWeather === "windy") {
-                    ctx.strokeStyle = `rgba(240, 240, 240, ${p.opacity * 0.3})`;
-                    ctx.lineWidth = 1;
-                    ctx.moveTo(p.x, p.y);
-                    ctx.lineTo(p.x + 35, p.y + (windY * 2));
-                    ctx.stroke();
-                    
-                    p.x += p.speed * 3;
-                    p.y += windY;
-                }
-
-                if (p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
-                if (p.x > canvas.width) { p.x = -20; p.y = Math.random() * canvas.height; }
-                if (p.x < -20) { p.x = canvas.width; p.y = Math.random() * canvas.height; }
+                p.y += p.v; p.x += windX * 10;
+                if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; }
             });
+        }
+
+        function drawWeather() {
+            ctx.save();
+            if(selectedWeather === "rainy") {
+                weatherParticles.forEach(p => {
+                    ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r;
+                    ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke();
+                });
+            } else if(selectedWeather === "snowy") {
+                weatherParticles.forEach(p => {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+                });
+            }
             ctx.restore();
         }
 
-        function resizeCanvas() {
-            let rect = canvas.getBoundingClientRect();
-            canvas.width = rect.width || 400;
-            canvas.height = rect.height || 600;
-            
-            if(!isMoving && player.vx === 0 && player.vy === 0 && player.y === 440) {
-                player.x = canvas.width / 2;
-                player.y = canvas.height - 50;
-            }
-            
-            box.w = canvas.width - 40;
-            box.h = canvas.height * 0.42; 
-            box.x = (canvas.width - box.w) / 2; 
-            box.y = 80; 
-            initWeatherParticles();
-        }
-        window.addEventListener('resize', resizeCanvas);
-
-        function updateNameInputs(count) {
-            namesContainer.innerHTML = "";
-            for (let i = 0; i < count; i++) {
-                let input = document.createElement("input");
-                input.type = "text";
-                input.id = `pInput${i}`;
-                input.value = `بازیکن ${i + 1}`;
-                input.placeholder = `نام بازیکن ${i + 1}`;
-                namesContainer.appendChild(input);
-            }
-        }
-
-        function generateMenuPreviews() {
-            setupMenu.style.backgroundImage = "url('menu_bg.jpg')";
-            let applyImgToGrid = (id, src, fallbackColor, isTarget) => {
-                let cnv = document.getElementById(id);
-                if(cnv) {
-                    let cCtx = cnv.getContext("2d");
-                    cnv.width = 200; cnv.height = 200;
-                    cnv.style.width = "100px"; cnv.style.height = "100px";
-                    cCtx.imageSmoothingEnabled = true;
-                    cCtx.imageSmoothingQuality = 'high';
-                    let img = new Image();
-                    img.onload = () => { 
-                        cCtx.clearRect(0, 0, 200, 200);
-                        cCtx.save();
-                        if (isTarget) {
-                            cCtx.beginPath(); cCtx.arc(100, 100, 100, 0, Math.PI * 2); cCtx.clip();
-                        }
-                        cCtx.drawImage(img, 0, 0, 200, 200);
-                        cCtx.restore(); 
-                    };
-                    img.onerror = () => { 
-                        cCtx.clearRect(0, 0, 200, 200);
-                        if (isTarget) {
-                            cCtx.beginPath(); cCtx.arc(100, 100, 100, 0, Math.PI * 2);
-                            cCtx.fillStyle = fallbackColor || "#333"; cCtx.fill(); 
-                        } else {
-                            cCtx.fillStyle = fallbackColor || "#333"; cCtx.fillRect(0, 0, 200, 200);
-                        }
-                    };
-                    img.src = src; 
-                }
-            };
-            applyImgToGrid("pre_grass", "grass.jpg", "#2e7d32", false);
-            applyImgToGrid("pre_carpet", "carpet.jpg", "#b71c1c", false);
-            applyImgToGrid("pre_asphalt", "asphalt.jpg", "#424242", false);
-            applyImgToGrid("pre_cement", "cement.jpg", "#9e9e9e", false);
-            applyImgToGrid("pre_dirt", "dirt.jpg", "#8d6e63", false);
-
-            applyImgToGrid("pre_t_red", "1.png", "#e53935", true);
-            applyImgToGrid("pre_t_green", "2.png", "#4caf50", true);
-            applyImgToGrid("pre_t_gold", "3.png", "#ffeb3b", true);
-        }
-
-        function loadLevel(lvl) {
-            player.x = canvas.width / 2; player.y = canvas.height - 50; player.vx = 0; player.vy = 0; player.angle = 0; targets = [];
-            player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-            let cx = box.x + box.w / 2; let cy = box.y + box.h / 2;
-            
-            if (selectedCountVal === 3) {
-                targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                targets.push({ x: cx - 25, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                targets.push({ x: cx + 25, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-            } else if (selectedCountVal === 5) {
-                targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                targets.push({ x: cx - 28, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                targets.push({ x: cx + 28, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                targets.push({ x: cx, y: cy - 28, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                targets.push({ x: cx, y: cy + 28, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-            } else { 
-                targets.push({ x: cx, y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                for(let i = 1; i <= 3; i++) {
-                    targets.push({ x: cx - (i * 26), y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                    targets.push({ x: cx + (i * 26), y: cy, r: 14, vx: 0, vy: 0, isOut: false, angle: 0 });
-                }
-            }
-            
-            let weatherWindModifier = 1;
-            if (selectedWeather === "windy") weatherWindModifier = 3.5;
-            if (selectedWeather === "rainy") weatherWindModifier = 1.8;
-            if (selectedWeather === "snowy") weatherWindModifier = 1.2;
-            if (selectedWeather === "sunny") weatherWindModifier = 0.3;
-
-            windX = (Math.random() * 2 - 1) * currentGround.wind * weatherWindModifier;
-            windY = (selectedWeather === "windy" || selectedWeather === "rainy") ? (Math.random() * 0.15) : 0;
-            
-            initWeatherParticles();
-            if (turnIndicator) turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]}`;
-            if (lvl === 1 && !isMoving && !isAiming) gameLoop();
-        }
         function resetRound() {
             player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
             isMoving = false;
+            
             let activeTargets = targets.filter(t => !t.isOut).length;
             
             if (activeTargets > 0) {
-                if (selectedPlayerCount === 1) {
-                    if (!targetOutInTurn) {
-                        alert("❌ شما نتوانستید تیله‌ای را از خط بیرون بیندازید! بازی تمام شد.");
-                        exitBtn.click();
-                        return;
-                    }
-                } else {
-                    // سیستم نوبت‌دهی و بازگشت هوشمند به نقطه شروع در صورت خطا
-                    if (!targetOutInTurn) {
-                        currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
-                        // بازگشت بازیکن به نقطه شروع پایین صفحه به دلیل عدم کسب امتیاز در این راند
-                        player.x = canvas.width / 2;
-                        player.y = canvas.height - 50;
+                // 🎯 وضعیت اول: تیله هدف با موفقیت از خط بیرون رفته است (کسب جایزه و فعال شدن زنجیره)
+                if (targetOutInTurn) {
+                    if (selectedPlayerCount === 1) {
+                        alert("🎉 عالی بود! یک شلیک جایزه گرفتید!");
                     } else {
-                        alert(`🎯 پرتاب موفق! ${playerNames[currentPlayerIndex]} جایزه گرفت و از همان نقطه پرتاب بعدی را می‌زند.`);
+                        alert(`🎉 عالی بود ${playerNames[currentPlayerIndex]}! تیله بیرون رفت و شلیک جایزه گرفتی!`);
+                    }
+                    hasBonusShot = true; 
+                    
+                    // 🌟 فعال کردن حالت زنجیره‌ای برای کل بازی: از این لحظه به بعد تیله دیگر هرگز به پایین برنمی‌گردد
+                    isChainMode = true; 
+                    
+                    // تیله دست دست‌نخورده می‌ماند و پرتاب بعدی دقیقاً از همان نقطه توقف انجام می‌شود.
+                } 
+                // 🎯 وضعیت دوم: شلیک ناموفق بوده و هیچ تیله هدفی بیرون نرفته است
+                else {
+                    if (selectedPlayerCount === 1) {
+                        if (hasBonusShot) {
+                            // 💀 بازی تک‌نفره: خطا در شلیک جایزه باعث باخت فوری و ریست کل بازی می‌شود
+                            alert("💀 خطا در شلیک جایزه! شما فرصت طلایی را از دست دادید. بازی تمام شد و ریست می‌شود.");
+                            hasBonusShot = false; isChainMode = false;
+                            exitBtn.click(); 
+                            return;
+                        } else {
+                            // ❌ بازی تک‌نفره: اگر شلیک عادی خطا برود، تیله به نقطه شروع پایین زمین بازمی‌گردد
+                            alert("❌ شما نتوانستید تیله‌ای را از خط بیرون بینذازید! دوباره تلاش کنید.");
+                            
+                            let newStartX = canvas.width / 2;
+                            let newStartY = canvas.height - 120; 
+                            player.x = newStartX; player.y = newStartY;
+                            player.startX = newStartX; player.startY = newStartY;
+                            player.targetX = newStartX; player.targetY = newStartY;
+                            player.angle = 0;
+                            hasBonusShot = false;
+                        }
+                    } 
+                    else {
+                        // 👥 بازی چندنفره (پیاده‌سازی مو به موی قانون توالی زنجیره‌ای شما):
+                        if (isChainMode) {
+                            // 🌟 قانون مهارتی شما: چون قبلاً حداقل یک تیله بیرون رفته، بازی در حالت زنجیره‌ای است.
+                            // نوبت عوض می‌شود اما تیله دست برای بازیکن بعدی هرگز به پایین زمین برنمی‌گردد و از جای توقف جاری ادامه می‌یابد.
+                            alert(`❌ بازیکن ${playerNames[currentPlayerIndex]} موفق نشد! نوبت بازیکن بعدی است و بازی از همین نقطه توقف ادامه پیدا می‌کند.`);
+                            
+                            currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
+                            hasBonusShot = false; // بازیکن جدید پرتاب عادی‌اش را از همین جا می‌زند و شانس جایزه دارد
+                            
+                            // هیچ کدی برای بازگشت تیله به پایین نوشته نشده تا مختصات فیکس بماند
+                        } 
+                        else {
+                            // 🌟 فاز اول بازی: هنوز هیچ تیله هدفی در کل مسابقه بیرون نرفته و شلیک اولِ اول خراب شده است.
+                            // نوبت عوض می‌شود و تیله دست بازیکن بعدی حتماً به نقطه شروع پایین زمین بازمی‌گردد.
+                            alert(`❌ بازیکن ${playerNames[currentPlayerIndex]} نتوانست تیله‌ای را بیرون بیندازد! نوبت بازیکن بعدی از نقطه شروع است.`);
+                            
+                            currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
+                            
+                            let newStartX = canvas.width / 2;
+                            let newStartY = canvas.height - 120; 
+                            player.x = newStartX; player.y = newStartY;
+                            player.startX = newStartX; player.startY = newStartY;
+                            player.targetX = newStartX; player.targetY = newStartY;
+                            player.angle = 0;
+                            hasBonusShot = false;
+                        }
                     }
                 }
             } else {
+                // 🎉 وضعیت سوم: اتمام تمام اهداف و پیروزی در مسابقه
+                hasBonusShot = false; isChainMode = false;
                 if (selectedPlayerCount > 1) {
                     let maxScore = Math.max(...playerScores.slice(0, selectedPlayerCount));
                     let winners = [];
                     playerScores.slice(0, selectedPlayerCount).forEach((score, idx) => { if(score === maxScore) winners.push(playerNames[idx]); });
                     alert("🎯 مسابقه تمام شد!\n" + winners.join(" و ") + " با کسب " + maxScore + " تیله برنده شدند! 🏆");
                 } else {
-                    alert(`🎉 آفرین ${playerNames}! تمام تیله‌ها را بردی!`);
+                    alert(`🎉 آفرین ${playerNames[currentPlayerIndex]}! تمام تیله‌ها را بردی!`);
                 }
-                exitBtn.click();
-                return;
+                exitBtn.click(); return;
             }
+            
             if (turnIndicator) turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]}`;
-            hitSuccessInTurn = false;
-            targetOutInTurn = false; 
+            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; 
         }
-
         function drawDynamicBorder() {
-            ctx.save(); ctx.strokeStyle = currentGround.borderColor; ctx.lineWidth = currentGround.borderWidth;
-            box.w = canvas.width - 40; box.h = canvas.height * 0.42; box.x = (canvas.width - box.w) / 2; box.y = 80; 
+            ctx.save(); ctx.strokeStyle = currentGround.borderColor || '#fff'; ctx.lineWidth = 4;
             ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.restore();
             ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h);
         }
 
+        function generateMenuPreviews() {
+            Object.keys(grounds).forEach(key => {
+                let pCanvas = document.getElementById(`pre_${key}`);
+                if (pCanvas) {
+                    let pCtx = pCanvas.getContext("2d"); pCanvas.width = 70; pCanvas.height = 70;
+                    pCtx.fillStyle = grounds[key].fallbackColor; pCtx.fillRect(0, 0, 70, 70);
+                    let preImg = new Image(); preImg.src = grounds[key].src;
+                    preImg.onload = function() {
+                        pCtx.drawImage(preImg, 0, 0, 70, 70);
+                        pCtx.strokeStyle = "rgba(255,255,255,0.2)"; pCtx.strokeRect(5, 5, 60, 60);
+                    };
+                    pCtx.strokeStyle = "rgba(255,255,255,0.2)"; pCtx.strokeRect(5, 5, 60, 60);
+                }
+            });
+        }
+        function updateNameInputs(count) {
+            namesContainer.innerHTML = "";
+            for(let i=0; i<count; i++) {
+                let input = document.createElement("input"); input.type = "text"; input.id = `pInput${i}`; input.value = `بازیکن ${i+1}`;
+                namesContainer.appendChild(input);
+            }
+        }
+
+        function loadLevel(lvl) {
+            targets = []; let count = selectedCountVal;
+            let centerY = box.y + box.h / 2; let targetRadius = 16; let targetDiameter = targetRadius * 2;
+            let totalWidth = count * targetDiameter;
+            let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius;
+            for (let i = 0; i < count; i++) {
+                targets.push({ x: startX + (i * targetDiameter), y: centerY, r: targetRadius, vx: 0, vy: 0, angle: 0, isOut: false });
+            }
+            initWeatherParticles();
+        }
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            box.x = (canvas.width - box.w) / 2; box.y = 80;
+        }
+
+        function getEventPos(e) {
+            let r = canvas.getBoundingClientRect(); let singleTouch = null;
+            if (e.touches && e.touches.length > 0) { singleTouch = e.touches; }
+            else if (e.changedTouches && e.changedTouches.length > 0) { singleTouch = e.changedTouches; }
+            let clientX = singleTouch ? singleTouch.clientX : e.clientX; let clientY = singleTouch ? singleTouch.clientY : e.clientY;
+            return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
+        }
+
+        function handleStart(e) {
+            if (isMoving || player.inAir) return;
+            let pos = getEventPos(e); isAiming = true; 
+            dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; 
+            if(e.cancelable) e.preventDefault(); 
+        }
+        
+        function handleMove(e) { 
+            if (!isAiming) return; 
+            let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; 
+            if(e.cancelable) e.preventDefault(); 
+        }
+        
+        function handleEnd() { 
+            if (!isAiming) return; 
+            isAiming = false; 
+            let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; 
+            let dragDist = Math.sqrt(dx * dx + dy * dy);
+            
+            if (dragDist > 5) {
+                player.startX = player.x; player.startY = player.y;
+                let targetHit = null; let closestDist = Infinity;
+                if (typeof targets !== 'undefined' && targets.length > 0) {
+                    targets.forEach(t => {
+                        if (t.isOut) return;
+                        let A = dy; let B = -dx; let C = dx * player.y - dy * player.x;
+                        let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B);
+                        if (lineDist < (16 + t.r)) {
+                            let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2);
+                            if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; }
+                        }
+                    });
+                }
+                
+                if (targetHit && closestDist < 120) {
+                    player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y;
+                    let hitDelay = (closestDist / 5.5) * 15; 
+                    setTimeout(() => {
+                        if (typeof playClickSound === 'function') playClickSound(1);
+                        let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX);
+                        let hitSpeed = 14 + (dragDist * 0.25); let steps = 0;
+                        let slideInterval = setInterval(() => {
+                            targetHit.x += Math.cos(angle) * hitSpeed; targetHit.y += Math.sin(angle) * hitSpeed;
+                            targetHit.angle += hitSpeed / targetHit.r; hitSpeed *= 0.94; steps++;
+                            
+                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
+                                targetHit.isOut = true; targetOutInTurn = true;
+                                if(playerScores[currentPlayerIndex] !== undefined) playerScores[currentPlayerIndex]++;
+                            }
+                            if (steps > 60 || hitSpeed < 0.5 || targetHit.isOut) {
+                                clearInterval(slideInterval);
+                            }
+                        }, 16);
+                    }, hitDelay);
+                } else {
+                    let calcTargetX = player.x + dx * 5.5; 
+                    let calcTargetY = player.y + dy * 5.5;
+                    
+                    // 🌟 قفل مرزی مهندسی‌شده (Clamp): مانع از خروج تیله دست بازیکن از دیواره‌های کادر بازی می‌شود
+                    let padding = player.baseR + 4;
+                    if (calcTargetX < box.x + padding) calcTargetX = box.x + padding;
+                    if (calcTargetX > box.x + box.w - padding) calcTargetX = box.x + box.w - padding;
+                    if (calcTargetY < box.y + padding) calcTargetY = box.y + padding;
+                    if (calcTargetY > box.y + box.h - padding) calcTargetY = box.y + box.h - padding;
+                    
+                    player.targetX = calcTargetX; 
+                    player.targetY = calcTargetY;
+                    player.arcHeight = Math.min(dragDist * 0.45, 140); 
+                }
+                player.progress = 0; player.inAir = true; isFirstShotOfTurn = false;
+            }
+        }
         function gameLoop() {
             if (canvas.style.display === "none") return;
-            let anyMoving = false;
-            let stopThreshold = 0.15;
-
             let weatherFrictionModifier = 1;
             if (selectedWeather === "rainy") weatherFrictionModifier = 0.995; 
             if (selectedWeather === "snowy") weatherFrictionModifier = 0.997; 
 
             if (player.inAir) {
-                player.progress += 0.04; 
-                
+                player.progress += 0.03; 
                 player.x = player.startX + (player.targetX - player.startX) * player.progress;
                 player.y = player.startY + (player.targetY - player.startY) * player.progress;
-                
-                player.x += windX * player.progress * 15;
-                player.y += windY * player.progress * 15;
-
+                player.x += windX * player.progress * 15; player.y += windY * player.progress * 15;
                 player.z = Math.sin(player.progress * Math.PI) * player.arcHeight;
                 player.r = player.baseR + player.z * 0.35; 
-
                 let tSpeed = Math.sqrt(Math.pow(player.targetX - player.startX, 2) + Math.pow(player.targetY - player.startY, 2)) * 0.02;
                 player.angle += tSpeed / player.baseR;
 
@@ -474,240 +587,116 @@
                     targets.forEach(t => {
                         if (!t.isOut) {
                             let dx = t.x - player.x; let dy = t.y - player.y; let dist = Math.sqrt(dx*dx + dy*dy);
-                            if (dist < player.r + t.r) {
+                            if (dist < (player.r + t.r)) {
+                                playClickSound(1);
                                 let angle = Math.atan2(dy, dx);
-                                // افزایش چشمگیر ضریب نیرو به ۱.۴۵ جهت شتاب‌دهی واقعی و پرتاب قطعی اهداف به بیرون
-                                t.vx = Math.cos(angle) * (player.arcHeight * 0.045) * 1.45;
-                                t.vy = Math.sin(angle) * (player.arcHeight * 0.045) * 1.45;
-                                hitSuccessInTurn = true;
-                                playClickSound(0.8);
+                                t.vx = Math.cos(angle) * 8; t.vy = Math.sin(angle) * 8;
                             }
                         }
                     });
-
-                    if (!hitSuccessInTurn) {
-                        player.vx = 0; player.vy = 0;
-                    }
-                }
-                anyMoving = true;
-            }
-
-            targets.forEach(t => {
-                if (!t.isOut) {
-                    if (Math.abs(t.vx) > stopThreshold || Math.abs(t.vy) > stopThreshold) {
-                        t.x += t.vx; t.y += t.vy;
-                        let tSpeed = Math.sqrt(t.vx * t.vx + t.vy * t.vy);
-                        t.angle += (t.vx >= 0 ? tSpeed : -tSpeed) / t.r;
-                        // فیزیک روان غلطش سنگ‌ها روی زمین مسابقه
-                        t.vx *= (currentGround.friction * weatherFrictionModifier * 0.94); 
-                        t.vy *= (currentGround.friction * weatherFrictionModifier * 0.94); 
-                        anyMoving = true;
-                    } else { t.vx = 0; t.vy = 0; }
                     
-                    if (t.x - t.r < 0) { t.x = t.r; t.vx *= -0.4; playClickSound(0.15); }
-                    if (t.x + t.r > canvas.width) { t.x = canvas.width - t.r; t.vx *= -0.4; playClickSound(0.15); }
-                    if (t.y - t.r < 0) { t.y = t.r; t.vy *= -0.4; playClickSound(0.15); }
-                    if (t.y + t.r > canvas.height) { t.y = canvas.height - t.r; t.vy *= -0.4; playClickSound(0.15); }
-
-                    targets.forEach(t2 => {
-                        if (t !== t2 && !t2.isOut) {
-                            let tDx = t2.x - t.x; let tDy = t2.y - t.y; let tDist = Math.sqrt(tDx*tDx + tDy*tDy);
-                            if (tDist < t.r + t2.r) {
-                                let tAngle = Math.atan2(tDy, tDx); let tSpeed = Math.sqrt(t.vx*t.vx + t.vy*t.vy);
-                                t2.vx = Math.cos(tAngle) * tSpeed * 0.55; t2.vy = Math.sin(tAngle) * tSpeed * 0.55;
-                                t.vx = -Math.cos(tAngle) * tSpeed * 0.15; t.vy = -Math.sin(tAngle) * tSpeed * 0.15;
-                                playClickSound(Math.min(tSpeed / 8, 0.6));
-                            }
-                        }
-                    });
-
-                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
-                        t.isOut = true; 
-                        targetOutInTurn = true; 
-                        playerScores[currentPlayerIndex]++;
-                    }
+                    // 🌟 بررسی و فراخوانی تعویض نوبت پس از توقف قطعی فیزیک حرکت و فرود تیله اصلی بازیکن
+                    setTimeout(() => { resetRound(); }, 1000);
                 }
-            });
-            if (isMoving && !anyMoving && !player.inAir) {
-                isMoving = false;
-                setTimeout(resetRound, 500);
             }
-            if (anyMoving || player.inAir) isMoving = true;
-            
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (imgBg.complete && imgBg.naturalWidth !== 0) { ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); }
+            if (imgBg.complete && imgBg.src) { ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); }
             else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             
             drawDynamicBorder();
-            
-            // رسم خط‌چین سهمی و منحنی برای شبیه‌سازی دقیق کمان پرتاب در هوا
-            if (isAiming) {
-                ctx.save();
-                let dx = dragStart.x - dragEnd.x;
-                let dy = dragStart.y - dragEnd.y;
-                let targetX = player.x + dx * 2.2;
-                let targetY = player.y + dy * 2.2;
-                
-                ctx.beginPath();
-                ctx.setLineDash([5, 5]); 
-                ctx.strokeStyle = "rgba(255, 235, 59, 0.75)";
-                ctx.lineWidth = 3;
-                
-                let ctrlX = (player.x + targetX) / 2;
-                let ctrlY = Math.min(player.y, targetY) - Math.sqrt(dx*dx + dy*dy) * 0.4;
-                
-                ctx.moveTo(player.x, player.y);
-                ctx.quadraticCurveTo(ctrlX, ctrlY, targetX, targetY);
-                ctx.stroke();
-                
-                ctx.beginPath();
-                ctx.setLineDash([]);
-                ctx.arc(targetX, targetY, player.baseR, 0, Math.PI * 2);
-                ctx.fillStyle = "rgba(255, 235, 59, 0.25)";
-                ctx.fill();
-                ctx.strokeStyle = "#ffeb3b";
-                ctx.stroke();
-                ctx.restore();
-            }
 
             targets.forEach(t => {
                 if (!t.isOut) {
-                    ctx.save();
-                    ctx.translate(t.x, t.y);
-                    ctx.rotate(t.angle);
-                    ctx.beginPath();
-                    ctx.arc(0, 0, t.r, 0, Math.PI * 2);
-                    ctx.clip();
-                    if (imgTarget.complete && imgTarget.naturalWidth !== 0) {
-                        ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
-                    } else {
-                        ctx.fillStyle = "#ff5722"; ctx.fill();
-                        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(t.r, 0); ctx.strokeStyle = "#fff"; ctx.lineWidth = 2; ctx.stroke();
+                    t.x += t.vx; t.y += t.vy; 
+                    t.vx *= (currentGround.friction * weatherFrictionModifier); 
+                    t.vy *= (currentGround.friction * weatherFrictionModifier);
+                    let speed = Math.sqrt(t.vx*t.vx + t.vy*t.vy); t.angle += speed / t.r;
+
+                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) {
+                        t.isOut = true; targetOutInTurn = true;
                     }
-                    ctx.restore();
+                    
+                    ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle);
+                    ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
+                    ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2); ctx.restore();
                 }
             });
 
-            ctx.save();
-            if (player.inAir) {
-                ctx.save();
-                ctx.beginPath();
-                ctx.fillStyle = `rgba(0, 0, 0, ${Math.max(0.1, 0.4 - player.z * 0.01)})`;
-                ctx.arc(player.x + player.z * 0.15, player.y + player.z * 0.15, player.baseR * (1 - player.z * 0.003), 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
+            ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle);
+            ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
+            ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2); ctx.restore();
+
+            if (isAiming) {
+                ctx.beginPath(); ctx.strokeStyle = "rgba(255, 255, 255, 0.5)"; ctx.lineWidth = 3;
+                ctx.moveTo(player.x, player.y); ctx.lineTo(player.x + (dragStart.x - dragEnd.x), player.y + (dragStart.y - dragEnd.y)); ctx.stroke();
             }
 
-            ctx.translate(player.x, player.y);
-            ctx.rotate(player.angle);
-            ctx.beginPath();
-            ctx.arc(0, 0, player.r, 0, Math.PI * 2);
-            ctx.clip();
-            if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) {
-                ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
-            } else {
-                ctx.fillStyle = "#2196f3"; ctx.fill();
-                ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(player.r, 0); ctx.strokeStyle = "#fff"; ctx.lineWidth = 3; ctx.stroke();
-            }
-            ctx.restore();
-
-            drawWeatherFX();
-            requestAnimationFrame(gameLoop);
+            updateWeatherParticles(); drawWeather();
+            requestAnimationFrame(gameLoop); 
         }
 
-        function getEventPos(e) {
-            let r = canvas.getBoundingClientRect();
-            let touch = e.touches && e.touches.length > 0 ? e.touches : (e.changedTouches ? e.changedTouches : null);
-            let clientX = touch ? touch.clientX : e.clientX; 
-            let clientY = touch ? touch.clientY : e.clientY;
-            return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
-        }
-        
-        function handleStart(e) {
-            if (isMoving) return;
-            let pos = getEventPos(e); 
-            let d = Math.sqrt(Math.pow(pos.x - player.x, 2) + Math.pow(pos.y - player.y, 2));
-            if (d < player.baseR + 40) { 
-                isAiming = true; 
-                dragStart.x = pos.x; dragStart.y = pos.y; 
-                dragEnd.x = pos.x; dragEnd.y = pos.y; 
-            }
-        }
-        
-        function handleMove(e) { 
-            if (!isAiming) return; 
-            let pos = getEventPos(e); 
-            dragEnd.x = pos.x; dragEnd.y = pos.y; 
-        }
-        
-        function handleEnd() { 
-            if (!isAiming) return; 
-            isAiming = false; 
-            let dx = dragStart.x - dragEnd.x;
-            let dy = dragStart.y - dragEnd.y;
-            let dragDist = Math.sqrt(dx*dx + dy*dy);
-            if (dragDist > 15) {
-                player.startX = player.x; player.startY = player.y;
-                player.targetX = player.x + dx * 2.2; player.targetY = player.y + dy * 2.2;
-                player.arcHeight = Math.min(dragDist * 0.45, 120);
-                player.progress = 0; player.inAir = true;
-            }
+        function launchGameDirectly() {
+            setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex";
+            currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0);
+            resizeCanvas(); 
+            
+            isFirstShotOfTurn = true;
+            hitSuccessInTurn = false;
+            targetOutInTurn = false; 
+            hasBonusShot = false;
+            isChainMode = false;
+            
+            let initX = canvas.width / 2;
+            let initY = canvas.height - 120; 
+            player.x = initX; player.y = initY;
+            player.startX = initX; player.startY = initY;
+            player.targetX = initX; player.targetY = initY;
+            player.angle = 0;
+            
+            player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
+            imgBg.src = currentGround.src;
+            loadLevel(1);
+            
+            setTimeout(() => { requestAnimationFrame(gameLoop); }, 50);
         }
 
-        gearBtn.onclick = () => { settingsDrawer.classList.add("open"); overlay.style.display = "block"; };
         closeDrawer.onclick = () => {
-            settingsDrawer.classList.remove("open"); overlay.style.display = "none";
+            initAudio(); settingsDrawer.classList.remove("open"); overlay.style.display = "none";
             playerNames = [];
             for (let i = 0; i < selectedPlayerCount; i++) {
-                let val = document.getElementById(`pInput${i}`)?.value || `بازیکن ${i + 1}`;
-                playerNames.push(val);
+                let val = document.getElementById(`pInput${i}`)?.value || `بازیکن ${i + 1}`; playerNames.push(val);
             }
+            startAmbientSound(selectedWeather); launchGameDirectly();
         };
-        overlay.onclick = closeDrawer.onclick;
+
+        startBtn.onclick = () => { initAudio(); startAmbientSound(selectedWeather); launchGameDirectly(); };
+        gearBtn.onclick = () => { initAudio(); settingsDrawer.classList.add("open"); overlay.style.display = "block"; };
+        overlay.onclick = () => { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; };
+        exitBtn.onclick = () => { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex"; };
 
         function setupGridSelector(containerId, activeClass, callback) {
-            const container = document.getElementById(containerId);
-            if(!container) return;
+            const container = document.getElementById(containerId); if(!container) return;
             container.addEventListener('click', (e) => {
-                const item = e.target.closest('[data-val]');
-                if (!item) return;
+                const item = e.target.closest('[data-val]'); if (!item) return;
                 container.querySelectorAll('[data-val]').forEach(i => i.classList.remove(activeClass));
-                item.classList.add(activeClass);
-                callback(item.getAttribute('data-val'));
+                item.classList.add(activeClass); callback(item.getAttribute('data-val'));
             });
         }
 
-        setupGridSelector('groundGrid', 'active', (val) => {
-            selectedGroundVal = val; currentGround = grounds[val]; imgBg.src = currentGround.src;
-        });
-        setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; });
-        setupGridSelector('targetGrid', 'active', (val) => { selectedTargetSrc = val; imgTarget.src = val; });
-        setupGridSelector('playerCountGrid', 'active', (val) => {
-            selectedPlayerCount = parseInt(val); playerScores = []; currentPlayerIndex = 0; updateNameInputs(selectedPlayerCount);
-        });
+        canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
+        canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
+
+        setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; imgBg.src = currentGround.src; playGroundPreviewSound(val); });
+        setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val === 'sunny') { windX = 0; windY = 0; } else if(val === 'windy') { windX = 0.08; windY = 0.02; } else if(val === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; } playWeatherPreviewSound(val); });
+        setupGridSelector('playerCountGrid', 'active', (val) => { selectedPlayerCount = parseInt(val); updateNameInputs(selectedPlayerCount); });
         setupGridSelector('countGrid', 'active', (val) => { selectedCountVal = parseInt(val); });
 
-        startBtn.onclick = () => {
-            if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-            setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex";
-            currentPlayerIndex = 0; playerScores = [];
-            player.x = canvas.width / 2; player.y = canvas.height - 50;
-            player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-            resizeCanvas(); loadLevel(1);
-        };
-
-        exitBtn.onclick = () => {
-            canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex";
-            currentLevel = 1; currentPlayerIndex = 0; playerScores = []; player.y = 440; 
-            player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-        };
-
-        canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); window.addEventListener("mouseup", handleEnd);
-        canvas.addEventListener("touchstart", function(e) { e.preventDefault(); handleStart(e); }, { passive: false });
-        canvas.addEventListener("touchmove", function(e) { e.preventDefault(); handleMove(e); }, { passive: false });
-        window.addEventListener("touchend", function(e) { handleEnd(); });
-
-        window.onload = () => { generateMenuPreviews(); imgBg.src = currentGround.src; };
+        window.addEventListener("DOMContentLoaded", () => { 
+            imgBg.src = grounds[selectedGroundVal].src; imgPlayer.src = '6.png'; imgTarget.src = '1.png';
+            generateMenuPreviews(); updateNameInputs(selectedPlayerCount); resizeCanvas(); 
+        });
+        window.addEventListener("resize", resizeCanvas);
     </script>
 </body>
 </html>
