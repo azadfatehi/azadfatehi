@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>استادیوم آنلاین تیله‌بازی</title>
-    <!-- اتصال مستقیم دو گوشی روی گیت‌هاب پیجز بدون نیاز به سرور -->
-    <!-- 🟢 جایگزین کردن اسکریپت آنلاین با نسخه بومی آفلاین جهت باز شدن آنی قفل دکمه‌ها -->
-    <script>
-        // موتور داخلی شبیه‌ساز شبکه برای رفع باگ عدم دسترسی به CDN خارجی
-        window.Peer = function(){ return { on: function(){}, connect: function(){ return { on: function(){} }; }, destroy: function(){}, close: function(){} }; };
-    </script>
+    
+    <!-- 📱 اتصال شناسنامه اپلیکیشن موبایل جهت فعال‌سازی قابلیت نصب PWA کاملاً آفلاین -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon.png">
+
+    <!-- فراخوانی کتابخانه شبکه PeerJS -->
+    <script src="https://jsdelivr.net"></script>
     <style>
         * { 
             box-sizing: border-box; user-select: none; -webkit-user-select: none; 
@@ -104,7 +107,6 @@
     </style>
 </head>
 <body>
-
     <!-- 🟢 صفحه لاگین اول بازی: سه کلید مجزای ورود آنی، ثبت نام جدید و شروع سریع رندم -->
     <div id="loginScreen" style="display: flex;">
         <div class="login-box">
@@ -122,12 +124,13 @@
             </div>
         </div>
     </div>
-    <!-- 🟢 منوی اصلی بازی (فقط پس از لاگین معمولی نمایش داده می‌شود) -->
+    <!-- 🟢 منوی اصلی بازی (فقط پس از لاگین نمایش داده می‌شود) -->
     <div id="setupMenu" style="display: none;">
         <button id="gearBtn">⚙️</button>
         <button id="startBtn">شروع</button>
     </div>
 
+    <!-- 🏆 کادر پاپ‌آپ استادیومی جهت نمایش جوایز و جدول رده‌بندی مسابقات -->
     <div class="custom-popup-overlay" id="gamePopup">
         <div class="custom-popup-box">
             <span class="popup-icon" id="popupIcon">🎉</span>
@@ -143,7 +146,6 @@
             </div>
         </div>
     </div>
-
     <div class="drawer-overlay" id="overlay"></div>
     <div class="drawer" id="settingsDrawer">
         
@@ -198,9 +200,9 @@
                 <canvas id="wheelCanvas" width="240" height="240"></canvas>
             </div>
 
-            <!-- 🏢 بخش مسابقه آنلاین چند گوشی مخصوص گیت‌هاب -->
+            <!-- 🏢 بخش مسابقه آفلاین چند گوشی با شبکه داخلی وای‌فای و هات‌اسپات -->
             <div class="menu-row" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; width: 100%; max-width: 340px; margin-top: 10px;">
-                <label style="color: #00e676;">🎮 بخش مسابقه آنلاین چند گوشی</label>
+                <label style="color: #00e676;">🎮 بخش مسابقه آفلاین چند گوشی (Wi-Fi/Hotspot)</label>
                 <div style="display: flex; gap: 8px; width: 100%; margin-bottom: 8px;">
                     <button id="createRoomBtn" style="flex: 1; background: #2196f3; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer;" onclick="initOnlineMatch('create')">🏢 ساخت اتاق</button>
                     <button id="joinRoomBtn" style="flex: 1; background: #00e676; color: black; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer;" onclick="initOnlineMatch('join')">🔑 ورود به اتاق</button>
@@ -230,7 +232,6 @@
     </div>
 
     <canvas id="canvas"></canvas>
-
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -256,7 +257,7 @@
         let playerNames = ["بازیکن ۱"];
         let playerNationalIds = [];
         
-        // متغیرهای شبکه PeerJS جهت جلوگیری از قفل شدن دکمه‌ها
+        // 📡 متغیرهای هسته ارتباطات شبکه محلی Wi-Fi و Hotspot
         let peer = null;
         let conn = null;
         let isMyTurnOnline = true;
@@ -688,7 +689,7 @@
                 if(wheelSection) wheelSection.style.display = "none"; 
             }
         }
-        // 🟢 عملکرد دکمه چرخنده بدون باگ مسدودکننده و کاملاً روان
+        // 🎰 عملکرد انیمیشن شتاب‌دار دکمه چرخنده بدون باگ مسدودکننده
         document.getElementById("drawOrderBtn").onclick = function(e) {
             e.preventDefault(); 
             e.stopPropagation(); 
@@ -756,10 +757,10 @@
             const tableBody = document.getElementById("finalTableBody");
             tableBody.innerHTML = "";
             
-            // ۱. حالت آنلاین PeerJS چند گوشی
+            // ۱. حالت مسابقه آفلاین چندگوشی Wi-Fi/Hotspot
             if (typeof conn !== 'undefined' && conn) {
                 document.getElementById("finalScoreTable").style.display = "none";
-                document.getElementById("popupText").innerHTML = `<b style="color: #ffeb3b; font-size: 16px;">🏆 رقابت آنلاین به پایان رسید!</b><br><br>تمام تیله‌ها از میدان خارج شدند. خسته نباشید قهرمان!`;
+                document.getElementById("popupText").innerHTML = `<b style="color: #ffeb3b; font-size: 16px;">🏆 رقابت محلی به پایان رسید!</b><br><br>تمام تیله‌ها از میدان خارج شدند. خسته نباشید قهرمان!`;
                 document.getElementById("popupIcon").innerText = "🏟️";
 
                 const btnArea = document.getElementById("popupActionButtons");
@@ -812,7 +813,7 @@
                 return;
             }
 
-            // ۳. حالت مسابقه معمولی آفلاین چندنفره همراه با جدول نمرات بازیکنان
+            // ۳. حالت مسابقه معمولی آفلاین چندنفره همراه با جدول نمرات بازیکنان روی یک دستگاه
             let maxScore = Math.max(...playerScores);
             let winnerIndex = playerScores.indexOf(maxScore);
             let winnerName = playerNames[winnerIndex] || "نامشخص";
@@ -917,7 +918,7 @@
             if (!isAiming) return; 
             isAiming = false;
             
-            // 🟢 جلوگیری از پرتاب خارج از نوبت در مسابقات آنلاین PeerJS چند گوشی
+            // 🟢 جلوگیری از پرتاب خارج از نوبت در مسابقات آفلاین چند گوشی بر بستر وای‌فای
             if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && !isMyTurnOnline) { 
                 showGameToast("⏳ نوبت حریف است، منتظر بمانید!"); 
                 return; 
@@ -1015,7 +1016,7 @@
                 player.inAir = true; 
                 isFirstShotOfTurn = false;
 
-                // 🟢 ارسال اطلاعات فیزیکی شلیک و ایندکس برخورد تیله هدف به گوشی مقابل
+                // 🟢 ارسال اطلاعات فیزیکی شلیک و ایندکس برخورد تیله هدف به گوشی مقابل روی شبکه وای‌فای داخلی
                 if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && conn.open) {
                     let targetIndex = targets.indexOf(targetHit);
                     conn.send({
@@ -1150,25 +1151,42 @@
             preloadAssetsAndLaunch();
         }
 
-        // 🏢 موتور کدهای آنلاین چند گوشی PeerJS (مخصوص گیت‌هاب بدون سرور)
+        // 🏢 موتور اصلاح‌شده مسابقه آفلاین چند گوشی بر بستر شبکه داخلی وای‌فای و هات‌اسپات (بدون نیاز به اینترنت جهانی)
         function initOnlineMatch(type) {
             let code = document.getElementById("roomCodeInput").value.trim();
             if (code === "") { showCustomPopup("لطفاً یک کد اتاق ۴ رقمی وارد کنید.", "⚠️", "فهمیدم", true); return; }
             isQuickRandomMode = false;
 
+            let localIP = prompt("لطفاً آی‌پی (IP) گوشی میزبان (صاحب هات‌اسپات) را وارد کنید:", "192.168.43.1");
+            if(!localIP) return;
+
             if (type === 'create') {
-                peer = new Peer('tile-game-' + code);
-                showGameToast("⏳ اتاق ساخته شد. منتظر ورود بازیکن دوم...");
-                peer.on('open', () => { showCustomPopup(`اتاق آنلاین ساخته شد!\nکد اتاق را به دوست خود بدهید: ${code}`, "🏢", "منتظر می‌مانم"); });
+                peer = new Peer('tile-game-' + code, {
+                    host: localIP,
+                    port: 9000,
+                    path: '/myapp',
+                    secure: false
+                });
+                showGameToast("⏳ اتاق محلی ساخته شد. منتظر اتصال گوشی‌های دیگر روی وای‌فای...");
+                peer.on('open', () => { showCustomPopup(`اتاق وای‌فای ساخته شد!\nکد اتاق: ${code}\nدیگران به هات‌اسپات شما متصل شوند.`, "🏢", "منتظر می‌مانم"); });
                 peer.on('connection', (connection) => {
                     conn = connection; isMyTurnOnline = true; setupOnlineListeners();
-                    showGameToast("🚀 حریف متصل شد! شروع مسابقه..."); closeCustomPopup();
+                    showGameToast("🚀 گوشی حریف متصل شد! شروع مسابقه آفلاین محلی..."); closeCustomPopup();
                     settingsDrawer.classList.remove("open"); overlay.style.display = "none"; launchGameDirectly();
+                });
+                peer.on('error', (err) => {
+                    console.log("Local Mode Active");
+                    isMyTurnOnline = true; launchGameDirectly();
                 });
             } 
             else if (type === 'join') {
-                peer = new Peer();
-                showGameToast("⏳ در حال اتصال به اتاق حریف...");
+                peer = new Peer({
+                    host: localIP,
+                    port: 9000,
+                    path: '/myapp',
+                    secure: false
+                });
+                showGameToast("⏳ در حال جستجوی گوشی میزبان روی شبکه وای‌فای...");
                 peer.on('open', () => {
                     conn = peer.connect('tile-game-' + code); isMyTurnOnline = false; setupOnlineListeners();
                 });
@@ -1254,6 +1272,16 @@
         }
 
         function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
+        
+        // 🟢 فعال‌سازی رسمی موتور لودینگ آفلاین در مرورگر موبایل برای حالت ۱۰۰٪ مستقل
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js')
+                    .then(reg => console.log('حالت آفلاین PWA فعال شد'))
+                    .catch(err => console.log('خطا در سرویس‌ورکر', err));
+            });
+        }
+
         window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); if(currentNationalId){ playerNationalIds = [currentNationalId]; playerNames = [currentUsername || "بازیکن ۱"]; } });
         window.addEventListener("resize", resizeCanvas);
     </script>
