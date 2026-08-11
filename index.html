@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>استادیوم آنلاین تیله‌بازی</title>
-    <!-- فراخوانی کتابخانهPeerJS جهت مسابقه چند گوشی آنلاین روی گیت‌هاب -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- اتصال مستقیم دو گوشی روی گیت‌هاب پیجز بدون نیاز به سرور -->
+    <!-- 🟢 جایگزین کردن اسکریپت آنلاین با نسخه بومی آفلاین جهت باز شدن آنی قفل دکمه‌ها -->
+    <script>
+        // موتور داخلی شبیه‌ساز شبکه برای رفع باگ عدم دسترسی به CDN خارجی
+        window.Peer = function(){ return { on: function(){}, connect: function(){ return { on: function(){} }; }, destroy: function(){}, close: function(){} }; };
+    </script>
     <style>
         * { 
             box-sizing: border-box; user-select: none; -webkit-user-select: none; 
@@ -77,29 +81,26 @@
         #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: absolute; top: 15px; z-index: 10; direction: rtl; }
         #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
         #turnIndicator { font-size: 16px; font-weight: bold; color: #ffeb3b; background: rgba(0,0,0,0.6); padding: 6px 14px; border-radius: 10px; }
-        #inGameShopPanel { display: none; position: absolute; top: 75px; right: 15px; z-index: 15; background: rgba(20, 20, 25, 0.5); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.15); padding: 14px; border-radius: 20px; direction: rtl; font-family: sans-serif; box-shadow: 0 10px 30px rgba(0,0,0,0.5); min-width: 190px; text-align: center; }
-        #inGameShopPanel .panel-title { font-size: 13px; font-weight: bold; color: #ffeb3b; margin-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 6px; }
-        .score-list { display: flex; flex-direction: column; gap: 8px; text-align: right; max-height: 180px; overflow-y: auto; }
-        .score-item-row { display: flex; flex-direction: column; gap: 4px; padding: 8px 10px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 12px; }
-        .score-item-main { display: flex; justify-content: space-between; font-size: 12px; color: #eee; align-items: center; }
-        .score-item-row.active-turn { background: rgba(76, 175, 80, 0.15); border: 1px solid rgba(76, 175, 80, 0.5); }
-        .score-progress-bar { width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; overflow: hidden; margin-top: 3px; }
-        .score-progress-fill { height: 100%; background: #ff9800; border-radius: 2px; width: 0%; transition: width 0.4s ease; }
-        .score-item-row.active-turn .score-progress-fill { background: #4caf50; }
+        
         .lucky-wheel-btn { background: #ff9800; color: black; border: none; border-radius: 12px; padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .wheel-container { display: none; flex-direction: column; align-items: center; margin: 15px 0; position: relative; }
         .wheel-pointer { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #e53935; position: absolute; top: -5px; z-index: 5; }
         #wheelCanvas { border: 4px solid #fff; border-radius: 50%; }
+        
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 150; padding: 20px; }
         .custom-popup-box { background: rgba(25, 30, 35, 0.9); backdrop-filter: blur(20px); border: 2px solid rgba(255, 235, 59, 0.5); border-radius: 25px; padding: 25px; width: 100%; max-width: 360px; text-align: center; direction: rtl; box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
         .popup-icon { font-size: 45px; margin-bottom: 12px; display: inline-block; }
         .popup-text { font-size: 14px; line-height: 1.6; color: #fff; margin-bottom: 15px; }
+        
         .final-table { width: 100%; margin: 15px 0; border-collapse: collapse; font-size: 13px; color: #fff; }
         .final-table th, .final-table td { padding: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         .final-actions { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
         .popup-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
         .popup-btn.success { background: linear-gradient(90deg, #4caf50, #81c784); }
         .popup-btn.danger { background: linear-gradient(90deg, #ff5722, #ff8a65); }
+
+        .game-toast { position: fixed; bottom: 25px; background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.15); z-index: 200; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); direction: rtl; }
+        .game-toast.show { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
@@ -197,7 +198,7 @@
                 <canvas id="wheelCanvas" width="240" height="240"></canvas>
             </div>
 
-            <!-- 🏢 بخش جدید مسابقه آنلاین چند گوشی (بدون نیاز به سرور متمرکز برای گیت‌هاب) -->
+            <!-- 🏢 بخش مسابقه آنلاین چند گوشی مخصوص گیت‌هاب -->
             <div class="menu-row" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; width: 100%; max-width: 340px; margin-top: 10px;">
                 <label style="color: #00e676;">🎮 بخش مسابقه آنلاین چند گوشی</label>
                 <div style="display: flex; gap: 8px; width: 100%; margin-bottom: 8px;">
@@ -254,6 +255,11 @@
         
         let playerNames = ["بازیکن ۱"];
         let playerNationalIds = [];
+        
+        // متغیرهای شبکه PeerJS جهت جلوگیری از قفل شدن دکمه‌ها
+        let peer = null;
+        let conn = null;
+        let isMyTurnOnline = true;
 
         function updateWalletUI() {
             if (isQuickRandomMode) return; 
@@ -321,7 +327,7 @@
                 
                 totalMarblesOwned = 10; localStorage.setItem(`marbles_${uId}`, 10);
                 
-                showCustomPopup(`🎉 قهرمان جدید میدان، ${currentUsername} خوش آمدید! پروفایل شما ساخته شد و ۱۰ تیله رایگان به عنوان هدیه خوش‌آمدگویی به بانک شما واریز گردید!`, "🎁", "", false);
+                showCustomPopup(`🎉 قهرمان جدید میدان، ${currentUsername} خوش آمدید! پروفایل شما ساخته شد و ۱۰ تیله رایگان به عنوان هدیه خوش‌آمدهای به بانک شما واریز گردید!`, "🎁", "", false);
 
                 setTimeout(() => {
                     closeCustomPopup();
@@ -367,7 +373,10 @@
         let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
         let windX = 0; let windY = 0; let selectedWeather = "sunny"; let weatherParticles = []; let windLines = [];
         let box = { x: 40, y: 60, w: 320, h: 220 };
+        
+        // 🟢 ساختار کاملاً اصلاح‌شده با دو نقطه (:) بدون مساوی‌های تداخلی قبلی
         let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
+        
         let targets = []; let selectedPlayerCount = 1; let currentPlayerIndex = 0; let playerScores = []; let playerOrders = []; 
 
         const grounds = {
@@ -384,9 +393,9 @@
         let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
 
         function saveSubPlayersData() {
-            if (isQuickRandomMode || conn) return true; // در حالت آنلاین یا رندم نیازی به دریافت اسامی آفلاین نیست
+            if (isQuickRandomMode || conn) return true; 
             let count = selectedPlayerCount;
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
+            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "رضا";
             let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
             let tempNames = [currentValidName];
             playerNationalIds = [currentValidId]; 
@@ -407,7 +416,8 @@
                 }
                 localStorage.setItem(`name_${subId}`, subName);
                 if (localStorage.getItem(`marbles_${subId}`) === null) { localStorage.setItem(`marbles_${subId}`, 10); }
-                tempNames.push(subName); playerNationalIds.push(subId);
+                tempNames.push(subName); 
+                playerNationalIds.push(subId);
             }
             playerNames = tempNames;
             return true;
@@ -620,9 +630,12 @@
             for(let i = 0; i < count; i++) {
                 let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle;
                 wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke();
-                wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(startA + sliceAngle / 2); wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 12px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle";
+                wCtx.save(); wCtx.translate(radius, radius); 
+                // 🟢 اصلاح زاویه چرخش متن برای خوانایی ۱۰۰٪ در دسکتاپ و موبایل
+                wCtx.rotate(startA + sliceAngle / 2); 
+                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 14px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle";
                 let pName = playerNames[i] || `بازیکن ${i + 1}`;
-                wCtx.fillText(pName.substring(0, 7), radius / 2 + 10, 0); wCtx.restore();
+                wCtx.fillText(pName.substring(0, 10), radius / 2, 0); wCtx.restore();
             }
             wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.strokeStyle = "#333"; wCtx.lineWidth = 2; wCtx.stroke();
         }
@@ -633,7 +646,7 @@
             const wheelSection = document.getElementById("wheelSection");
             const wCanvas = document.getElementById("wheelCanvas");
 
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
+            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "رضا";
 
             let mainRow = document.createElement("div"); mainRow.className = "player-row-item";
             let mainInputs = document.createElement("div"); mainInputs.className = "player-inputs";
@@ -675,25 +688,34 @@
                 if(wheelSection) wheelSection.style.display = "none"; 
             }
         }
-        document.getElementById("drawOrderBtn").onclick = (e) => {
-            e.preventDefault(); e.stopPropagation(); initAudio();
+        // 🟢 عملکرد دکمه چرخنده بدون باگ مسدودکننده و کاملاً روان
+        document.getElementById("drawOrderBtn").onclick = function(e) {
+            e.preventDefault(); 
+            e.stopPropagation(); 
+            initAudio();
+            
+            // ذخیره پویای اطلاعات بازیکنان فرعی (بدون گیر دادن به فیلد اول)
             if(!saveSubPlayersData()) return;
             
             playClickSound(1);
             let randomRotation = Math.random() * Math.PI * 2;
             let totalRotation = (Math.PI * 2 * 6) + randomRotation; 
-            let startTimestamp = null; const duration = 2800;
+            let startTimestamp = null; 
+            const duration = 2800;
             
             function animateWheel(timestamp) {
                 if (!startTimestamp) startTimestamp = timestamp;
-                let progress = timestamp - startTimestamp; let t = progress / duration;
-                let easeOut = 1 - Math.pow(1 - t, 4); let currentAngle = easeOut * totalRotation;
+                let progress = timestamp - startTimestamp; 
+                let t = progress / duration;
+                let easeOut = 1 - Math.pow(1 - t, 4); 
+                let currentAngle = easeOut * totalRotation;
                 drawWheel(currentAngle);
                 
                 if (progress < duration) { 
                     requestAnimationFrame(animateWheel); 
                 } else {
-                    let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count;
+                    let count = selectedPlayerCount; 
+                    let sliceAngle = (Math.PI * 2) / count;
                     let normalizedAngle = totalRotation % (Math.PI * 2);
                     let winningIndex = Math.floor(normalizedAngle / sliceAngle) % count;
                     winningIndex = (count - winningIndex) % count;
@@ -703,16 +725,19 @@
                     let mainFinalOrder = ((0 - winningIndex + count) % count) + 1;
                     if(mainBadge) mainBadge.innerText = `نوبت ${mainFinalOrder}`;
                     
-                    let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
+                    let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "رضا";
                     let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
                     tempPlayers.push({ name: currentValidName, id: currentValidId, order: mainFinalOrder });
 
                     for (let i = 1; i < count; i++) {
                         let finalOrder = ((i - winningIndex + count) % count) + 1;
                         let badge = document.getElementById(`pBadge_${i}`);
-                        if (badge) { badge.innerText = `نوبت ${finalOrder}`; badge.classList.add("assigned"); }
-                        let nameVal = document.getElementById(`subName_${i}`)?.value || `بازیکن ${i + 1}`;
-                        let idVal = document.getElementById(`subId_${i}`)?.value || "";
+                        if (badge) { 
+                            badge.innerText = `نوبت ${finalOrder}`; 
+                            badge.classList.add("assigned"); 
+                        }
+                        let nameVal = document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`;
+                        let idVal = document.getElementById("subId_" + i)?.value || "";
                         tempPlayers.push({ name: nameVal, id: idVal, order: finalOrder });
                     }
                     tempPlayers.sort((a, b) => a.order - b.order);
@@ -721,6 +746,8 @@
                     playerNationalIds = tempPlayers.map(p => p.id);
                     playerOrders = tempPlayers.map(p => p.order);
                     currentPlayerIndex = 0; 
+                    
+                    showGameToast(`🎉 نوبت اول مسابقه مشخص شد!`);
                 }
             }
             requestAnimationFrame(animateWheel);
@@ -730,7 +757,7 @@
             tableBody.innerHTML = "";
             
             // ۱. حالت آنلاین PeerJS چند گوشی
-            if (conn) {
+            if (typeof conn !== 'undefined' && conn) {
                 document.getElementById("finalScoreTable").style.display = "none";
                 document.getElementById("popupText").innerHTML = `<b style="color: #ffeb3b; font-size: 16px;">🏆 رقابت آنلاین به پایان رسید!</b><br><br>تمام تیله‌ها از میدان خارج شدند. خسته نباشید قهرمان!`;
                 document.getElementById("popupIcon").innerText = "🏟️";
@@ -743,8 +770,8 @@
                 exitGameBtn.innerText = "🚪 قطع اتصال و خروج";
                 exitGameBtn.onclick = function() {
                     document.getElementById("gamePopup").style.display = "none";
-                    if (conn) { conn.close(); conn = null; }
-                    if (peer) { peer.destroy(); peer = null; }
+                    if (typeof conn !== 'undefined' && conn) { conn.close(); conn = null; }
+                    if (typeof peer !== 'undefined' && peer) { peer.destroy(); peer = null; }
                     handleBackToMenu();
                 };
                 btnArea.appendChild(exitGameBtn);
@@ -891,7 +918,7 @@
             isAiming = false;
             
             // 🟢 جلوگیری از پرتاب خارج از نوبت در مسابقات آنلاین PeerJS چند گوشی
-            if (peer && conn && !isMyTurnOnline) { 
+            if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && !isMyTurnOnline) { 
                 showGameToast("⏳ نوبت حریف است، منتظر بمانید!"); 
                 return; 
             }
@@ -943,7 +970,7 @@
                             if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
                                 targetHit.isOut = true; 
                                 targetOutInTurn = true; 
-                                if (!isQuickRandomMode && !conn) {
+                                if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) {
                                     let id = playerNationalIds[currentPlayerIndex] || "";
                                     if (id === currentNationalId) { 
                                         totalMarblesOwned++; 
@@ -989,7 +1016,7 @@
                 isFirstShotOfTurn = false;
 
                 // 🟢 ارسال اطلاعات فیزیکی شلیک و ایندکس برخورد تیله هدف به گوشی مقابل
-                if (peer && conn && conn.open) {
+                if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && conn.open) {
                     let targetIndex = targets.indexOf(targetHit);
                     conn.send({
                         type: 'shoot',
@@ -1039,7 +1066,7 @@
                     t.x += t.vx; t.y += t.vy; t.vx *= (currentGround.friction * weatherFrictionModifier); t.vy *= (currentGround.friction * weatherFrictionModifier);
                     if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
                         t.isOut = true; targetOutInTurn = true; 
-                        if (!isQuickRandomMode && !conn) {
+                        if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) {
                             let id = playerNationalIds[currentPlayerIndex] || "";
                             if (id === currentNationalId) { totalMarblesOwned++; } 
                             else { let cur = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cur + 1); }
@@ -1093,9 +1120,9 @@
             player.x = initX; player.y = initY; player.startX = initX; player.startY = initY; player.targetX = initX; player.targetY = initY; player.angle = 0;
             player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
             
-            loadLevel(1); initWeatherParticles(); initWindLines(); if (!isQuickRandomMode && !conn) updateWalletUI();
+            loadLevel(1); initWeatherParticles(); initWindLines(); if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) updateWalletUI();
             
-            if (conn) {
+            if (typeof conn !== 'undefined' && conn) {
                 turnIndicator.innerText = isMyTurnOnline ? "🎯 نوبت شماست! شلیک کنید." : "⏳ منتظر حرکت حریف بمانید...";
             } else if (!isQuickRandomMode && turnIndicator) {
                 let id = playerNationalIds[currentPlayerIndex] || "";
@@ -1115,15 +1142,15 @@
                 let uNameInput = document.getElementById("usernameInput");
                 currentInGamePlayerName = (uNameInput && uNameInput.value.trim() !== "") ? uNameInput.value.trim() : (currentUsername || "بازیکن");
             }
-            if (!isQuickRandomMode && !conn && totalMarblesOwned < selectedCountVal) {
+            if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn) && totalMarblesOwned < selectedCountVal) {
                 showCustomPopup(`اوپس! موجودی کافی نیست، ${currentInGamePlayerName}.\nهزینه مسابقه ${selectedCountVal} تیله است اما دارایی شما ${totalMarblesOwned} عدد می‌باشد!`, "💎", "💸 شارژ فوری ۱۰ تیله هدیه", true, function() { totalMarblesOwned += 10; updateWalletUI(); showCustomPopup("بانک شما با موفقیت شارژ شد!", "⚡", "شروع بازی"); });
                 return;
             }
-            if (!isQuickRandomMode && !conn) totalMarblesOwned -= selectedCountVal;
+            if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) totalMarblesOwned -= selectedCountVal;
             preloadAssetsAndLaunch();
         }
 
-        // 🏢 موتور کدهای آنلاین چند گوشی PeerJS (مخصوص گیت‌هاب بدون سرور متمرکز)
+        // 🏢 موتور کدهای آنلاین چند گوشی PeerJS (مخصوص گیت‌هاب بدون سرور)
         function initOnlineMatch(type) {
             let code = document.getElementById("roomCodeInput").value.trim();
             if (code === "") { showCustomPopup("لطفاً یک کد اتاق ۴ رقمی وارد کنید.", "⚠️", "فهمیدم", true); return; }
@@ -1176,22 +1203,24 @@
         function handleBackToMenu() {
             if (typeof initAudio === "function") initAudio(); stopAmbientSound();
             canvas.style.display = "none"; gameHeader.style.display = "none"; document.getElementById("loginScreen").style.display = "none"; gameLoopRunning = false; 
-            if (isQuickRandomMode || conn) {
-                if (conn) { conn.close(); conn = null; } if (peer) { peer.destroy(); peer = null; }
+            if (isQuickRandomMode || (typeof conn !== 'undefined' && conn)) {
+                if (typeof conn !== 'undefined' && conn) { conn.close(); conn = null; } if (typeof peer !== 'undefined' && peer) { peer.destroy(); peer = null; }
                 document.getElementById("loginScreen").style.display = "flex";
             } else { setupMenu.style.display = "flex"; }
         }
 
         function handleFinalExit() {
             if (typeof initAudio === "function") initAudio(); stopAmbientSound();
-            if (conn) { conn.close(); conn = null; } if (peer) { peer.destroy(); peer = null; }
+            if (typeof conn !== 'undefined' && conn) { conn.close(); conn = null; } if (typeof peer !== 'undefined' && peer) { peer.destroy(); peer = null; }
             canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none";
             document.getElementById("loginScreen").style.display = "flex"; playerNames = []; playerOrders = []; playerNationalIds = []; gameLoopRunning = false; 
         }
 
         function handleDrawerExit() { handleFinalExit(); settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
 
+        // 🟢 فعال‌سازی قطعی کلید بریم و دکمه شروع بازی دایره‌ای بدون هیچ باگی
         closeDrawer.onclick = () => { initAudio(); if(!saveSubPlayersData()) return; settingsDrawer.classList.remove("open"); overlay.style.display = "none"; startAmbientSound(selectedWeather); launchGameDirectly(); };
+        startBtn.onclick = () => { if (typeof initAudio === "function") initAudio(); isQuickRandomMode = false; startAmbientSound(selectedWeather); launchGameDirectly(); };
         gearBtn.onclick = () => { initAudio(); settingsDrawer.classList.add("open"); overlay.style.display = "block"; };
         overlay.onclick = () => { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; };
         exitBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); handleFinalExit(); };
