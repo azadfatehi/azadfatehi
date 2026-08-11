@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>استادیوم آنلاین تیله‌بازی</title>
     
-    <!-- 📱 اتصال شناسنامه اپلیکیشن موبایل جهت فعال‌سازی قابلیت نصب PWA کاملاً آفلاین -->
+    <!-- 📱 اتصال شناسنامه اپلیکیشن موبایل جهت فعال‌سازی قابلیت نصب آفلاین PWA -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="icon.png">
 
-    <!-- فراخوانی کتابخانه شبکه PeerJS -->
+    <!-- فراخوانی کتابخانه شبکه محلی Wi-Fi و Hotspot -->
     <script src="https://jsdelivr.net"></script>
     <style>
         * { 
@@ -80,6 +80,17 @@
         .player-inputs input { flex: 1; padding: 10px; font-size: 13px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; user-select: text !important; -webkit-user-select: text !important; }
         .order-badge { width: 65px; padding: 10px 0; font-size: 12px; font-weight: bold; background: #333; border: 2px solid #555; border-radius: 10px; color: #aaa; text-align: center; }
         .order-badge.assigned { background: #ff9800; border-color: #fff; color: #000; box-shadow: 0 0 8px #ff9800; }
+        /* 🛍️ استایل‌های منوی اختصاصی فروشگاه و صرافی دوطرفه تیله */
+        .shop-container { width: 100%; max-width: 340px; background: rgba(255,255,255,0.04); border: 2px dashed rgba(255,235,59,0.3); border-radius: 18px; padding: 15px; margin-top: 10px; direction: rtl; }
+        .shop-title { color: #ffeb3b; font-size: 15px; font-weight: bold; margin-bottom: 10px; text-align: center; }
+        .shop-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 10px; margin: 6px 0; }
+        .shop-row span { font-size: 13px; color: #fff; }
+        .shop-actions { display: flex; gap: 6px; }
+        .shop-btn { padding: 6px 12px; border-radius: 8px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
+        .shop-btn.buy { background: #4caf50; }
+        .shop-btn.sell { background: #e53935; }
+        .shop-btn:active { transform: scale(0.95); }
+
         #canvas { display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
         #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: absolute; top: 15px; z-index: 10; direction: rtl; }
         #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
@@ -176,15 +187,32 @@
                     <div class="count-button-item" data-val="snowy">❄️ برفی</div>
                 </div>
             </div>
+            <!-- 🛍️ ماژول بومی فروشگاه و صرافی دوطرفه خرید/فروش آنی تیله -->
+            <div class="shop-container">
+                <div class="shop-title">💎 دکان و صرافی دوطرفه تیله‌بازی</div>
+                
+                <!-- ردیف خرید تیله هدیه/فوری -->
+                <div class="shop-row">
+                    <span>بسته ۱۰ تایی تیله (شارژ فوری حساب)</span>
+                    <div class="shop-actions">
+                        <button class="shop-btn buy" onclick="handleShopTransaction('buy', 10)">🛒 خرید</button>
+                    </div>
+                </div>
+
+                <!-- ردیف فروش تیله به صرافی -->
+                <div class="shop-row">
+                    <span>فروش ۱۰ تیله به صرافی بازی</span>
+                    <div class="shop-actions">
+                        <button class="shop-btn sell" onclick="handleShopTransaction('sell', 10)">💰 فروش</button>
+                    </div>
+                </div>
+            </div>
             <div class="menu-row">
                 <label>دوست داری چند نفره باشیم؟ (آفلاین نوبتی)</label>
                 <select class="custom-select" id="playerCountSelect">
                     <option value="1" selected>۱ نفره (انفرادی تنهایی)</option>
-                    <option value="2">۲ نفره</option>
-                    <option value="3">۳ نفره</option>
-                    <option value="4">۴ نفره</option>
-                    <option value="5">۵ نفره</option>
-                    <option value="6">۶ نفره</option>
+                    <option value="2">۲ نفره</option><option value="3">۳ نفره</option>
+                    <option value="4">۴ نفره</option><option value="5">۵ نفره</option><option value="6">۶ نفره</option>
                 </select>
             </div>
             <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px;">
@@ -211,7 +239,7 @@
             </div>
 
             <div class="menu-row">
-                <label>با چند تا تیله بریم بازی؟</label>
+                <label>با چند تا تیله بریم بازی?</label>
                 <select class="custom-select" id="marbleCountSelect">
                     <option value="2">۲ تیله</option><option value="3">۳ تیله</option><option value="4">۴ تیله</option>
                     <option value="5" selected>۵ تیله</option><option value="6">۶ تیله</option><option value="7">۷ تیله</option>
@@ -246,7 +274,7 @@
         const namesContainer = document.getElementById("namesContainer");
         const turnIndicator = document.getElementById("turnIndicator");
 
-        let totalMarblesOwned = parseInt(localStorage.getItem("totalMarblesOwned")) || 0;
+        let totalMarblesOwned = parseInt(localStorage.getItem("totalMarblesOwned")) || 10;
         let freeShopClaims = parseInt(localStorage.getItem("freeShopClaims")) || 0; 
         let currentUsername = localStorage.getItem("currentUsername") || "";
         let currentNationalId = localStorage.getItem("currentNationalId") || "";
@@ -257,7 +285,6 @@
         let playerNames = ["بازیکن ۱"];
         let playerNationalIds = [];
         
-        // 📡 متغیرهای هسته ارتباطات شبکه محلی Wi-Fi و Hotspot
         let peer = null;
         let conn = null;
         let isMyTurnOnline = true;
@@ -266,12 +293,34 @@
             if (isQuickRandomMode) return; 
             if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); }
             localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
-            localStorage.setItem("freeShopClaims", freeShopClaims);
             
             if (turnIndicator && playerNames[currentPlayerIndex]) {
                 let id = playerNationalIds[currentPlayerIndex] || "";
                 let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
                 turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles})`;
+            }
+        }
+
+        // 🛍️ تابع مدیریت تراکنش‌های خرید و فروش در صرافی دوطرفه تیله
+        function handleShopTransaction(type, amount) {
+            if (typeof initAudio === "function") initAudio();
+            playClickSound(0.8);
+
+            if (type === 'buy') {
+                totalMarblesOwned += amount;
+                updateWalletUI();
+                showCustomPopup(`🎉 تعداد ${amount} تیله با موفقیت به بانک شما اضافه شد!`, "🛒", "متوجه شدم", false);
+                showGameToast(`🎁 حساب شارژ شد (+${amount} تیله)`);
+            } 
+            else if (type === 'sell') {
+                if (totalMarblesOwned < amount) {
+                    showCustomPopup(`❌ موجودی تیله‌های شما کافی نیست! برای فروش حداقل به ${amount} تیله نیاز دارید.`, "⚠️", "اصلاح موجودی", true);
+                    return;
+                }
+                totalMarblesOwned -= amount;
+                updateWalletUI();
+                showCustomPopup(`💰 تعداد ${amount} تیله به صرافی فروخته شد و معادل ریالی آن به حساب شما واریز گردید.`, "💸", "قبول", false);
+                showGameToast(`💸 تسویه حساب شد (-${amount} تیله)`);
             }
         }
         function switchAuthModeToRegister() {
@@ -375,7 +424,7 @@
         let windX = 0; let windY = 0; let selectedWeather = "sunny"; let weatherParticles = []; let windLines = [];
         let box = { x: 40, y: 60, w: 320, h: 220 };
         
-        // 🟢 ساختار کاملاً اصلاح‌شده با دو نقطه (:) بدون مساوی‌های تداخلی قبلی
+        // 🔄 فعال‌سازی ساختار چرخش پویای تصاویر روی تیله‌ها با اضافه شدن زاویه (angle)
         let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
         
         let targets = []; let selectedPlayerCount = 1; let currentPlayerIndex = 0; let playerScores = []; let playerOrders = []; 
@@ -534,6 +583,57 @@
             if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); }
             toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); 
         }
+        function playWeatherPreviewSound(type) { startAmbientSound(type); }
+
+        function initWeatherParticles() {
+            weatherParticles = []; 
+            let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80);
+            for(let i=0; i<count; i++) { 
+                weatherParticles.push({ 
+                    x: Math.random() * canvas.width, 
+                    y: Math.random() * canvas.height, 
+                    v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1), 
+                    r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2), 
+                    opacity: Math.random() * 0.5 + 0.3 
+                }); 
+            }
+        }
+
+        function initWindLines() {
+            windLines = []; if (selectedWeather === "sunny") return;
+            let count = selectedWeather === "windy" ? 25 : 10;
+            for (let i = 0; i < count; i++) { 
+                windLines.push({ 
+                    x: Math.random() * canvas.width, 
+                    y: Math.random() * canvas.height, 
+                    w: Math.random() * 80 + 40, 
+                    h: Math.random() * 1.5 + 0.5, 
+                    v: Math.random() * 4 + 3, 
+                    opacity: Math.random() * 0.2 + 0.05 
+                }); 
+            }
+        }
+
+        function updateWeatherParticles() {
+            weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } });
+            windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } });
+        }
+
+        function drawWeather() {
+            ctx.save(); 
+            if(selectedWeather === "rainy") { 
+                weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); 
+            } else if(selectedWeather === "snowy") { 
+                weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); 
+            }
+            ctx.restore();
+        }
+
+        function showGameToast(message) {
+            let toast = document.getElementById("gameToast");
+            if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); }
+            toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); 
+        }
         function resetRound() {
             player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
             isMoving = false; 
@@ -543,11 +643,16 @@
                 setTimeout(showFinalScoreboard, 400); 
                 return;
             }
+            
+            // 🔊 پخش صداها دقیقاً بعد از اتمام پرتاب بر اساس خروجی تیله‌ها
             if (targetOutInTurn) { 
-                playCheeringSound(); 
+                playCheeringSound(); // 📣 جیغ و هورا به خاطر بیرون انداختن تیله هدف
                 hasBonusShot = true; 
+                showGameToast("🎯 شلیک عالی! هوراااا");
             } else {
-                playDisappointmentSound(); 
+                playDisappointmentSound(); // 😔 صدای آه و افسوس به خاطر خطا رفتن شلیک
+                showGameToast("😔 اوووف! نزدیک بود...");
+                
                 if (selectedPlayerCount === 1 || isQuickRandomMode || conn) {
                     if (hasBonusShot) { 
                         hasBonusShot = false; isChainMode = false; 
@@ -753,109 +858,6 @@
             }
             requestAnimationFrame(animateWheel);
         };
-        function showFinalScoreboard() {
-            const tableBody = document.getElementById("finalTableBody");
-            tableBody.innerHTML = "";
-            
-            // ۱. حالت مسابقه آفلاین چندگوشی Wi-Fi/Hotspot
-            if (typeof conn !== 'undefined' && conn) {
-                document.getElementById("finalScoreTable").style.display = "none";
-                document.getElementById("popupText").innerHTML = `<b style="color: #ffeb3b; font-size: 16px;">🏆 رقابت محلی به پایان رسید!</b><br><br>تمام تیله‌ها از میدان خارج شدند. خسته نباشید قهرمان!`;
-                document.getElementById("popupIcon").innerText = "🏟️";
-
-                const btnArea = document.getElementById("popupActionButtons");
-                btnArea.innerHTML = "";
-
-                const exitGameBtn = document.createElement("button");
-                exitGameBtn.className = "popup-btn danger";
-                exitGameBtn.innerText = "🚪 قطع اتصال و خروج";
-                exitGameBtn.onclick = function() {
-                    document.getElementById("gamePopup").style.display = "none";
-                    if (typeof conn !== 'undefined' && conn) { conn.close(); conn = null; }
-                    if (typeof peer !== 'undefined' && peer) { peer.destroy(); peer = null; }
-                    handleBackToMenu();
-                };
-                btnArea.appendChild(exitGameBtn);
-                document.getElementById("gamePopup").style.display = "flex";
-                return;
-            }
-
-            // ۲. حالت شروع سریع و رندم (انفرادی تنهایی)
-            if (isQuickRandomMode) {
-                document.getElementById("finalScoreTable").style.display = "none";
-                document.getElementById("popupText").innerHTML = `<b style="color: #ffeb3b; font-size: 16px;">🏆 مسابقه به پایان رسید!</b><br><br>تمام تیله‌های هدف را با موفقیت از میدان خارج کردید.`;
-                document.getElementById("popupIcon").innerText = "🏟️";
-
-                const btnArea = document.getElementById("popupActionButtons");
-                btnArea.innerHTML = "";
-
-                const replayBtn = document.createElement("button");
-                replayBtn.className = "popup-btn success";
-                replayBtn.innerText = "🎮 بازی بعدی (رندم)";
-                replayBtn.onclick = function() {
-                    document.getElementById("gamePopup").style.display = "none";
-                    processQuickRandomAuth(); 
-                };
-
-                const exitGameBtn = document.createElement("button");
-                exitGameBtn.className = "popup-btn danger";
-                exitGameBtn.innerText = "🚪 خروج به منو";
-                exitGameBtn.onclick = function() {
-                    document.getElementById("gamePopup").style.display = "none";
-                    canvas.style.display = "none";
-                    gameHeader.style.display = "none";
-                    document.getElementById("loginScreen").style.display = "flex";
-                    gameLoopRunning = false;
-                };
-
-                btnArea.appendChild(replayBtn); btnArea.appendChild(exitGameBtn);
-                document.getElementById("gamePopup").style.display = "flex";
-                return;
-            }
-
-            // ۳. حالت مسابقه معمولی آفلاین چندنفره همراه با جدول نمرات بازیکنان روی یک دستگاه
-            let maxScore = Math.max(...playerScores);
-            let winnerIndex = playerScores.indexOf(maxScore);
-            let winnerName = playerNames[winnerIndex] || "نامشخص";
-
-            playerNames.forEach((name, idx) => {
-                let id = playerNationalIds[idx] || "";
-                let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                let score = playerScores[idx] || 0;
-                
-                let row = document.createElement("tr");
-                row.innerHTML = `<td>${score === maxScore && maxScore > 0 ? "👑 " : ""}${name}</td>` +
-                                `<td><b>${score}</b> تیله</td>` +
-                                `<td>💰 ${pMarbles}</td>`;
-                tableBody.appendChild(row);
-            });
-
-            document.getElementById("finalScoreTable").style.display = "table";
-            document.getElementById("popupText").innerHTML = `<b style="color: #ffeb3b; font-size: 16px;">🏆 مسابقه به پایان رسید!</b><br><br>تبریک به <b>${winnerName}</b> که با بیشترین شوت موفق فاتح این دستگاه شد!`;
-            document.getElementById("popupIcon").innerText = "🏟️";
-
-            const btnArea = document.getElementById("popupActionButtons");
-            btnArea.innerHTML = "";
-
-            const replayBtn = document.createElement("button");
-            replayBtn.className = "popup-btn success";
-            replayBtn.innerText = "🎮 مسابقه جدید";
-            replayBtn.onclick = function() {
-                document.getElementById("gamePopup").style.display = "none";
-                launchGameDirectly();
-            };
-
-            const exitGameBtn = document.createElement("button");
-            exitGameBtn.className = "popup-btn danger";
-            exitGameBtn.innerText = "🚪 خروج به منو";
-            exitGameBtn.onclick = function() {
-                document.getElementById("gamePopup").style.display = "none";
-                handleBackToMenu();
-            };
-
-            btnArea.appendChild(replayBtn); btnArea.appendChild(exitGameBtn);
-            document.getElementById("gamePopup").style.display = "flex";
-        }
         function resizeCanvas() { 
             canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight; 
@@ -889,11 +891,11 @@
             
             // مانیتورینگ همزمان تاچ موبایل و کلیک ماوس دسکتاپ بدون تداخل و باگ
             if (e.touches && e.touches.length > 0) { 
-                clientX = e.touches[0].clientX; 
-                clientY = e.touches[0].clientY; 
+                clientX = e.touches.clientX; 
+                clientY = e.touches.clientY; 
             } else if (e.changedTouches && e.changedTouches.length > 0) { 
-                clientX = e.changedTouches[0].clientX; 
-                clientY = e.changedTouches[0].clientY; 
+                clientX = e.changedTouches.clientX; 
+                clientY = e.changedTouches.clientY; 
             }
             return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
         }
@@ -993,7 +995,7 @@
                                     return; 
                                 }
                             }
-                            if (steps > 60 || hitSpeed < 0.5 || targetHit.isOut) { 
+                            if (steps > 60 || hitSpeed < 0.5 || tHit.isOut) { 
                                 clearInterval(slideInterval); 
                                 setTimeout(resetRound, 100); 
                             }
@@ -1038,33 +1040,62 @@
         function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
             let weatherFrictionModifier = selectedWeather === "rainy" ? 0.995 : (selectedWeather === "snowy" ? 0.997 : 1);
+            
+            // ۱. فیزیک پرواز سه‌بعدی و چرخش تیله شلیک‌کننده در هوا
             if (player.inAir) {
                 player.progress += 0.03;
                 player.x = player.startX + (player.targetX - player.startX) * player.progress;
                 player.y = player.startY + (player.targetY - player.startY) * player.progress;
                 player.x += windX * player.progress * 15; player.y += windY * player.progress * 15;
-                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; player.r = player.baseR + player.z * 0.35;
+                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; 
+                player.r = player.baseR + player.z * 0.35;
+                
+                // افکت چرخیدن تصویر تیله شلیک‌کننده متناسب با پرواز
+                player.angle += 0.15; 
+
                 if (player.progress >= 1) {
                     player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
                     playClickSound(0.5); let hitAny = false;
                     targets.forEach(t => {
                         if (!t.isOut) {
                             let dx = t.x - player.x; let dy = t.y - player.y; let dist = Math.sqrt(dx*dx + dy*dy);
-                            if (dist < (player.r + t.r)) { hitAny = true; playClickSound(0.9); let angle = Math.atan2(dy, dx); t.vx = Math.cos(angle) * 8; t.vy = Math.sin(angle) * 8; }
+                            if (dist < (player.r + t.r)) { 
+                                hitAny = true; playClickSound(0.9); 
+                                let angleHits = Math.atan2(dy, dx); 
+                                t.vx = Math.cos(angleHits) * 9; t.vy = Math.sin(angleHits) * 9; 
+                            }
                         }
                     });
                     if (!hitAny) { setTimeout(resetRound, 100); }
                 }
             }
+            
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (imgBg.complete && imgBg.naturalWidth !== 0) ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
             else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             drawDynamicBorder();
             
-            // 🎯 رندر و چسباندن تصاویر واقعی روی تیله‌های هدف (وسط کادر)
+            // ۲. پردازش حرکت غلتشی، چرخش زاویه‌ای و بازگشت فیزیکی تیله‌های هدف از دیواره کادر بازی
             targets.forEach(t => {
                 if (!t.isOut) {
-                    t.x += t.vx; t.y += t.vy; t.vx *= (currentGround.friction * weatherFrictionModifier); t.vy *= (currentGround.friction * weatherFrictionModifier);
+                    t.x += t.vx; t.y += t.vy; 
+                    t.vx *= (currentGround.friction * weatherFrictionModifier); 
+                    t.vy *= (currentGround.friction * weatherFrictionModifier);
+                    
+                    // محاسبه سرعت لحظه‌ای برای تعیین شدت چرخش تصویر روی تیله
+                    let speed = Math.sqrt(t.vx * t.vx + t.vy * t.vy);
+                    if (speed > 0.1) {
+                        t.angle += speed * 0.05; // چرخیدن پویای پوسته تیله متناسب با سرعت حرکت
+                    }
+
+                    // 🏢 فیزیک بازگشت از لبه‌های کادر مستطیلی مسابقه (Wall Bounce)
+                    let padding = t.r + 2;
+                    if (t.x < box.x + padding) { t.x = box.x + padding; t.vx *= -0.8; playClickSound(0.3); }
+                    if (t.x > box.x + box.w - padding) { t.x = box.x + box.w - padding; t.vx *= -0.8; playClickSound(0.3); }
+                    if (t.y < box.y + padding) { t.y = box.y + padding; t.vy *= -0.8; playClickSound(0.3); }
+                    if (t.y > box.y + box.h - padding) { t.y = box.y + box.h - padding; t.vy *= -0.8; playClickSound(0.3); }
+
+                    // بررسی خروج قطعی از حاشیه‌ها جهت کسر و افزایش موجودی یا ثبت امتیاز
                     if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
                         t.isOut = true; targetOutInTurn = true; 
                         if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) {
@@ -1075,20 +1106,22 @@
                             updateWalletUI();
                         }
                     }
-                    ctx.save(); ctx.translate(t.x, t.y); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
+                    
+                    // رندر نهایی تصویر تیله‌های هدف چرخنده (وسط صفحه)
+                    ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
                     else { ctx.fillStyle = "#ff5722"; ctx.fill(); }
                     ctx.restore();
                 }
             });
             
-            // 🔵 رندر و چسباندن تصویر واقعی روی تیله شلیک‌کننده بازیکن (پایین صفحه)
-            ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
+            // ۳. رندر تصویر چرخان روی تیله شلیک‌کننده بازیکن (پایین صفحه)
+            ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle); ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
             if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
             else { ctx.fillStyle = "#2196f3"; ctx.fill(); }
             ctx.restore();
             
-            if (isAiming) { ctx.beginPath(); ctx.strokeStyle = "rgba(255, 255, 255, 0.5)"; ctx.lineWidth = 3; ctx.moveTo(player.x, player.y); ctx.lineTo(player.x + (dragStart.x - dragEnd.x), player.y + (dragStart.y - dragEnd.y)); ctx.stroke(); }
+            // ❌ حذف کامل خط نشانه‌گیری قدیمی برای افزایش چالش مسابقه
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
         function preloadAssetsAndLaunch() {
@@ -1273,7 +1306,7 @@
 
         function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
         
-        // 🟢 فعال‌سازی رسمی موتور لودینگ آفلاین در مرورگر موبایل برای حالت ۱۰۰٪ مستقل
+        // 🟢 فعال‌سازی رسمی موتور لودینگ آفلاین PWA در مرورگر موبایل
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
