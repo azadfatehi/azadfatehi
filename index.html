@@ -884,21 +884,21 @@
             }
         }
 
-        function getEventPos(e) {
-            let r = canvas.getBoundingClientRect(); 
-            let clientX = e.clientX; 
-            let clientY = e.clientY;
-            
-            // مانیتورینگ همزمان تاچ موبایل و کلیک ماوس دسکتاپ بدون تداخل و باگ
-            if (e.touches && e.touches.length > 0) { 
-                clientX = e.touches.clientX; 
-                clientY = e.touches.clientY; 
-            } else if (e.changedTouches && e.changedTouches.length > 0) { 
-                clientX = e.changedTouches.clientX; 
-                clientY = e.changedTouches.clientY; 
-            }
-            return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
-        }
+function getEventPos(e) {
+    let r = canvas.getBoundingClientRect(); 
+    let clientX = e.clientX; 
+    let clientY = e.clientY;
+    
+    // 📱 مانیتورینگ صحیح تاچ موبایل با ارجاع به اولین نقطه لمس [0]
+    if (e.touches && e.touches.length > 0) { 
+        clientX = e.touches[0].clientX; 
+        clientY = e.touches[0].clientY; 
+    } else if (e.changedTouches && e.changedTouches.length > 0) { 
+        clientX = e.changedTouches[0].clientX; 
+        clientY = e.changedTouches[0].clientY; 
+    }
+    return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
+}
 
         function handleStart(e) { 
             if (isMoving || player.inAir) return; 
