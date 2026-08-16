@@ -5,35 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no, viewport-fit=cover">
     <title>استادیوم ملی تیله‌بازی PWA</title>
     <style>
+        /* 🪐 اصول پایه طراحی واکنش‌گرا و مدرن */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #111; font-family: sans-serif; }
-        
+        /* 🔐 استایل مدرن شیشه‌ای صفحه احراز هویت اولیه */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a237e, #020716); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
-        .login-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .login-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
         .login-box h2 { color: #fff; font-size: 20px; margin-bottom: 20px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .login-box input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 2px solid #3f51b5; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 15px; outline: none; user-select: text !important; -webkit-user-select: text !important; }
+        .login-box input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: 2px solid #3f51b5; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 15px; outline: none; transition: border-color 0.3s; user-select: text !important; -webkit-user-select: text !important; }
+        .login-box input:focus { border-color: #00e676; }
         .login-box input::placeholder { color: #888; }
         .login-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; transition: transform 0.1s; }
         .login-btn:active { transform: scale(0.95); }
         .quick-btn { width: 100%; padding: 12px; border-radius: 12px; border: 2px dashed #ff9800; background: rgba(255, 152, 0, 0.1); color: #ff9800; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; }
-        
+        /* ☰ منوی اصلی و کلید همبرگری مدرن امروزی */
         #setupMenu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-image: url('main_bg.jpg'); background-size: cover; background-position: center; z-index: 20; }
-#setupMenu::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: -1; }
-        #gearBtn { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.25); border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; width: 50px; height: 50px; font-size: 22px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 25; }
+        #setupMenu::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: -1; }
+        #gearBtn { position: fixed; top: 15px; left: 15px; background: rgba(17, 17, 22, 0.95); border: 2px solid rgba(255,255,255,0.45); border-radius: 12px; width: 48px; height: 48px; font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 140; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.15s; touch-action: manipulation; }
         #startBtn { position: relative; width: 140px; height: 140px; border-radius: 50%; background-image: url('1.png'); background-size: cover; border: 4px solid #fff; color: white; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 25; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.6); text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
         #startBtn:active, #gearBtn:active { transform: scale(0.95); }
         
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 30; display: none; }
-        .drawer { 
-            position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; 
-            background-image: linear-gradient(rgba(17, 17, 22, 0.91), rgba(17, 17, 22, 0.91)), url('menu_bg.jpg');
-            background-size: cover; background-position: center; background-repeat: no-repeat;
-            padding: 20px; z-index: 31; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl; display: flex; flex-direction: column; align-items: center; border-radius: 25px 25px 0 0; 
-        }
+        /* ⚙️ کشوی لغزنده تنظیمات پیشرفته استادیوم (Drawer) */
+        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 145; display: none; }
+        .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; background-image: linear-gradient(rgba(17, 17, 22, 0.93), rgba(17, 17, 22, 0.93)), url('menu_bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px; z-index: 150; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl; display: flex; flex-direction: column; align-items: center; border-radius: 25px 25px 0 0; }
         .drawer.open { bottom: 0; }
         .drawer-close-btn { background: #2196f3; border: none; color: white; padding: 14px 28px; width: 100%; max-width: 320px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
         .menu-row { margin: 15px 0; text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
         .menu-row label { display: block; font-size: 16px; margin-bottom: 10px; font-weight: bold; color: #ffeb3b; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
+        /* گزینه‌های جدولی چیدمان آیتم‌ها */
         .count-column-select { display: flex; justify-content: center; gap: 8px; width: 100%; max-width: 340px; flex-wrap: wrap; }
         .count-button-item { flex: 1; min-width: 75px; padding: 10px 5px; font-size: 12px; font-weight: bold; background: rgba(37,37,37,0.85); border: 2px solid #444; border-radius: 12px; color: white; cursor: pointer; text-align: center; }
         .count-button-item.active { background: #4caf50; border-color: #fff; box-shadow: 0 0 12px #4caf50; }
@@ -42,57 +41,43 @@
         .scroll-item canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
         .scroll-item.active { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
         .custom-select { width: 100%; max-width: 260px; padding: 12px; font-size: 15px; font-weight: bold; background: rgba(37,37,37,0.9); border: 2px solid #555; border-radius: 12px; color: white; text-align: center; outline: none; cursor: pointer; }
+        
+        /* فرم‌های اسامی تیمی بازیکنان */
         .name-input-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 340px; margin-top: 5px; }
         .player-row-item { display: flex; flex-direction: column; gap: 5px; width: 100%; background: rgba(255,255,255,0.03); border: 1px solid #333; padding: 8px; border-radius: 14px; }
         .player-inputs { display: flex; gap: 6px; width: 100%; align-items: center; }
         .player-inputs input { flex: 1; padding: 10px; font-size: 13px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; user-select: text !important; -webkit-user-select: text !important; }
         .order-badge { width: 65px; padding: 10px 0; font-size: 12px; font-weight: bold; background: #333; border: 2px solid #555; border-radius: 10px; color: #aaa; text-align: center; }
         .order-badge.assigned { background: #ff9800; border-color: #fff; color: #000; box-shadow: 0 0 8px #ff9800; }
-        /* 🛍️ استایل‌های منوی اختصاصی فروشگاه و صرافی دوطرفه تیله */
-        .shop-container { width: 100%; max-width: 340px; background: rgba(255,235,59,0.06); border: 1px dashed rgba(255,235,59,0.3); border-radius: 18px; padding: 15px; margin-top: 10px; direction: rtl; }
-        .shop-title { color: #ffeb3b; font-size: 15px; font-weight: bold; margin-bottom: 10px; text-align: center; }
-        .shop-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 10px; margin: 6px 0; }
-        .shop-row span { font-size: 13px; color: #fff; }
-        .shop-actions { display: flex; gap: 6px; }
-        .shop-btn { padding: 6px 12px; border-radius: 8px; border: none; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
-        .shop-btn.buy { background: #4caf50; }
-        .shop-btn.sell { background: #e53935; }
-        .shop-btn:active { transform: scale(0.95); }
-
+        /* 🎮 لایه‌های اصلی گرافیک بازی، هدر و پاپ‌آپ استادیومی */
         #canvas { display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: absolute; top: 15px; z-index: 10; direction: rtl; }
+        #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: fixed; top: 15px; right: 15px; z-index: 130; direction: rtl; }
         #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
         #turnIndicator { font-size: 16px; font-weight: bold; color: #ffeb3b; background: rgba(0,0,0,0.6); padding: 6px 14px; border-radius: 10px; }
-        
         .lucky-wheel-btn { background: #ff9800; color: black; border: none; border-radius: 12px; padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 15px; }
         .wheel-container { display: none; flex-direction: column; align-items: center; margin: 15px 0; position: relative; }
         .wheel-pointer { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #e53935; position: absolute; top: -5px; z-index: 5; }
         #wheelCanvas { border: 4px solid #fff; border-radius: 50%; }
-        
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 150; padding: 20px; }
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 160; padding: 20px; }
         .custom-popup-box { background: rgba(25, 30, 35, 0.9); backdrop-filter: blur(20px); border: 2px solid rgba(255, 235, 59, 0.5); border-radius: 25px; padding: 25px; width: 100%; max-width: 360px; text-align: center; direction: rtl; box-shadow: 0 20px 50px rgba(0,0,0,0.7); }
         .popup-icon { font-size: 45px; margin-bottom: 12px; display: inline-block; }
         .popup-text { font-size: 14px; line-height: 1.6; color: #fff; margin-bottom: 15px; }
-        
         .final-table { width: 100%; margin: 15px 0; border-collapse: collapse; font-size: 13px; color: #fff; }
         .final-table th, .final-table td { padding: 8px; border: 1px solid rgba(255,255,255,0.1); text-align: center; }
         .final-actions { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
         .popup-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
         .popup-btn.success { background: linear-gradient(90deg, #4caf50, #81c784); }
         .popup-btn.danger { background: linear-gradient(90deg, #ff5722, #ff8a65); }
-
         .game-toast { position: fixed; bottom: 25px; background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.15); z-index: 200; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); direction: rtl; }
         .game-toast.show { opacity: 1; transform: translateY(0); }
     </style>
 </head>
 <body>
-    <!-- 🟢 صفحه لاگین اول بازی: سه کلید مجزای ورود آنی، ثبت نام جدید و شروع سریع رندم -->
     <div id="loginScreen" style="display: flex;">
         <div class="login-box">
             <h2 id="authFormTitle">🏟️ به میدان تیله‌بازی خوش آمدید</h2>
             <input type="number" id="identifierInput" placeholder="کد ملی (۱۰ رقمی)">
             <input type="text" id="usernameInput" placeholder="نام و نام خانوادگی (فارسی)" style="display: none;">
-            
             <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; width: 100%;">
                 <div style="display: flex; gap: 8px; width: 100%;">
                     <button class="login-btn" id="loginModeBtn" style="background: #2196f3; flex: 1;" onclick="processSmartAuth('login')">ورود به حساب</button>
@@ -103,13 +88,12 @@
             </div>
         </div>
     </div>
-    <!-- 🟢 منوی اصلی بازی (فقط پس از لاگین نمایش داده می‌شود) -->
+
     <div id="setupMenu" style="display: none;">
-        <button id="gearBtn">⚙️</button>
         <button id="startBtn">شروع</button>
     </div>
-
-    <!-- 🏆 کادر پاپ‌آپ استادیومی جهت نمایش جوایز و جدول رده‌بندی مسابقات -->
+    
+    <button id="gearBtn" style="display: none;">☰</button>
     <div class="custom-popup-overlay" id="gamePopup">
         <div class="custom-popup-box">
             <span class="popup-icon" id="popupIcon">🎉</span>
@@ -125,15 +109,14 @@
             </div>
         </div>
     </div>
+
     <div class="drawer-overlay" id="overlay"></div>
     <div class="drawer" id="settingsDrawer">
-        
-        <!-- 🔝 هدر بالای کشو شامل عنوان و کلید خروج نهایی به لاگین -->
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; margin-top: 5px; margin-bottom: 20px; padding: 0 5px; direction: rtl;">
             <h3 style="color: #ffeb3b; font-size: 17px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">⚙️ تنظیمات استادیوم</h3>
             <button style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.5);" onclick="handleDrawerExit()">خروج</button>
         </div>
-        <!-- 🕹️ محتوای داخلی تنظیمات استادیوم -->
+
         <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <div class="menu-row">
                 <label>کجا میخوای بازی کنیم؟</label>
@@ -154,48 +137,25 @@
                     <div class="count-button-item" data-val="snowy">❄️ برفی</div>
                 </div>
             </div>
-            <!-- 🛍️ ماژول بومی فروشگاه و صرافی دوطرفه خرید/فروش آنی تیله -->
-            <div class="shop-container">
-                <div class="shop-title">💎 دکان و صرافی دوطرفه تیله‌بازی</div>
-                
-                <!-- ردیف خرید تیله هدیه/فوری -->
-                <div class="shop-row">
-                    <span>بسته ۱۰ تایی تیله (شارژ فوری حساب)</span>
-                    <div class="shop-actions">
-                        <button class="shop-btn buy" onclick="handleShopTransaction('buy', 10)">🛒 خرید</button>
-                    </div>
-                </div>
 
-                <!-- ردیف فروش تیله به صرافی -->
-                <div class="shop-row">
-                    <span>فروش ۱۰ تیله به صرافی بازی</span>
-                    <div class="shop-actions">
-                        <button class="shop-btn sell" onclick="handleShopTransaction('sell', 10)">💰 فروش</button>
-                    </div>
-                </div>
-            </div>
             <div class="menu-row">
                 <label>دوست داری چند نفره باشیم؟ (آفلاین نوبتی)</label>
                 <select class="custom-select" id="playerCountSelect">
                     <option value="1" selected>۱ نفره (انفرادی تنهایی)</option>
-                    <option value="2">۲ نفره</option><option value="3">۳ نفره</option>
-                    <option value="4">۴ نفره</option><option value="5">۵ نفره</option><option value="6">۶ نفره</option>
+                    <option value="2">۲ نفره</option>
+                    <option value="3">۳ نفره</option>
+                    <option value="4">۴ نفره</option>
+                    <option value="5">۵ نفره</option>
+                    <option value="6">۶ نفره</option>
                 </select>
             </div>
             <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px;">
-                <div class="player-row-item">
-                    <div class="player-inputs">
-                        <input type="text" id="pInput0" value="بازیکن ۱" placeholder="نام فارسی بازیکن ۱" disabled>
-                    </div>
-                </div>
+                <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" placeholder="نام بازیکن ۱" disabled></div></div>
             </div>
+            
             <button class="lucky-wheel-btn" id="drawOrderBtn" style="display: none;">🎰 ببینیم نوبت اول کیه ؟</button>
-            <div class="wheel-container" id="wheelSection">
-                <div class="wheel-pointer"></div>
-                <canvas id="wheelCanvas" width="240" height="240"></canvas>
-            </div>
+            <div class="wheel-container" id="wheelSection"><div class="wheel-pointer"></div><canvas id="wheelCanvas" width="240" height="240"></canvas></div>
 
-            <!-- 🏢 بخش مسابقه آفلاین چند گوشی با شبکه داخلی وای‌فای و هات‌اسپات -->
             <div class="menu-row" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; width: 100%; max-width: 340px; margin-top: 10px;">
                 <label style="color: #00e676;">🎮 بخش مسابقه آفلاین چند گوشی (Wi-Fi/Hotspot)</label>
                 <div style="display: flex; gap: 8px; width: 100%; margin-bottom: 8px;">
@@ -204,23 +164,51 @@
                 </div>
                 <input type="text" id="roomCodeInput" placeholder="کد اتاق ۴ رقمی (مثلاً: 4582)" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #555; background: #111; color: white; text-align: center; outline: none;">
             </div>
+            <div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255,255,255,0.1);">
+                <div style="display: flex; background: rgba(0, 0, 0, 0.4); padding: 5px; border-radius: 16px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05);">
+                    <button type="button" id="btnTabBank" style="flex: 1; background: #ff9800; color: #000; border: none; padding: 11px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 13px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 15px rgba(255,152,0,0.25);" onclick="switchDashboardTab('bank')">💸 انتقال و دکان</button>
+                    <button type="button" id="btnTabHistory" style="flex: 1; background: transparent; color: #aaa; border: none; padding: 11px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 13px; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);" onclick="switchDashboardTab('history')">📊 کارنامه بازی‌ها</button>
+                </div>
 
-            <div class="menu-row">
-                <label>با چند تا تیله بریم بازی?</label>
+                <div id="tabBankContent" style="display: block; animation: fadeInDashboard 0.4s ease;">
+                    <div style="background: rgba(0,0,0,0.25); border-radius: 14px; padding: 10px; margin-bottom: 14px; border: 1px dashed rgba(255,235,59,0.2);">
+                        <div style="color: #ffeb3b; font-size: 13px; font-weight: bold; text-align: center; margin-bottom: 8px;">💎 دکان خرید و فروش فوری</div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; color: #fff;">
+                            <span>بسته ۱۰ تایی تیله</span>
+                            <button class="shop-btn buy" onclick="handleShopTransaction('buy', 10)" style="background:#4caf50; padding:4px 10px; border-radius:6px; border:none; color:white; font-weight:bold; cursor:pointer;">🛒 خرید</button>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #fff;">
+                            <span>فروش ۱۰ تیله به صرافی</span>
+                            <button class="shop-btn sell" onclick="handleShopTransaction('sell', 10)" style="background:#e53935; padding:4px 10px; border-radius:6px; border:none; color:white; font-weight:bold; cursor:pointer;">💰 فروش</button>
+                        </div>
+                    </div>
+                    <div style="font-size: 11px; color: #ff9800; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 6px;">💳 مشخصات حساب مقصد</div>
+                    <input type="number" id="transferTargetIdInput" placeholder="کد ملی مقصد (۱۰ رقمی)" style="width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; text-align: center; font-size: 14px; margin-bottom: 12px; outline: none;">
+                    <div style="font-size: 11px; color: #ff9800; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 6px;">💎 مبلغ انتقال (تعداد تیله)</div>
+                    <input type="number" id="transferAmountInput" placeholder="چه تعداد تیله ارسال شود؟" style="width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; text-align: center; font-size: 14px; margin-bottom: 16px; outline: none;">
+                    <button type="button" style="width: 100%; background: linear-gradient(90deg, #4caf50, #66bb6a); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 6px 20px rgba(76,175,80,0.4);" onclick="executeMarbleTransfer()">🚀 تایید و انتقال قطعی تیله</button>
+                </div>
+
+                <div id="tabHistoryContent" style="display: none; animation: fadeInDashboard 0.4s ease;">
+                    <div style="max-height: 200px; overflow-y: auto; padding-right: 2px;" id="historyLogsContainer"></div>
+                </div>
+            </div>
+
+            <div class="menu-row" style="margin-top: 20px;">
+                <label>با چند تا تیله بریم بازی؟</label>
                 <select class="custom-select" id="marbleCountSelect">
                     <option value="2">۲ تیله</option><option value="3">۳ تیله</option><option value="4">۴ تیله</option>
                     <option value="5" selected>۵ تیله</option><option value="6">۶ تیله</option><option value="7">۷ تیله</option>
                     <option value="8">۸ تیله</option><option value="9">۹ تیله</option><option value="10">۱۰ تیله</option>
                 </select>
             </div>
-            <button class="drawer-close-btn" id="closeDrawer" style="margin-top: 15px; margin-bottom: 10px;">همه چی عالی شد!     بریم؟</button>
+            <button class="drawer-close-btn" id="closeDrawer" style="margin-top: 15px; margin-bottom: 10px;">همه چی عالی شد! بریم؟</button>
         </div>
     </div>
 
-    <!-- هدر بالای میدان شامل دکمه خروج نهایی و برگشت به منو به همراه وضعیت نوبت و بانک بازیکن -->
     <div id="gameHeader">
         <div style="display: flex; gap: 8px;">
-            <button id="exitBtn" style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3);">خروج</button>
+            <button id="exitBtn">خروج</button>
             <button id="backToMenuBtn" style="background: #ff9800; color: black; border: none; border-radius: 12px; padding: 8px 14px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3);" onclick="handleBackToMenu()">برگشت به منو</button>
         </div>
         <div id="turnIndicator">نوبت: بازیکن ۱</div>
@@ -229,6 +217,7 @@
     <canvas id="canvas"></canvas>
     <script src="https://unpkg.com"></script>
     <script>
+        // ۱. المان‌های DOM و متغیرهای کلیدی بانک اطلاعاتی استادیوم
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         const setupMenu = document.getElementById("setupMenu");
@@ -252,147 +241,48 @@
         
         let playerNames = ["بازیکن ۱"];
         let playerNationalIds = [];
+        let currentPlayerIndex = 0;
         
         let peer = null;
         let conn = null;
         let isMyTurnOnline = true;
 
-        function updateWalletUI() {
-            if (isQuickRandomMode) return; 
-            if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); }
-            localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
-            
-            if (turnIndicator && playerNames[currentPlayerIndex]) {
-                let id = playerNationalIds[currentPlayerIndex] || "";
-                let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles})`;
-            }
-        }
-        // 🛍️ تابع مدیریت تراکنش‌های خرید و فروش در صرافی دوطرفه تیله
-        function handleShopTransaction(type, amount) {
-            if (typeof initAudio === "function") initAudio();
-            playClickSound(0.8);
-
-            if (type === 'buy') {
-                totalMarblesOwned += amount;
-                updateWalletUI();
-                showCustomPopup(`🎉 تعداد ${amount} تیله با موفقیت به بانک شما اضافه شد!`, "🛒", "متوجه شدم", false);
-                showGameToast(`🎁 حساب شارژ شد (+${amount} تیله)`);
-            } 
-            else if (type === 'sell') {
-                if (totalMarblesOwned < amount) {
-                    showCustomPopup(`❌ موجودی تیله‌های شما کافی نیست! برای فروش حداقل به ${amount} تیله نیاز دارید.`, "⚠️", "اصلاح موجودی", true);
-                    return;
-                }
-                totalMarblesOwned -= amount;
-                updateWalletUI();
-                showCustomPopup(`💰 تعداد ${amount} تیله به صرافی فروخته شد و معادل ریالی آن به حساب شما واریز گردید.`, "💸", "قبول", false);
-                showGameToast(`💸 تسویه حساب شد (-${amount} تیله)`);
-            }
-        }
-
-        function switchAuthModeToRegister() {
-            authMode = "register";
-            let usernameField = document.getElementById("usernameInput");
-            let submitBtn = document.getElementById("authSubmitBtn");
-            let formTitle = document.getElementById("authFormTitle");
-            
-            if (typeof initAudio === "function") initAudio();
-            if (usernameField) usernameField.style.display = "block";
-            if (submitBtn) submitBtn.style.display = "block";
-            if (formTitle) formTitle.innerText = "📝 عضویت بازیکن جدید";
-        }
-        function processSmartAuth(actionType) {
-            let uName = document.getElementById("usernameInput").value.trim();
-            let uId = document.getElementById("identifierInput").value.trim();
-
-            if (uId === "") { showCustomPopup("لطفاً ابتدا کد ملی خود را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
-            if (uId.length !== 10) { showCustomPopup("کد ملی وارد شده باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح کد ملی", true); return; }
-
-            if (typeof initAudio === "function") initAudio();
-            let savedName = localStorage.getItem(`name_${uId}`);
-            isQuickRandomMode = false; 
-
-            if (actionType === 'login') {
-                if (savedName === null) {
-                    showCustomPopup("این کد ملی یافت نشد! سیستم به حالت ثبت‌نام منتقل شد. لطفاً نام خود را وارد کنید.", "⚠️", "ثبت‌نام بازیکن جدید", true);
-                    switchAuthModeToRegister();
-                    return;
-                }
-                currentUsername = savedName; 
-                currentNationalId = uId;
-                totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${uId}`)) || 10;
-                
-                showCustomPopup(`خوش آمدید قهرمان، ${currentUsername}! اطلاعات شما تایید شد.`, "⚡", "", false);
-
-                setTimeout(() => {
-                    closeCustomPopup();
-                    enterGameDirectly();
-                }, 300);
-            } 
-            else if (actionType === 'register') {
-                if (savedName !== null) {
-                    showCustomPopup("این کد ملی قبلاً ثبت شده است! در حال ورود به حساب...", "🔒", "متوجه شدم");
-                    currentUsername = savedName; currentNationalId = uId; enterGameDirectly(); return;
-                }
-                if (uName === "") { showCustomPopup("لطفاً نام فارسی خود را برای ثبت‌نام وارد کنید.", "⚠️", "متوجه شدم", true); return; }
-                
-                localStorage.setItem(`name_${uId}`, uName);
-                currentUsername = uName; currentNationalId = uId;
-                localStorage.setItem("currentUsername", currentUsername);
-                localStorage.setItem("currentNationalId", currentNationalId);
-                
-                totalMarblesOwned = 10; localStorage.setItem(`marbles_${uId}`, 10);
-                
-                showCustomPopup(`🎉 قهرمان جدید میدان، ${currentUsername} خوش آمدید! پروفایل شما ساخته شد و ۱۰ تیله رایگان به عنوان هدیه خوش‌آمدهای به بانک شما واریز گردید!`, "🎁", "", false);
-
-                setTimeout(() => {
-                    closeCustomPopup();
-                    enterGameDirectly();
-                }, 400);
-            }
-        }
-
-        function enterGameDirectly() {
-            document.getElementById("loginScreen").style.display = "none";
-            setupMenu.style.display = "flex";
-            playerNames = [currentUsername]; playerNationalIds = [currentNationalId];
-            updateWalletUI();
-        }
-        function processQuickRandomAuth() {
-            if (typeof initAudio === "function") initAudio();
-            isQuickRandomMode = true; 
-            document.getElementById("loginScreen").style.display = "none";
-            
-            const groundKeys = Object.keys(grounds);
-            const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)];
-            selectedGroundVal = randomGround; currentGround = grounds[randomGround];
-            
-            const weathers = ["sunny", "windy", "rainy", "snowy"];
-            const randomWeather = weathers[Math.floor(Math.random() * weathers.length)];
-            selectedWeather = randomWeather;
-            
-            if(randomWeather === 'sunny') { windX = 0; windY = 0; } 
-            else if(randomWeather === 'windy') { windX = 0.08; windY = 0.02; } 
-            else if(randomWeather === 'rainy') { windX = 0.03; windY = 0.05; } 
-            else { windX = 0.01; windY = 0.02; }
-            
-            selectedCountVal = Math.floor(Math.random() * 9) + 2; 
-            selectedPlayerCount = 1; currentPlayerIndex = 0;
-            playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; 
-            
-            startAmbientSound(selectedWeather);
-            preloadAssetsAndLaunch();
-        }
         let isFirstShotOfTurn = true; let currentLevel = 1; let isAiming = false; let isMoving = false;
         let hitSuccessInTurn = false; let targetOutInTurn = false; let hasBonusShot = false; let isChainMode = false;
         let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
         let windX = 0; let windY = 0; let selectedWeather = "sunny"; let weatherParticles = []; let windLines = [];
         let box = { x: 40, y: 60, w: 320, h: 220 };
-        
+
+        // 📌 پیاده‌سازی پاپ‌آپ پیش از صدا زدن توابع ورود برای حل قطعی ارور عدم تعریف تابع
+        function showCustomPopup(text, icon, btnText, isError, callback) {
+            const popup = document.getElementById("gamePopup"); 
+            const pText = document.getElementById("popupText"); 
+            const pIcon = document.getElementById("popupIcon");
+            const pTable = document.getElementById("finalScoreTable"); 
+            const pAction = document.getElementById("popupActionButtons");
+            if(!popup) return; 
+            if(pTable) pTable.style.display = "none"; 
+            if(pText) pText.innerText = text; 
+            if(pIcon) pIcon.innerText = icon || "🎉";
+            if(pAction) {
+                pAction.innerHTML = ""; 
+                if (btnText !== "") { 
+                    const btn = document.createElement("button"); 
+                    btn.className = isError ? "popup-btn danger" : "popup-btn success"; 
+                    btn.innerText = btnText || "تایید"; 
+                    btn.onclick = function() { 
+                        popup.style.display = "none"; 
+                        if(typeof callback === "function") callback(); 
+                    }; 
+                    pAction.appendChild(btn); 
+                }
+            }
+            popup.style.display = "flex";
+        }
+
+        function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
         let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
-        
-        let targets = []; let selectedPlayerCount = 1; let currentPlayerIndex = 0; let playerScores = []; let playerOrders = []; 
+        let targets = []; let selectedPlayerCount = 1; let playerScores = []; let playerOrders = []; 
 
         // 🟢 مقادیر اصلاح‌شده اصطکاک و چسبندگی زمین‌ها برای سنگین‌تر شدن غلتش و به چالش کشیدن خروج تیله‌ها
         const grounds = {
@@ -402,45 +292,114 @@
             cement:  { friction: 0.95, wind: 0.04, src: 'cement.jpg',  fallbackColor: '#9e9e9e', borderColor: '#00bcd4', lineStyle: 'paint_line' },
             dirt:    { friction: 0.92, wind: 0.15, src: 'dirt.jpg',    fallbackColor: '#8d6e63', borderColor: '#ff9800', lineStyle: 'dirt_scratch' }
         };
-
         let currentGround = grounds.grass; 
         let imgBg = new Image(); let imgPlayer = new Image(); let imgTarget = new Image();
-        let selectedGroundVal = "grass"; let selectedTargetSrc = "1.png"; let selectedCountVal = 5;
+        let selectedGroundVal = "grass"; let selectedCountVal = 5;
         let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
+
+        function updateWalletUI() {
+            if (isQuickRandomMode) return; 
+            if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); }
+            localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
+            if (turnIndicator && playerNames[currentPlayerIndex]) {
+                let id = playerNationalIds[currentPlayerIndex] || "";
+                let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
+                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles} تیله)`;
+            }
+        }
+        function switchAuthModeToRegister() {
+            authMode = "register";
+            let usernameField = document.getElementById("usernameInput");
+            let submitBtn = document.getElementById("authSubmitBtn");
+            let formTitle = document.getElementById("authFormTitle");
+            if (typeof initAudio === "function") initAudio();
+            if (usernameField) usernameField.style.display = "block";
+            if (submitBtn) submitBtn.style.display = "block";
+            if (formTitle) formTitle.innerText = "📝 عضویت بازیکن جدید";
+        }
+
+        function processSmartAuth(actionType) {
+            let uName = document.getElementById("usernameInput").value.trim();
+            let uId = document.getElementById("identifierInput").value.trim();
+            if (uId === "") { showCustomPopup("لطفاً ابتدا کد ملی خود را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
+            if (uId.length !== 10) { showCustomPopup("کد ملی وارد شده باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح کد ملی", true); return; }
+            if (typeof initAudio === "function") initAudio();
+            let savedName = localStorage.getItem(`name_${uId}`);
+            isQuickRandomMode = false; 
+
+            if (actionType === 'login') {
+                if (savedName === null) {
+                    showCustomPopup("این کد ملی یافت نشد! سیستم به حالت ثبت‌نام منتقل شد. نام خود را وارد کنید.", "⚠️", "ثبت‌نام جدید", true);
+                    switchAuthModeToRegister();
+                    return;
+                }
+                currentUsername = savedName; currentNationalId = uId;
+                totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${uId}`)) || 10;
+                showCustomPopup(`خوش آمدید قهرمان، ${currentUsername}! اطلاعات شما تایید شد.`, "⚡", "", false);
+                setTimeout(() => { closeCustomPopup(); enterGameDirectly(); }, 300);
+            } 
+            else if (actionType === 'register') {
+                if (savedName !== null) {
+                    showCustomPopup("این کد ملی قبلاً ثبت شده است! در حال ورود به حساب...", "🔒", "متوجه شدم");
+                    currentUsername = savedName; currentNationalId = uId; enterGameDirectly(); return;
+                }
+                if (uName === "") { showCustomPopup("لطفاً نام فارسی خود را برای ثبت‌نام وارد کنید.", "⚠️", "متوجه شدم", true); return; }
+                localStorage.setItem(`name_${uId}`, uName);
+                currentUsername = uName; currentNationalId = uId;
+                localStorage.setItem("currentUsername", currentUsername);
+                localStorage.setItem("currentNationalId", currentNationalId);
+                totalMarblesOwned = 10; localStorage.setItem(`marbles_${uId}`, 10); localStorage.setItem("totalMarblesOwned", 10);
+                showCustomPopup(`🎉 قهرمان جدید، ${currentUsername} خوش آمدید! پروفایل ساخته و ۱۰ تیله رایگان هدیه شد!`, "🎁", "بزن بریم", false, function() { enterGameDirectly(); });
+            }
+        }
+
+        function enterGameDirectly() {
+            document.getElementById("loginScreen").style.display = "none";
+            setupMenu.style.display = "flex";
+            gearBtn.style.display = "flex"; 
+            playerNames = [currentUsername]; playerNationalIds = [currentNationalId];
+            updateWalletUI();
+        }
+        function processQuickRandomAuth() {
+            if (typeof initAudio === "function") initAudio();
+            isQuickRandomMode = true; document.getElementById("loginScreen").style.display = "none";
+            const groundKeys = Object.keys(grounds);
+            const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)];
+            selectedGroundVal = randomGround; currentGround = grounds[randomGround];
+            selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
+            if(selectedWeather === 'sunny') { windX = 0; windY = 0; } 
+            else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } 
+            else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } 
+            else { windX = 0.01; windY = 0.02; }
+            selectedCountVal = Math.floor(Math.random() * 9) + 2; 
+            selectedPlayerCount = 1; currentPlayerIndex = 0;
+            playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; 
+            startAmbientSound(selectedWeather); preloadAssetsAndLaunch();
+        }
+
         function saveSubPlayersData() {
             if (isQuickRandomMode || conn) return true; 
             let count = selectedPlayerCount;
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "رضا";
+            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
             let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
-            let tempNames = [currentValidName];
-            playerNationalIds = [currentValidId]; 
-            
+            let tempNames = [currentValidName]; playerNationalIds = [currentValidId]; 
             for (let i = 1; i < count; i++) {
                 let subNameInput = document.getElementById(`subName_${i}`);
                 let subIdInput = document.getElementById(`subId_${i}`);
                 let subName = subNameInput ? subNameInput.value.trim() : "";
                 let subId = subIdInput ? subIdInput.value.trim() : "";
-                
-                if (subName === "" || subId === "") {
-                    showCustomPopup(`لطفاً نام فارسی و کد ملی بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true);
-                    return false;
-                }
-                if (subId.length !== 10) {
-                    showCustomPopup(`کد ملی بازیکن شماره ${i + 1} باید دقیقاً ۱۰ رقم باشد.`, "⚠️", "اصلاح کد ملی", true);
-                    return false;
-                }
+                if (subName === "" || subId === "") { showCustomPopup(`لطفاً اطلاعات بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true); return false; }
+                if (subId.length !== 10) { showCustomPopup(`کد ملی بازیکن شماره ${i + 1} باید ۱۰ رقم باشد.`, "⚠️", "اصلاح کد ملی", true); return false; }
                 localStorage.setItem(`name_${subId}`, subName);
-                if (localStorage.getItem(`marbles_${subId}`) === null) { localStorage.setItem(`marbles_${subId}`, 10); }
-                tempNames.push(subName); 
-                playerNationalIds.push(subId);
+                if (localStorage.getItem(`marbles_${subId}`) === null) { 
+                    localStorage.setItem(`marbles_${subId}`, 10); 
+                    showGameToast(`🎁 ۱۰ تیله هدیه خوش‌آمدهای به بانک ${subName} واریز شد!`);
+                }
+                tempNames.push(subName); playerNationalIds.push(subId);
             }
-            playerNames = tempNames;
-            return true;
+            playerNames = tempNames; return true;
         }
-
-        function initAudio() { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx.state === 'suspended') { audioCtx.resume(); } }
-        
-        // 🟢 فرکانس موج مثلثی اصلاح شده جهت شبیه‌سازی دقیق ضربه فیزیکی و سنگین دو تیله به یکدیگر
+        // 🟢 فرکانس موج مثلثی اصلاح‌شده جهت شبیه‌سازی دقیق ضربه فیزیکی و سنگین دو تیله به یکدیگر
         function playClickSound(intensity = 0.5) {
             try {
                 initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity, 1.2));
@@ -562,13 +521,12 @@
                 return;
             }
             
-            // 🔊 پخش تفکیک‌شده طنین تماشاگران دقیقاً بعد از اتمام غلتش بر اساس وضعیت پرتاب
             if (targetOutInTurn) { 
-                playCheeringSound(); // 📣 جیغ و هورا استادیوم به خاطر خروج موفقیت‌آمیز تیله هدف
+                playCheeringSound(); 
                 hasBonusShot = true; 
                 showGameToast("🎯 شلیک عالی! هوراااا");
             } else {
-                playDisappointmentSound(); // 😔 طنین آه و افسوس به خاطر خطا رفتن شلیک و عدم خروج تیله
+                playDisappointmentSound(); 
                 showGameToast("😔 اوووف! نزدیک بود...");
                 
                 if (selectedPlayerCount === 1 || isQuickRandomMode || conn) {
@@ -592,18 +550,18 @@
             if (!isQuickRandomMode && !conn && turnIndicator && playerNames[currentPlayerIndex]) {
                 let id = playerNationalIds[currentPlayerIndex] || "";
                 let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles})`;
+                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles} تیله)`;
             }
             isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; 
             if (!isQuickRandomMode && !conn) updateWalletUI();
         }
         function drawDynamicBorder() { 
             ctx.save(); ctx.lineWidth = 4;
-            if (currentGround.lineStyle === 'chalk') { ctx.strokeStyle = "rgba(240, 240, 245, 0.7)"; ctx.strokeRect(box.x, box.y, box.w, box.h); } 
-            else if (currentGround.lineStyle === 'dirt_scratch') { ctx.strokeStyle = "rgba(225, 195, 165, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); } 
-            else if (currentGround.lineStyle === 'carpet_stitch') { ctx.strokeStyle = "rgba(255, 255, 255, 0.75)"; ctx.strokeRect(box.x, box.y, box.w, box.h); } 
-            else { ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); }
-            ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore();
+            ctx.strokeStyle = "rgba(255, 255, 255, 0.55)";
+            ctx.strokeRect(box.x, box.y, box.w, box.h);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.12)";
+            ctx.fillRect(box.x, box.y, box.w, box.h);
+            ctx.restore();
         }
 
         function loadLevel(lvl) {
@@ -618,386 +576,136 @@
                 targets.push({ x: startX + (i * targetDiameter), y: centerY, r: targetRadius, vx: 0, vy: 0, angle: 0, isOut: false }); 
             }
         }
-
-        function generateMenuPreviews() { 
-            Object.keys(grounds).forEach(key => { 
-                let pCanvas = document.getElementById(`pre_${key}`); 
-                if (pCanvas) { 
-                    let pCtx = pCanvas.getContext("2d"); 
-                    pCanvas.width = 70; pCanvas.height = 70; 
-                    pCtx.fillStyle = grounds[key].fallbackColor; 
-                    pCtx.fillRect(0, 0, 70, 70); 
-                    
-                    let preImg = new Image(); 
-                    preImg.src = grounds[key].src; 
-                    preImg.onload = function() { 
-                        pCtx.drawImage(preImg, 0, 0, 70, 70); 
-                        pCtx.strokeStyle = "rgba(255,255,255,0.2)"; 
-                        pCtx.strokeRect(5, 5, 60, 60); 
-                    }; 
-                    preImg.onerror = function() {
-                        pCtx.fillStyle = "rgba(255, 255, 255, 0.15)";
-                        pCtx.font = "10px sans-serif";
-                        pCtx.fillStyle = "#fff";
-                        pCtx.textAlign = "center";
-                        pCtx.fillText(key === 'grass' ? 'چمن' : key === 'carpet' ? 'فرش' : key === 'asphalt' ? 'آسفالت' : key === 'cement' ? 'سیمان' : 'خاکی', 35, 40);
-                    };
-                    pCtx.strokeStyle = "rgba(255,255,255,0.2)"; 
-                    pCtx.strokeRect(5, 5, 60, 60); 
-                } 
-            }); 
-        }
         function drawWheel(currentAngle = 0) {
             const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return;
             const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2;
             wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count;
-            
             for(let i = 0; i < count; i++) {
                 let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle;
                 wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke();
-                
-                wCtx.save(); 
-                // ۱. انتقال سیستم مختصات به مرکز چرخ دنده جهت چرخاندن اصولی متون
-                wCtx.translate(radius, radius); 
-                
-                // ۲. چرخش دقیق به اندازه زاویه وسط هر اسلایس مجزا
-                let textAngle = startA + sliceAngle / 2;
-                wCtx.rotate(textAngle); 
-                
-                // ۳. تراز کردن متن (راست‌چین برای شروع حرکت کلمات فارسی از لبه بیرونی به مرکز و ممانعت از برعکس شدن)
-                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; 
-                wCtx.font = "bold 14px sans-serif"; 
-                wCtx.textAlign = "right"; 
-                wCtx.textBaseline = "middle";
-                
-                // ۴. نوشتن نام بازیکن با حاشیه امن مستقل از مرکز چرخ دنده
-                let pName = playerNames[i] || `بازیکن ${i + 1}`;
-                wCtx.fillText(pName.substring(0, 10), radius - 20, 0); 
-                wCtx.restore();
+                wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(startA + sliceAngle / 2); 
+                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 14px sans-serif"; wCtx.textAlign = "right"; wCtx.textBaseline = "middle";
+                wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 10), radius - 20, 0); wCtx.restore();
             }
-            wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.strokeStyle = "#333"; wCtx.lineWidth = 2; wCtx.stroke();
+            wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke();
         }
 
         function updateNameInputs(count) {
             namesContainer.innerHTML = ""; playerOrders = [];
-            const drawOrderBtn = document.getElementById("drawOrderBtn"); 
-            const wheelSection = document.getElementById("wheelSection");
-            const wCanvas = document.getElementById("wheelCanvas");
-
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "رضا";
-
+            const drawOrderBtn = document.getElementById("drawOrderBtn"); const wheelSection = document.getElementById("wheelSection");
+            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
             let mainRow = document.createElement("div"); mainRow.className = "player-row-item";
-            let mainInputs = document.createElement("div"); mainInputs.className = "player-inputs";
-            let mainInput = document.createElement("input"); mainInput.type = "text"; mainInput.value = currentValidName; mainInput.disabled = true;
-            let mainBadge = document.createElement("div"); mainBadge.className = "order-badge assigned"; mainBadge.innerText = "نوبت ۱";
-            mainInputs.appendChild(mainInput); mainInputs.appendChild(mainBadge); mainRow.appendChild(mainInputs);
-            namesContainer.appendChild(mainRow);
-            playerOrders.push(1);
-
+            mainRow.innerHTML = `<div class="player-inputs"><input type="text" value="${currentValidName}" disabled><div class="order-badge assigned">نوبت ۱</div></div>`;
+            namesContainer.appendChild(mainRow); playerOrders.push(1);
             for(let i = 1; i < count; i++) {
                 playerOrders.push(i + 1);
                 let row = document.createElement("div"); row.className = "player-row-item";
-                let inputsDiv = document.createElement("div"); inputsDiv.className = "player-inputs";
-                let nameInp = document.createElement("input"); nameInp.type = "text"; nameInp.id = `subName_${i}`; nameInp.placeholder = `نام بازیکن ${i + 1} (فارسی)`;
-                let idInp = document.createElement("input"); idInp.type = "number"; idInp.id = `subId_${i}`; idInp.placeholder = `کد ملی بازیکن ${i + 1}`;
-                
-                nameInp.oninput = () => { 
-                    let temp = [currentValidName];
-                    for(let j=1; j<count; j++){ temp.push(document.getElementById(`subName_${j}`)?.value || `بازیکن ${j+1}`); }
-                    playerNames = temp; drawWheel(0); 
-                };
-                
-                let badge = document.createElement("div"); badge.className = "order-badge"; badge.id = `pBadge_${i}`; badge.innerText = "نامشخص";
-                inputsDiv.appendChild(nameInp); inputsDiv.appendChild(idInp); inputsDiv.appendChild(badge);
-                row.appendChild(inputsDiv); namesContainer.appendChild(row);
+                row.innerHTML = `<div class="player-inputs"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}"><input type="number" id="subId_${i}" placeholder="کد ملی"><div class="order-badge" id="pBadge_${i}">نامشخص</div></div>`;
+                namesContainer.appendChild(row);
+                document.getElementById(`subName_${i}`).oninput = () => { let temp = [currentValidName]; for(let j=1; j<count; j++){ temp.push(document.getElementById(`subName_${j}`)?.value || `بازیکن ${j+1}`); } playerNames = temp; drawWheel(0); };
             }
+            let tempInit = [currentValidName]; for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); } playerNames = tempInit;
+            if (count > 1) { drawOrderBtn.style.display = "block"; wheelSection.style.display = "flex"; drawWheel(0); } else { drawOrderBtn.style.display = "none"; wheelSection.style.display = "none"; }
+        }
+        function getEventPos(e) { 
+            let r = canvas.getBoundingClientRect(); 
+            let cX = e.clientX, cY = e.clientY; 
+            if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } 
+            else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } 
+            return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; 
+        }
+        
+        function handleStart(e) { 
+            let pos = getEventPos(e); 
+            // 📌 مانیتورینگ تاچ گوشه کانواس بازی: اگر وسط بازی محدوده همبرگری قبلی لمس شود، صرافی بدون باگ باز می‌شود
+            if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) {
+                e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return;
+            }
+            if (isMoving || player.inAir) return; 
+            isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; 
+        }
+        
+        function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
+        
+        function handleEnd() {
+            if (!isAiming) return; isAiming = false;
+            let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy);
+            if (dragDist > 5) {
+                player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; 
+                targets.forEach(t => {
+                    if (t.isOut) return;
+                    let A = dy; let B = -dx; let C = dx * player.y - dy * player.x;
+                    let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B);
+                    if (lineDist < (16 + t.r)) {
+                        let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2);
+                        if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; }
+                    }
+                });
 
-            let tempInit = [currentValidName];
-            for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); }
-            playerNames = tempInit;
-
-            if (count > 1) { 
-                if(wCanvas) { wCanvas.width = 240; wCanvas.height = 240; }
-                if(drawOrderBtn) drawOrderBtn.style.display = "block"; 
-                if(wheelSection) wheelSection.style.display = "flex"; 
-                drawWheel(0); // 🟢 رسم آنی و دو بخش شدن چرخ به محض لود اولیه منو با متغیر ۲ نفره
-            } else { 
-                if(drawOrderBtn) drawOrderBtn.style.display = "none"; 
-                if(wheelSection) wheelSection.style.display = "none"; 
+                if (targetHit && closestDist < 400) {
+                    player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y;
+                    setTimeout(() => {
+                        let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0;
+                        let slideInterval = setInterval(() => {
+                            targetHit.x += Math.cos(angle) * hitSpeed; targetHit.y += Math.sin(angle) * hitSpeed; hitSpeed *= 0.88; steps++;
+                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
+                                targetHit.isOut = true; targetOutInTurn = true;
+                                if (!isQuickRandomMode) {
+                                    let id = playerNationalIds[currentPlayerIndex] || "";
+                                    if (id === currentNationalId) { totalMarblesOwned++; } else { localStorage.setItem(`marbles_${id}`, (parseInt(localStorage.getItem(`marbles_${id}`)) || 0) + 1); }
+                                    if(playerScores[currentPlayerIndex] !== undefined) playerScores[currentPlayerIndex]++; updateWalletUI();
+                                }
+                                if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 50); return; }
+                            }
+                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); }
+                        }, 16);
+                    }, (closestDist / 5.5) * 15);
+                } else {
+                    let cX = player.x + dx * 6, cY = player.y + dy * 6;
+                    player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.arcHeight = Math.min(dragDist * 0.5, 140);
+                }
+                player.progress = 0; player.inAir = true; isFirstShotOfTurn = false;
             }
         }
         // 🎰 عملکرد انیمیشن شتاب‌دار دکمه چرخنده بدون باگ مسدودکننده
         document.getElementById("drawOrderBtn").onclick = function(e) {
-            e.preventDefault(); 
-            e.stopPropagation(); 
-            initAudio();
-            
-            if(!saveSubPlayersData()) return;
-            
-            playClickSound(1);
-            let randomRotation = Math.random() * Math.PI * 2;
-            let totalRotation = (Math.PI * 2 * 6) + randomRotation; 
-            let startTimestamp = null; 
-            const duration = 2800;
-
+            e.preventDefault(); e.stopPropagation(); initAudio(); if(!saveSubPlayersData()) return; playClickSound(1);
+            let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null;
             function animateWheel(timestamp) {
                 if (!startTimestamp) startTimestamp = timestamp;
-                let progress = timestamp - startTimestamp; 
-                let t = progress / duration;
-                let easeOut = 1 - Math.pow(1 - t, 4); 
-                let currentAngle = easeOut * totalRotation;
-                drawWheel(currentAngle);
-                
-                if (progress < duration) { 
-                    requestAnimationFrame(animateWheel); 
-                } else {
-                    let count = selectedPlayerCount; 
-                    let sliceAngle = (Math.PI * 2) / count;
-                    let normalizedAngle = totalRotation % (Math.PI * 2);
-                    let winningIndex = Math.floor(normalizedAngle / sliceAngle) % count;
-                    winningIndex = (count - winningIndex) % count;
-
-                    let tempPlayers = [];
-                    let mainBadge = namesContainer.querySelector(".order-badge");
-                    let mainFinalOrder = ((0 - winningIndex + count) % count) + 1;
-                    if(mainBadge) mainBadge.innerText = `نوبت ${mainFinalOrder}`;
-                    
-                    let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "رضا";
-                    let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
-                    tempPlayers.push({ name: currentValidName, id: currentValidId, order: mainFinalOrder });
-
+                let progress = timestamp - startTimestamp; let currentAngle = (1 - Math.pow(1 - (progress / 2800), 4)) * totalRotation; drawWheel(currentAngle);
+                if (progress < 2800) { requestAnimationFrame(animateWheel); } else {
+                    let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count;
+                    document.querySelector(".order-badge").innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`;
+                    let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }];
                     for (let i = 1; i < count; i++) {
                         let finalOrder = ((i - winningIndex + count) % count) + 1;
-                        let badge = document.getElementById(`pBadge_${i}`);
-                        if (badge) { 
-                            badge.innerText = `نوبت ${finalOrder}`; 
-                            badge.classList.add("assigned"); 
-                        }
-                        let nameVal = document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`;
-                        let idVal = document.getElementById("subId_" + i)?.value || "";
-                        tempPlayers.push({ name: nameVal, id: idVal, order: finalOrder });
+                        document.getElementById(`pBadge_${i}`).innerText = `نوبت ${finalOrder}`;
+                        document.getElementById(`pBadge_${i}`).classList.add("assigned");
+                        tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder });
                     }
-                    tempPlayers.sort((a, b) => a.order - b.order);
-                    
-                    playerNames = tempPlayers.map(p => p.name); 
-                    playerNationalIds = tempPlayers.map(p => p.id);
-                    playerOrders = tempPlayers.map(p => p.order);
-                    currentPlayerIndex = 0; 
-                    
-                    showGameToast(`🎉 نوبت اول مسابقه مشخص شد!`);
+                    tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`);
                 }
             }
             requestAnimationFrame(animateWheel);
         };
 
         function resizeCanvas() { 
-            canvas.width = window.innerWidth; 
-            canvas.height = window.innerHeight; 
-            
-            if (canvas.width < 600) {
-                box.w = canvas.width * 0.85; 
-                box.h = canvas.height * 0.25; 
-                box.y = 80; 
-            } else {
-                box.w = 420; 
-                box.h = 260;
-                box.y = 100;
-            }
-            box.x = (canvas.width - box.w) / 2; 
-
-            if (!player.inAir && player.progress === 0) {
-                let initX = canvas.width / 2; 
-                let initY = canvas.height - 100; 
-                player.x = initX; player.y = initY; 
-                player.startX = initX; player.startY = initY; 
-                player.targetX = initX; player.targetY = initY;
-            }
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight; 
+            if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; }
+            box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100;
         }
-function getEventPos(e) {
-    let r = canvas.getBoundingClientRect(); 
-    let clientX = e.clientX; 
-    let clientY = e.clientY;
-    
-    // 📱 مانیتورینگ صحیح تاچ موبایل با ارجاع به اولین نقطه لمس
-    if (e.touches && e.touches.length > 0) { 
-        clientX = e.touches[0].clientX; 
-        clientY = e.touches[0].clientY; 
-    } else if (e.changedTouches && e.changedTouches.length > 0) { 
-        clientX = e.changedTouches[0].clientX; 
-        clientY = e.changedTouches[0].clientY; 
-    }
-    return { x: (clientX - r.left) * (canvas.width / r.width), y: (clientY - r.top) * (canvas.height / r.height) };
-}
-
-        function handleStart(e) { 
-            if (isMoving || player.inAir) return; 
-            let pos = getEventPos(e); 
-            isAiming = true; 
-            dragStart.x = pos.x; 
-            dragStart.y = pos.y; 
-            dragEnd.x = pos.x; 
-            dragEnd.y = pos.y; 
-        }
-
-        function handleMove(e) { 
-            if (!isAiming) return; 
-            let pos = getEventPos(e); 
-            dragEnd.x = pos.x; 
-            dragEnd.y = pos.y; 
-        }
-function handleEnd() {
-            if (!isAiming) return; 
-            isAiming = false;
-            
-            // 🟢 جلوگیری از پرتاب خارج از نوبت در مسابقات آفلاین چند گوشی بر بستر وای‌فای
-            if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && !isMyTurnOnline) { 
-                showGameToast("⏳ نوبت حریف است، منتظر بمانید!"); 
-                return; 
-            }
-
-            let dx = dragStart.x - dragEnd.x; 
-            let dy = dragStart.y - dragEnd.y; 
-            let dragDist = Math.sqrt(dx * dx + dy * dy);
-            
-            if (dragDist > 5) {
-                player.startX = player.x; 
-                player.startY = player.y; 
-                let targetHit = null; 
-                let closestDist = Infinity;
-                targetOutInTurn = false; 
-                
-                targets.forEach(t => {
-                    if (t.isOut) return;
-                    let A = dy; 
-                    let B = -dx; 
-                    let C = dx * player.y - dy * player.x;
-                    let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B);
-                    if (lineDist < (16 + t.r)) {
-                        let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2);
-                        if (dToTarget < closestDist) { 
-                            closestDist = dToTarget; 
-                            targetHit = t; 
-                        }
-                    }
-                });
-
-                if (targetHit && closestDist < 120) {
-                    player.arcHeight = 0; 
-                    player.targetX = targetHit.x; 
-                    player.targetY = targetHit.y;
-                    let hitDelay = (closestDist / 5.5) * 15;
-                    
-                    setTimeout(() => {
-                        // 🟢 جذاب و چالش‌برانگیز شدن بازی: سرعت ضربه اولیه را به خاطر وزن مجازی سنگین تیله‌ها کاهش دادیم تا راحت فرار نکنند
-                        let hitSpeed = 7 + (dragDist * 0.15); 
-                        playClickSound(hitSpeed / 10); 
-                        let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX);
-                        let steps = 0;
-                        
-                        let slideInterval = setInterval(() => {
-                            targetHit.x += Math.cos(angle) * hitSpeed; 
-                            targetHit.y += Math.sin(angle) * hitSpeed;
-                            // 🟢 افزایش نیروی بازدارنده و اثر جرم سنگین تیله هدف (سرعت غلتش خیلی سریع‌تر افت می‌کند)
-                            hitSpeed *= 0.88; 
-                            steps++;
-                            
-                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
-                                targetHit.isOut = true; 
-                                targetOutInTurn = true; 
-                                if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) {
-                                    let id = playerNationalIds[currentPlayerIndex] || "";
-                                    if (id === currentNationalId) { 
-                                        totalMarblesOwned++; 
-                                    } else { 
-                                        let cur = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; 
-                                        localStorage.setItem(`marbles_${id}`, cur + 1); 
-                                    }
-                                    if(playerScores[currentPlayerIndex] !== undefined) playerScores[currentPlayerIndex]++;
-                                    updateWalletUI();
-                                }
-
-                                let activeTargets = targets.filter(targetItem => !targetItem.isOut).length;
-                                if (activeTargets === 0) {
-                                    clearInterval(slideInterval);
-                                    player.vx = 0; player.vy = 0; player.inAir = false; isMoving = false;
-                                    playStadiumGoalHornSound();
-                                    setTimeout(showFinalScoreboard, 50); 
-                                    return; 
-                                }
-                            }
-                            
-                            // توقف فیزیکی سریع‌تر غلتش تیله به علت سنگینی جرم
-                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { 
-                                clearInterval(slideInterval); 
-                                setTimeout(resetRound, 300); 
-                            }
-                        }, 16);
-                    }, hitDelay);
-                } else {
-                    let cX = player.x + dx * 5.5; 
-                    let cY = player.y + dy * 5.5; 
-                    let padding = player.baseR + 4;
-                    if (cX < box.x + padding) cX = box.x + padding; 
-                    if (cX > box.x + box.w - padding) cX = box.x + box.w - padding;
-                    if (cY < box.y + padding) cY = box.y + padding; 
-                    if (cY > box.y + box.h - padding) cY = box.y + box.h - padding;
-                    player.targetX = cX; 
-                    player.targetY = cY; 
-                    player.arcHeight = Math.min(dragDist * 0.45, 140);
-                }
-                
-                player.progress = 0; 
-                player.inAir = true; 
-                isFirstShotOfTurn = false;
-
-                if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && conn.open) {
-                    let targetIndex = targets.indexOf(targetHit);
-                    conn.send({
-                        type: 'shoot',
-                        cX: player.targetX,
-                        cY: player.targetY,
-                        arc: player.arcHeight,
-                        hitTarget: targetIndex !== -1 ? {
-                            index: targetIndex,
-                            angle: Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX),
-                            speed: 7 + (dragDist * 0.15)
-                        } : null
-                    });
-                    isMyTurnOnline = false; 
-                    showGameToast("⏳ منتظر حرکت حریف بمانید...");
-                }
-            }
-        }
-function gameLoop() {
+        // ۹. لوپ اصلی گرافیک کانواس بازی (تضمین رندر تصاویر اصلی شما)
+        function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
-            let weatherFrictionModifier = selectedWeather === "rainy" ? 0.995 : (selectedWeather === "snowy" ? 0.997 : 1);
-            
-            // ۱. فیزیک پرواز سه‌بعدی و چرخش تیله شلیک‌کننده در هوا
             if (player.inAir) {
                 player.progress += 0.03;
-                player.x = player.startX + (player.targetX - player.startX) * player.progress;
-                player.y = player.startY + (player.targetY - player.startY) * player.progress;
-                player.x += windX * player.progress * 15; player.y += windY * player.progress * 15;
-                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; 
-                player.r = player.baseR + player.z * 0.35;
-                
-                player.angle += 0.15; 
-
+                player.x = player.startX + (player.targetX - player.startX) * player.progress + windX * player.progress * 15;
+                player.y = player.startY + (player.targetY - player.startY) * player.progress + windY * player.progress * 15;
+                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; player.r = player.baseR + player.z * 0.35; player.angle += 0.15; 
                 if (player.progress >= 1) {
-                    player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-                    playClickSound(0.5); let hitAny = false;
-                    targets.forEach(t => {
-                        if (!t.isOut) {
-                            let dx = t.x - player.x; let dy = t.y - player.y; let dist = Math.sqrt(dx*dx + dy*dy);
-                            if (dist < (player.r + t.r)) { 
-                                hitAny = true; playClickSound(0.9); 
-                                let angleHits = Math.atan2(dy, dx); 
-                                // 🟢 کاهش شتاب ثانویه پس از برخورد سه‌بعدی برای پیاده‌سازی وزن واقعی و سخت‌تر شدن خروج تیله‌ها
-                                t.vx = Math.cos(angleHits) * 5.5; t.vy = Math.sin(angleHits) * 5.5; 
-                            }
-                        }
-                    });
-                    // 🟢 رفع باگ نوبت‌ها: اگر پرتاب شبیه‌سازی شده به هدفی نخورد، نوبت بلافاصله به بازیکن بعدی منتقل شود
+                    player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; playClickSound(0.5); let hitAny = false;
+                    targets.forEach(t => { if (!t.isOut) { let dx = t.x - player.x, dy = t.y - player.y; if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) { hitAny = true; playClickSound(0.9); t.vx = Math.cos(Math.atan2(dy, dx)) * 5.5; t.vy = Math.sin(Math.atan2(dy, dx)) * 5.5; } } });
                     if (!hitAny) { setTimeout(resetRound, 300); }
                 }
             }
@@ -1007,37 +715,11 @@ function gameLoop() {
             else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             drawDynamicBorder();
             
-            // ۲. پردازش حرکت غلتشی، چرخش زاویه‌ای و خروج فیزیکی تیله‌های هدف از کادر بازی (دیوارها کاملاً برداشته شده‌اند)
+            // رندر تصویر ۱.png روی تیله‌های هدف
             targets.forEach(t => {
                 if (!t.isOut) {
-                    t.x += t.vx; t.y += t.vy; 
-                    t.vx *= (currentGround.friction * weatherFrictionModifier); 
-                    t.vy *= (currentGround.friction * weatherFrictionModifier);
-                    
-                    let speed = Math.sqrt(t.vx * t.vx + t.vy * t.vy);
-                    if (speed > 0.1) {
-                        t.angle += speed * 0.05; 
-                    }
-
-                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
-                        t.isOut = true; targetOutInTurn = true; 
-                        if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) {
-                            let id = playerNationalIds[currentPlayerIndex] || "";
-                            if (id === currentNationalId) { totalMarblesOwned++; } 
-                            else { let cur = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cur + 1); }
-                            if(playerScores[currentPlayerIndex] !== undefined) playerScores[currentPlayerIndex]++;
-                            updateWalletUI();
-                        }
-
-                        let activeTargets = targets.filter(targetItem => !targetItem.isOut).length;
-                        if (activeTargets === 0) {
-                            t.vx = 0; t.vy = 0; player.vx = 0; player.vy = 0; player.inAir = false; isMoving = false;
-                            playStadiumGoalHornSound();
-                            setTimeout(showFinalScoreboard, 50); 
-                            return; 
-                        }
-                    }
-                    
+                    t.x += t.vx; t.y += t.vy; t.vx *= 0.93; t.vy *= 0.93;
+                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { t.isOut = true; targetOutInTurn = true; if (targets.filter(targetItem => !targetItem.isOut).length === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 50); return; } }
                     ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
                     else { ctx.fillStyle = "#ff5722"; ctx.fill(); }
@@ -1045,214 +727,195 @@ function gameLoop() {
                 }
             });
             
-            // ۳. رندر تصویر چرخان روی تیله شلیک‌کننده بازیکن (پایین صفحه)
+            // رندر تصویر ۶.png روی تیله بازیکن
             ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle); ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
             if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
             else { ctx.fillStyle = "#2196f3"; ctx.fill(); }
             ctx.restore();
-            
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
-        function preloadAssetsAndLaunch() {
-            showGameToast("⏳ در حال تدارک اتمسفر استادیوم...");
-            imgBg.src = currentGround.src; imgPlayer.src = '6.png'; imgTarget.src = '1.png';
-            
-            let isLaunched = false;
-            const forceLaunchTimeout = setTimeout(() => {
-                if (!isLaunched) { isLaunched = true; runGameInitialization(); }
-            }, 2000);
 
-            const loadPromises = [
-                new Promise(resolve => { if (imgBg.complete) resolve(); else imgBg.onload = resolve; imgBg.onerror = resolve; }),
-                new Promise(resolve => { if (imgPlayer.complete) resolve(); else imgPlayer.onload = resolve; imgPlayer.onerror = resolve; }),
-                new Promise(resolve => { if (imgTarget.complete) resolve(); else imgTarget.onload = resolve; imgTarget.onerror = resolve; })
-            ];
-
-            Promise.all(loadPromises).then(() => {
-                if (!isLaunched) { clearTimeout(forceLaunchTimeout); isLaunched = true; runGameInitialization(); }
-            });
+        // ۱۰. بارگذاری آدرس تصاویر اصلی پروژه شما و رندر قطعی عکس‌ها روی گرید انتخاب زمین
+        function generateMenuPreviews() { 
+            Object.keys(grounds).forEach(key => { 
+                let pCanvas = document.getElementById(`pre_${key}`); 
+                if (pCanvas) { 
+                    let pCtx = pCanvas.getContext("2d"); pCanvas.width = 70; pCanvas.height = 70; 
+                    let tempImg = new Image(); tempImg.src = grounds[key].src;
+                    tempImg.onload = function() { pCtx.drawImage(tempImg, 0, 0, 70, 70); };
+                    tempImg.onerror = function() { pCtx.fillStyle = grounds[key].fallbackColor; pCtx.fillRect(0, 0, 70, 70); };
+                } 
+            }); 
         }
 
+        function preloadAssetsAndLaunch() {
+            showGameToast("⏳ در حال تدارک اتمسفر استادیوم...");
+            imgBg.src = currentGround.src || 'grass.jpg'; 
+            imgPlayer.src = '6.png'; 
+            imgTarget.src = '1.png'; 
+            runGameInitialization();
+        }
+        
         function runGameInitialization() {
             setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex";
-            
+            gearBtn.style.display = "none"; // طبق منطق شما: غیب شدن دکمه همبرگری به محض ورود به بازی
             currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); resizeCanvas();
             isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; hasBonusShot = false; isChainMode = false;
-            
-            let initX = canvas.width / 2; let initY = canvas.height - 100;
-            player.x = initX; player.y = initY; player.startX = initX; player.startY = initY; player.targetX = initX; player.targetY = initY; player.angle = 0;
-            player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-            
-            loadLevel(1); initWeatherParticles(); initWindLines(); if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) updateWalletUI();
-            
-            if (typeof conn !== 'undefined' && conn) {
-                turnIndicator.innerText = isMyTurnOnline ? "🎯 نوبت شماست! شلیک کنید." : "⏳ منتظر حرکت حریف بمانید...";
-            } else if (!isQuickRandomMode && turnIndicator) {
+            loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI();
+            if (!isQuickRandomMode && turnIndicator) {
                 let id = playerNationalIds[currentPlayerIndex] || "";
                 let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles})`;
-            } else {
-                turnIndicator.innerText = "🎯 میدان تمرین انفرادی";
+                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles} تیله)`;
             }
-            
             if (!gameLoopRunning) { gameLoopRunning = true; requestAnimationFrame(gameLoop); }
         }
 
         function launchGameDirectly() {
-            let currentInGamePlayerName = "بازیکن";
-            if (playerNames && playerNames[currentPlayerIndex]) { currentInGamePlayerName = playerNames[currentPlayerIndex]; } 
-            else {
-                let uNameInput = document.getElementById("usernameInput");
-                currentInGamePlayerName = (uNameInput && uNameInput.value.trim() !== "") ? uNameInput.value.trim() : (currentUsername || "بازیکن");
+            let id = playerNationalIds[currentPlayerIndex] || "";
+            let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
+            if (!isQuickRandomMode && pMarbles < selectedCountVal) {
+                showCustomPopup(`❌ موجودی کافی نیست! حداقل به ${selectedCountVal} نیاز دارید.`, "💎", "ورود به صرافی", true, function() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; }); return;
             }
-            if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn) && totalMarblesOwned < selectedCountVal) {
-                showCustomPopup(`اوپس! موجودی کافی نیست، ${currentInGamePlayerName}.\nهزینه مسابقه ${selectedCountVal} تیله است اما دارایی شما ${totalMarblesOwned} عدد می‌باشد!`, "💎", "💸 شارژ فوری ۱۰ تیله هدیه", true, function() { totalMarblesOwned += 10; updateWalletUI(); showCustomPopup("بانک شما با موفقیت شارژ شد!", "⚡", "شروع بازی"); });
-                return;
-            }
-            if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) totalMarblesOwned -= selectedCountVal;
+            if (!isQuickRandomMode) { if (id === currentNationalId) { totalMarblesOwned -= selectedCountVal; } else { localStorage.setItem(`marbles_${id}`, (parseInt(localStorage.getItem(`marbles_${id}`)) || 0) - selectedCountVal); } }
             preloadAssetsAndLaunch();
         }
-
-        function initOnlineMatch(type) {
-            let code = document.getElementById("roomCodeInput").value.trim();
-            if (code === "") { showCustomPopup("لطفاً یک کد اتاق ۴ رقمی وارد کنید.", "⚠️", "فهمیدم", true); return; }
-            isQuickRandomMode = false;
-
-            let localIP = prompt("لطفاً آی‌پی (IP) گوشی میزبان (صاحب هات‌اسپات) را وارد کنید:", "192.168.43.1");
-            if(!localIP) return;
-
-            if (type === 'create') {
-                peer = new Peer('tile-game-' + code, { host: localIP, port: 9000, path: '/myapp', secure: false });
-                showGameToast("⏳ اتاق محلی ساخته شد. منتظر اتصال گوشی‌های دیگر روی وای‌فای...");
-                peer.on('open', () => { showCustomPopup(`اتاق وای‌فای ساخته شد!\nکد اتاق: ${code}\nدیگران به هات‌اسپات شما متصل شوند.`, "🏢", "منتظر می‌مانم"); });
-                peer.on('connection', (connection) => {
-                    conn = connection; isMyTurnOnline = true; setupOnlineListeners();
-                    showGameToast("🚀 گوشی حریف متصل شد! شروع مسابقه آفلاین محلی..."); closeCustomPopup();
-                    settingsDrawer.classList.remove("open"); overlay.style.display = "none"; launchGameDirectly();
-                });
-                peer.on('error', (err) => { console.log("Local Mode Active"); isMyTurnOnline = true; launchGameDirectly(); });
-            } 
-            else if (type === 'join') {
-                peer = new Peer({ host: localIP, port: 9000, path: '/myapp', secure: false });
-                showGameToast("⏳ در حال جستجوی گوشی میزبان روی شبکه وای‌فای...");
-                peer.on('open', () => { conn = peer.connect('tile-game-' + code); isMyTurnOnline = false; setupOnlineListeners(); });
-            }
-        }
-        function setupOnlineListeners() {
-            conn.on('open', () => {
-                showGameToast("✅ با موفقیت به حریف متصل شدید!"); closeCustomPopup();
-                settingsDrawer.classList.remove("open"); overlay.style.display = "none"; launchGameDirectly();
-            });
-            conn.on('data', (data) => {
-                if (data.type === 'shoot') {
-                    player.startX = player.x; player.startY = player.y; player.targetX = data.cX; player.targetY = data.cY; player.arcHeight = data.arc; player.progress = 0; player.inAir = true;
-                    if (data.hitTarget && targets[data.hitTarget.index]) {
-                        let tHit = targets[data.hitTarget.index]; let hitSpeed = data.hitTarget.speed; let angle = data.hitTarget.angle; let steps = 0;
-                        let opponentSlideInterval = setInterval(() => {
-                            tHit.x += Math.cos(angle) * hitSpeed; tHit.y += Math.sin(angle) * hitSpeed; hitSpeed *= 0.94; steps++;
-                            if (tHit.x < box.x || tHit.x > box.x + box.w || tHit.y < box.y || tHit.y > box.y + box.h) {
-                                tHit.isOut = true;
-                                let activeTargets = targets.filter(targetItem => !targetItem.isOut).length;
-                                if (activeTargets === 0) { clearInterval(opponentSlideInterval); player.vx = 0; player.vy = 0; player.inAir = false; isMoving = false; playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 200); return; }
-                            }
-                            if (steps > 60 || hitSpeed < 0.5 || tHit.isOut) { clearInterval(opponentSlideInterval); }
-                        }, 16);
-                    }
-                    isMyTurnOnline = true; turnIndicator.innerText = "🎯 نوبت شماست! شلیک کنید."; showGameToast("🎯 نوبت شماست!");
-                }
-            });
-        }
-
-        function handleBackToMenu() {
-            if (typeof initAudio === "function") initAudio(); stopAmbientSound();
-            canvas.style.display = "none"; gameHeader.style.display = "none"; document.getElementById("loginScreen").style.display = "none"; gameLoopRunning = false; 
-            if (isQuickRandomMode || (typeof conn !== 'undefined' && conn)) {
-                if (typeof conn !== 'undefined' && conn) { conn.close(); conn = null; } if (typeof peer !== 'undefined' && peer) { peer.destroy(); peer = null; }
-                document.getElementById("loginScreen").style.display = "flex";
-            } else { setupMenu.style.display = "flex"; }
-        }
-
-        function handleFinalExit() {
-            if (typeof initAudio === "function") initAudio(); stopAmbientSound();
-            if (typeof conn !== 'undefined' && conn) { conn.close(); conn = null; } if (typeof peer !== 'undefined' && peer) { peer.destroy(); peer = null; }
-            canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none";
-            document.getElementById("loginScreen").style.display = "flex"; playerNames = []; playerOrders = []; playerNationalIds = []; gameLoopRunning = false; 
-        }
-
-        function handleDrawerExit() { handleFinalExit(); settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
-
-        closeDrawer.onclick = () => { initAudio(); if(!saveSubPlayersData()) return; settingsDrawer.classList.remove("open"); overlay.style.display = "none"; startAmbientSound(selectedWeather); launchGameDirectly(); };
-        startBtn.onclick = () => { if (typeof initAudio === "function") initAudio(); isQuickRandomMode = false; startAmbientSound(selectedWeather); launchGameDirectly(); };
-        gearBtn.onclick = () => { initAudio(); settingsDrawer.classList.add("open"); overlay.style.display = "block"; };
-        overlay.onclick = () => { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; };
-        exitBtn.onclick = function(e) { e.preventDefault(); e.stopPropagation(); handleFinalExit(); };
-
-        function setupGridSelector(containerId, activeClass, callback) {
-            const container = document.getElementById(containerId); if(!container) return;
-            container.addEventListener('click', (e) => {
-                const item = e.target.closest('[data-val]'); if (!item) return;
-                container.querySelectorAll('[data-val]').forEach(i => i.classList.remove(activeClass));
-                item.classList.add(activeClass); callback(item.getAttribute('data-val'));
-            });
-        }
-
-        canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
-        canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
-        
-        setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
-        setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val === 'sunny') { windX = 0; windY = 0; } else if(val === 'windy') { windX = 0.08; windY = 0.02; } else if(val === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; } });
-        
-        // 🟢 تراز و رسم فوری چرخنده دو تکه رنگی به محض تغییر دستی به حالت ۲ نفره در منو
-        document.getElementById("playerCountSelect").onchange = (e) => { 
-            selectedPlayerCount = parseInt(e.target.value); 
-            updateNameInputs(selectedPlayerCount); 
-            drawWheel(0); 
-        };
-        document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
-
-        function showCustomPopup(text, icon, btnText, isError, callback) {
-            const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pIcon = document.getElementById("popupIcon");
-            const pTable = document.getElementById("finalScoreTable"); const pAction = document.getElementById("popupActionButtons");
-            if(!popup) return; if(pTable) pTable.style.display = "none"; if(pText) pText.innerText = text; if(pIcon) pIcon.innerText = icon || "🎉";
-            if(pAction) {
-                pAction.innerHTML = ""; if (btnText !== "") { const btn = document.createElement("button"); btn.className = isError ? "popup-btn danger" : "popup-btn success"; btn.innerText = btnText || "تایید"; btn.onclick = function() { popup.style.display = "none"; if(typeof callback === "function") callback(); }; pAction.appendChild(btn); }
-            }
-            popup.style.display = "flex";
-        }
-
-        function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
-
-        // 🏆 تابع نمایش جدول نهایی مسابقات استادیوم با دکمه بازگشت امن به منو
+        // 🏆 نمایش هوشمند جدول نهایی مسابقات
         function showFinalScoreboard() {
-            const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pIcon = document.getElementById("popupIcon");
-            const pTable = document.getElementById("finalScoreTable"); const pTableBody = document.getElementById("finalTableBody"); const pAction = document.getElementById("popupActionButtons");
-            if (!popup) return; if (pIcon) pIcon.innerText = "🏆"; if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
+            const popup = document.getElementById("gamePopup"); 
+            const pText = document.getElementById("popupText"); 
+            const pTable = document.getElementById("finalScoreTable"); 
+            const pTableBody = document.getElementById("finalTableBody"); 
+            const pAction = document.getElementById("popupActionButtons");
+            if (!popup) return; 
+            if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
             if (pTableBody) {
                 pTableBody.innerHTML = "";
                 for (let i = 0; i < selectedPlayerCount; i++) {
-                    let name = playerNames[i] || `بازیکن ${i + 1}`; let score = playerScores[i] || 0; let id = playerNationalIds[i] || "";
+                    let name = playerNames[i] || `بازیکن ${i + 1}`; 
+                    let score = playerScores[i] || 0; 
+                    let id = playerNationalIds[i] || "";
                     let totalBank = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                    if (isQuickRandomMode) totalBank = "-";
-                    let tr = document.createElement("tr"); tr.innerHTML = `<td>${name}</td><td>${score} عدد</td><td>${totalBank}</td>`; pTableBody.appendChild(tr);
+                    let tr = document.createElement("tr"); 
+                    tr.innerHTML = `<td>${name}</td><td>${score} تیله</td><td>${isQuickRandomMode ? '-' : totalBank}</td>`; 
+                    pTableBody.appendChild(tr);
                 }
             }
             if (pTable) pTable.style.display = "table";
             if (pAction) {
-                pAction.innerHTML = ""; const confirmBtn = document.createElement("button"); confirmBtn.className = "popup-btn success"; confirmBtn.innerText = "تایید و بازگشت به منو";
-                confirmBtn.onclick = function() { popup.style.display = "none"; if (pTable) pTable.style.display = "none"; handleBackToMenu(); }; pAction.appendChild(confirmBtn);
+                pAction.innerHTML = ""; 
+                const confirmBtn = document.createElement("button"); 
+                confirmBtn.className = "popup-btn success"; 
+                confirmBtn.innerText = "تایید و بازگشت به منو";
+                confirmBtn.onclick = function() { 
+                    popup.style.display = "none"; 
+                    if (pTable) pTable.style.display = "none"; 
+                    handleBackToMenu(); 
+                }; 
+                pAction.appendChild(confirmBtn);
             }
             popup.style.display = "flex";
         }
-        
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('sw.js')
-                    .then(reg => console.log('حالت آفلاین PWA فعال شد'))
-                    .catch(err => console.log('خطا در سرویس‌ورکر', err));
+
+        // 💸 سامانه جابجایی تب‌های داشبورد شیشه‌ای
+        function switchDashboardTab(tabName) {
+            const bankTab = document.getElementById("tabBankContent"); 
+            const historyTab = document.getElementById("tabHistoryContent");
+            const btnBank = document.getElementById("btnTabBank"); 
+            const btnHistory = document.getElementById("btnTabHistory");
+            if (tabName === 'bank') {
+                if (bankTab) bankTab.style.display = "block"; 
+                if (historyTab) historyTab.style.display = "none";
+                if(btnBank) { btnBank.style.background = "#ff9800"; btnBank.style.color = "#000"; }
+                if(btnHistory) { btnHistory.style.background = "transparent"; btnHistory.style.color = "#aaa"; }
+            } else {
+                if (bankTab) bankTab.style.display = "none"; 
+                if (historyTab) historyTab.style.display = "block";
+                if(btnBank) { btnBank.style.background = "transparent"; btnBank.style.color = "#aaa"; }
+                if(btnHistory) { btnHistory.style.background = "#2196f3"; btnHistory.style.color = "#fff"; }
+                renderStadiumHistoryLogs(); 
+            }
+        }
+
+        // 🛒 خرید و فروش مستقیم تیله با صرافی
+        function handleShopTransaction(type, amount) {
+            if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان خرید و فروش نیست.", "⚠️", "متوجه شدم", true); return; }
+            if (type === 'buy') { totalMarblesOwned += amount; showGameToast(`🛒 حساب شما ${amount} تیله شارژ شد!`); } 
+            else {
+                if (totalMarblesOwned < amount) { showCustomPopup("موجودی تیله‌های شما کافی نیست!", "⚠️", "اصلاح مقدار", true); return; }
+                totalMarblesOwned -= amount; showGameToast(`💰 ${amount} تیله به صرافی فروخته شد.`);
+            }
+            updateWalletUI();
+        }
+
+        // 🚀 موتور انتقال کارت‌به‌کارت آنی بین بازیکنان بر اساس کد ملی
+        function executeMarbleTransfer() {
+            let targetId = document.getElementById("transferTargetIdInput").value.trim();
+            let amount = parseInt(document.getElementById("transferAmountInput").value.trim());
+            if (targetId === "" || targetId.length !== 10 || isNaN(amount) || amount <= 0 || targetId === currentNationalId || totalMarblesOwned < amount) {
+                showCustomPopup("کد ملی مقصد اشتباه است، یا موجودی بانک شما کافی نیست.", "⚠️", "اصلاح اطلاعات", true); return;
+            }
+            let targetName = localStorage.getItem(`name_${targetId}`) || `بازیکن جدید (${targetId.substring(6)})`;
+            let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10;
+            totalMarblesOwned -= amount; targetMarbles += amount;
+            localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles);
+            updateWalletUI(); showCustomPopup(`🎉 تعداد ${amount} تیله با موفقیت به حساب ${targetName} انتقال یافت.`, "✅", "دریافت رسید", false);
+            document.getElementById("transferTargetIdInput").value = ""; document.getElementById("transferAmountInput").value = "";
+        }
+
+        // 📊 کارنامه و لیست اعضای ثبت‌نام شده
+        function renderStadiumHistoryLogs() {
+            const container = document.getElementById("historyLogsContainer"); if (!container) return; container.innerHTML = "";
+            let keys = Object.keys(localStorage).filter(k => k.startsWith("name_")).map(k => k.replace("name_", ""));
+            if (keys.length === 0) { container.innerHTML = "<div style='text-align:center; color:#666; font-size:12px; padding:10px;'>هنوز مسابقه‌ای ثبت نشده است.</div>"; return; }
+            keys.forEach(id => {
+                let name = localStorage.getItem(`name_${id}`);
+                let row = document.createElement("div"); row.style.cssText = "display:flex; justify-content:space-between; background:rgba(255,255,255,0.02); padding:8px 12px; border-radius:10px; margin-bottom:5px; color:#fff; font-size:12px;";
+                row.innerHTML = `<div>👤 ${name}</div><div style='color:#00e676;'>عضو استادیوم</div>`; container.appendChild(row);
             });
         }
 
-        window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); if(currentNationalId){ playerNationalIds = [currentNationalId]; playerNames = [currentUsername || "بازیکن ۱"]; } });
+        // ⚙️ توابع مدیریت کشو و چرخه هدایت منوها
+        function openSettingsDrawerMenu() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; switchDashboardTab('bank'); }
+        function handleDrawerExit() { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
+        
+        // 🔄 دکمه برگشت: بازی را متوقف کرده و بازیکن را به منوی انتخاب زمین و تعداد بازیکن هدایت می‌کند
+        function handleBackToMenu() { 
+            canvas.style.display = "none"; gameHeader.style.display = "none"; 
+            setupMenu.style.display = "flex"; gearBtn.style.display = "flex"; 
+        }
+        
+        // 🚪 دکمه خروج تفکیک شده: کلاً لایه بازی و منوها را بسته و بازیکن را به صفحه لاگین کد ملی اول شوت می‌کند
+        function handleFinalExit() { 
+            stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; 
+            setupMenu.style.display = "none"; gearBtn.style.display = "none"; 
+            document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; 
+        }
+
+        // 🔗 لیسنرها و پیوندهای کلیک نهایی
+        gearBtn.onclick = openSettingsDrawerMenu;
+        overlay.onclick = handleDrawerExit;
+        closeDrawer.onclick = () => { if(!saveSubPlayersData()) return; handleDrawerExit(); gearBtn.style.display = "none"; launchGameDirectly(); };
+        startBtn.onclick = () => { isQuickRandomMode = false; gearBtn.style.display = "none"; launchGameDirectly(); };
+        exitBtn.onclick = handleFinalExit;
+        
+        document.getElementById("playerCountSelect").onchange = (e) => { selectedPlayerCount = parseInt(e.target.value); updateNameInputs(selectedPlayerCount); };
+        document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
+
+        canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
+        canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
+        
+        function setupGridSelector(gridId, activeClass, callback) { 
+            const grid = document.getElementById(gridId); if(!grid) return; 
+            grid.addEventListener('click', (e) => { 
+                const item = e.target.closest('[data-val]'); if(!item) return; 
+                grid.querySelectorAll('.' + activeClass).forEach(el => el.classList.remove(activeClass)); 
+                item.classList.add(activeClass); callback(item.getAttribute('data-val')); 
+            }); 
+        }
+        setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
+        setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val==='sunny'){windX=0;windY=0;}else if(val==='windy'){windX=0.08;windY=0.02;}else if(val==='rainy'){windX=0.03;windY=0.05;}else{windX=0.01;windY=0.02;} });
+        
+        window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); });
         window.addEventListener("resize", resizeCanvas);
     </script>
 </body>
