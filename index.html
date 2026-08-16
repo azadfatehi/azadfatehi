@@ -2,55 +2,23 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>استادیوم آنلاین تیله‌بازی</title>
-    
-    <!-- 📱 اتصال شناسنامه اپلیکیشن موبایل جهت فعال‌سازی قابلیت نصب آفلاین PWA -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="icon.png">
-
-    <!-- فراخوانی کتابخانه شبکه محلی Wi-Fi و Hotspot -->
-    <script src="https://jsdelivr.net"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no, viewport-fit=cover">
+    <title>استادیوم ملی تیله‌بازی PWA</title>
     <style>
-        * { 
-            box-sizing: border-box; user-select: none; -webkit-user-select: none; 
-            margin: 0; padding: 0; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
-        }
-        body { 
-            background-color: #111; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; 
-            height: 100vh; height: -webkit-fill-available; font-family: sans-serif; color: white; overflow: hidden; touch-action: none;
-        }
-        #loginScreen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #25252d 0%, #111116 100%); background-image: url('menu_bg.jpg');
-            background-size: cover; background-position: center; background-repeat: no-repeat; image-rendering: crisp-edges;
-            display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; direction: rtl; padding: 20px;
-        }
-        #loginScreen::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.45); z-index: -1; }
-        .login-box {
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255,255,255,0.2);
-            padding: 30px; border-radius: 25px; width: 100%; max-width: 360px; box-shadow: 0 15px 35px rgba(0,0,0,0.5); text-align: center;
-        }
-        .login-box h2 { color: #ffeb3b; margin-bottom: 20px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); font-size: 21px; }
-        .login-box input {
-            width: 100%; padding: 12px 15px; margin: 8px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.3);
-            background: rgba(0,0,0,0.4); color: #fff; text-align: center; font-size: 14px; outline: none; user-select: text !important; -webkit-user-select: text !important;
-        }
-        .login-box input:focus { border-color: #ffeb3b; box-shadow: 0 0 10px rgba(255,235,59,0.3); }
-        .login-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; color: white; font-size: 15px; font-weight: bold; cursor: pointer; }
-        .quick-btn {
-            width: 100%; padding: 12px; border-radius: 12px; border: none; color: white; font-size: 14px; font-weight: bold; cursor: pointer;
-            background: linear-gradient(90deg, #ff9800, #ff5722); margin-top: 10px; box-shadow: 0 4px 15px rgba(255,152,0,0.3);
-        }
-        .login-btn:active, .quick-btn:active { transform: scale(0.98); }
-        #setupMenu {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; 
-            align-items: center; justify-content: center; z-index: 20; padding: 20px; direction: rtl;
-            background: radial-gradient(circle, #25252d 0%, #111116 100%); background-image: url('menu_bg.jpg'); background-size: cover; background-position: center;
-        }
-        #setupMenu::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: -1; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #111; font-family: sans-serif; }
+        
+        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a237e, #020716); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
+        .login-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .login-box h2 { color: #fff; font-size: 20px; margin-bottom: 20px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+        .login-box input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 2px solid #3f51b5; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 15px; outline: none; user-select: text !important; -webkit-user-select: text !important; }
+        .login-box input::placeholder { color: #888; }
+        .login-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; transition: transform 0.1s; }
+        .login-btn:active { transform: scale(0.95); }
+        .quick-btn { width: 100%; padding: 12px; border-radius: 12px; border: 2px dashed #ff9800; background: rgba(255, 152, 0, 0.1); color: #ff9800; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; }
+        
+        #setupMenu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background-image: url('main_bg.jpg'); background-size: cover; background-position: center; z-index: 20; }
+#setupMenu::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.4); z-index: -1; }
         #gearBtn { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.25); border: 2px solid rgba(255,255,255,0.4); border-radius: 50%; width: 50px; height: 50px; font-size: 22px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 25; }
         #startBtn { position: relative; width: 140px; height: 140px; border-radius: 50%; background-image: url('1.png'); background-size: cover; border: 4px solid #fff; color: white; font-size: 24px; font-weight: bold; cursor: pointer; z-index: 25; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.6); text-shadow: 0 2px 5px rgba(0,0,0,0.9); }
         #startBtn:active, #gearBtn:active { transform: scale(0.95); }
@@ -81,7 +49,7 @@
         .order-badge { width: 65px; padding: 10px 0; font-size: 12px; font-weight: bold; background: #333; border: 2px solid #555; border-radius: 10px; color: #aaa; text-align: center; }
         .order-badge.assigned { background: #ff9800; border-color: #fff; color: #000; box-shadow: 0 0 8px #ff9800; }
         /* 🛍️ استایل‌های منوی اختصاصی فروشگاه و صرافی دوطرفه تیله */
-        .shop-container { width: 100%; max-width: 340px; background: rgba(255,255,255,0.04); border: 2px dashed rgba(255,235,59,0.3); border-radius: 18px; padding: 15px; margin-top: 10px; direction: rtl; }
+        .shop-container { width: 100%; max-width: 340px; background: rgba(255,235,59,0.06); border: 1px dashed rgba(255,235,59,0.3); border-radius: 18px; padding: 15px; margin-top: 10px; direction: rtl; }
         .shop-title { color: #ffeb3b; font-size: 15px; font-weight: bold; margin-bottom: 10px; text-align: center; }
         .shop-row { display: flex; justify-content: space-between; align-items: center; background: rgba(0,0,0,0.3); padding: 8px 12px; border-radius: 10px; margin: 6px 0; }
         .shop-row span { font-size: 13px; color: #fff; }
@@ -165,7 +133,6 @@
             <h3 style="color: #ffeb3b; font-size: 17px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.9);">⚙️ تنظیمات استادیوم</h3>
             <button style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.5);" onclick="handleDrawerExit()">خروج</button>
         </div>
-
         <!-- 🕹️ محتوای داخلی تنظیمات استادیوم -->
         <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <div class="menu-row">
@@ -260,6 +227,7 @@
     </div>
 
     <canvas id="canvas"></canvas>
+    <script src="https://unpkg.com"></script>
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -300,7 +268,6 @@
                 turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles})`;
             }
         }
-
         // 🛍️ تابع مدیریت تراکنش‌های خرید و فروش در صرافی دوطرفه تیله
         function handleShopTransaction(type, amount) {
             if (typeof initAudio === "function") initAudio();
@@ -323,6 +290,7 @@
                 showGameToast(`💸 تسویه حساب شد (-${amount} تیله)`);
             }
         }
+
         function switchAuthModeToRegister() {
             authMode = "register";
             let usernameField = document.getElementById("usernameInput");
@@ -334,7 +302,6 @@
             if (submitBtn) submitBtn.style.display = "block";
             if (formTitle) formTitle.innerText = "📝 عضویت بازیکن جدید";
         }
-
         function processSmartAuth(actionType) {
             let uName = document.getElementById("usernameInput").value.trim();
             let uId = document.getElementById("identifierInput").value.trim();
@@ -392,7 +359,6 @@
             playerNames = [currentUsername]; playerNationalIds = [currentNationalId];
             updateWalletUI();
         }
-
         function processQuickRandomAuth() {
             if (typeof initAudio === "function") initAudio();
             isQuickRandomMode = true; 
@@ -424,24 +390,23 @@
         let windX = 0; let windY = 0; let selectedWeather = "sunny"; let weatherParticles = []; let windLines = [];
         let box = { x: 40, y: 60, w: 320, h: 220 };
         
-        // 🔄 فعال‌سازی ساختار چرخش پویای تصاویر روی تیله‌ها با اضافه شدن زاویه (angle)
         let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
         
         let targets = []; let selectedPlayerCount = 1; let currentPlayerIndex = 0; let playerScores = []; let playerOrders = []; 
 
+        // 🟢 مقادیر اصلاح‌شده اصطکاک و چسبندگی زمین‌ها برای سنگین‌تر شدن غلتش و به چالش کشیدن خروج تیله‌ها
         const grounds = {
-            grass:   { friction: 0.98, wind: 0.08, src: 'grass.jpg',   fallbackColor: '#2e7d32', borderColor: '#4caf50', lineStyle: 'white_paint' },
-            carpet:  { friction: 0.99, wind: 0.02, src: 'carpet.jpg',  fallbackColor: '#b71c1c', borderColor: '#e91e63', lineStyle: 'carpet_stitch' },
-            asphalt: { friction: 0.96, wind: 0.05, src: 'asphalt.jpg', fallbackColor: '#424242', borderColor: '#9e9e9e', lineStyle: 'chalk' },
-            cement:  { friction: 0.99, wind: 0.04, src: 'cement.jpg',  fallbackColor: '#9e9e9e', borderColor: '#00bcd4', lineStyle: 'paint_line' },
-            dirt:    { friction: 0.97, wind: 0.15, src: 'dirt.jpg',    fallbackColor: '#8d6e63', borderColor: '#ff9800', lineStyle: 'dirt_scratch' }
+            grass:   { friction: 0.93, wind: 0.08, src: 'grass.jpg',   fallbackColor: '#2e7d32', borderColor: '#4caf50', lineStyle: 'white_paint' },
+            carpet:  { friction: 0.91, wind: 0.02, src: 'carpet.jpg',  fallbackColor: '#b71c1c', borderColor: '#e91e63', lineStyle: 'carpet_stitch' },
+            asphalt: { friction: 0.94, wind: 0.05, src: 'asphalt.jpg', fallbackColor: '#424242', borderColor: '#9e9e9e', lineStyle: 'chalk' },
+            cement:  { friction: 0.95, wind: 0.04, src: 'cement.jpg',  fallbackColor: '#9e9e9e', borderColor: '#00bcd4', lineStyle: 'paint_line' },
+            dirt:    { friction: 0.92, wind: 0.15, src: 'dirt.jpg',    fallbackColor: '#8d6e63', borderColor: '#ff9800', lineStyle: 'dirt_scratch' }
         };
 
         let currentGround = grounds.grass; 
         let imgBg = new Image(); let imgPlayer = new Image(); let imgTarget = new Image();
         let selectedGroundVal = "grass"; let selectedTargetSrc = "1.png"; let selectedCountVal = 5;
         let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
-
         function saveSubPlayersData() {
             if (isQuickRandomMode || conn) return true; 
             let count = selectedPlayerCount;
@@ -472,15 +437,21 @@
             playerNames = tempNames;
             return true;
         }
+
         function initAudio() { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx.state === 'suspended') { audioCtx.resume(); } }
         
+        // 🟢 فرکانس موج مثلثی اصلاح شده جهت شبیه‌سازی دقیق ضربه فیزیکی و سنگین دو تیله به یکدیگر
         function playClickSound(intensity = 0.5) {
             try {
                 initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity, 1.2));
-                let oscMain = audioCtx.createOscillator(); let gainMain = audioCtx.createGain(); oscMain.type = "sine"; 
-                oscMain.frequency.setValueAtTime(4800 + (vol * 1200), now); oscMain.frequency.exponentialRampToValueAtTime(3200, now + 0.001);
-                gainMain.gain.setValueAtTime(vol * 0.95, now); gainMain.gain.exponentialRampToValueAtTime(0.0001, now + 0.002);
-                oscMain.connect(gainMain); gainMain.connect(audioCtx.destination); oscMain.start(now); oscMain.stop(now + 0.003);
+                let oscMain = audioCtx.createOscillator(); let gainMain = audioCtx.createGain(); 
+                oscMain.type = "triangle"; 
+                oscMain.frequency.setValueAtTime(650 + (vol * 250), now); 
+                oscMain.frequency.exponentialRampToValueAtTime(120, now + 0.04);
+                gainMain.gain.setValueAtTime(vol * 0.85, now); 
+                gainMain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
+                oscMain.connect(gainMain); gainMain.connect(audioCtx.destination); 
+                oscMain.start(now); oscMain.stop(now + 0.06);
             } catch(e) {}
         }
 
@@ -519,7 +490,6 @@
                 }
             } catch(e){}
         }
-
         function startAmbientSound(weather) {
             try {
                 initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
@@ -562,58 +532,6 @@
                 }); 
             }
         }
-
-        function updateWeatherParticles() {
-            weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } });
-            windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } });
-        }
-
-        function drawWeather() {
-            ctx.save(); 
-            if(selectedWeather === "rainy") { 
-                weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); 
-            } else if(selectedWeather === "snowy") { 
-                weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); 
-            }
-            ctx.restore();
-        }
-
-        function showGameToast(message) {
-            let toast = document.getElementById("gameToast");
-            if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); }
-            toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); 
-        }
-        function playWeatherPreviewSound(type) { startAmbientSound(type); }
-
-        function initWeatherParticles() {
-            weatherParticles = []; 
-            let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80);
-            for(let i=0; i<count; i++) { 
-                weatherParticles.push({ 
-                    x: Math.random() * canvas.width, 
-                    y: Math.random() * canvas.height, 
-                    v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1), 
-                    r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2), 
-                    opacity: Math.random() * 0.5 + 0.3 
-                }); 
-            }
-        }
-
-        function initWindLines() {
-            windLines = []; if (selectedWeather === "sunny") return;
-            let count = selectedWeather === "windy" ? 25 : 10;
-            for (let i = 0; i < count; i++) { 
-                windLines.push({ 
-                    x: Math.random() * canvas.width, 
-                    y: Math.random() * canvas.height, 
-                    w: Math.random() * 80 + 40, 
-                    h: Math.random() * 1.5 + 0.5, 
-                    v: Math.random() * 4 + 3, 
-                    opacity: Math.random() * 0.2 + 0.05 
-                }); 
-            }
-        }
-
         function updateWeatherParticles() {
             weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } });
             windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } });
@@ -644,13 +562,13 @@
                 return;
             }
             
-            // 🔊 پخش صداها دقیقاً بعد از اتمام پرتاب بر اساس خروجی تیله‌ها
+            // 🔊 پخش تفکیک‌شده طنین تماشاگران دقیقاً بعد از اتمام غلتش بر اساس وضعیت پرتاب
             if (targetOutInTurn) { 
-                playCheeringSound(); // 📣 جیغ و هورا به خاطر بیرون انداختن تیله هدف
+                playCheeringSound(); // 📣 جیغ و هورا استادیوم به خاطر خروج موفقیت‌آمیز تیله هدف
                 hasBonusShot = true; 
                 showGameToast("🎯 شلیک عالی! هوراااا");
             } else {
-                playDisappointmentSound(); // 😔 صدای آه و افسوس به خاطر خطا رفتن شلیک
+                playDisappointmentSound(); // 😔 طنین آه و افسوس به خاطر خطا رفتن شلیک و عدم خروج تیله
                 showGameToast("😔 اوووف! نزدیک بود...");
                 
                 if (selectedPlayerCount === 1 || isQuickRandomMode || conn) {
@@ -679,7 +597,6 @@
             isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; 
             if (!isQuickRandomMode && !conn) updateWalletUI();
         }
-
         function drawDynamicBorder() { 
             ctx.save(); ctx.lineWidth = 4;
             if (currentGround.lineStyle === 'chalk') { ctx.strokeStyle = "rgba(240, 240, 245, 0.7)"; ctx.strokeRect(box.x, box.y, box.w, box.h); } 
@@ -688,6 +605,7 @@
             else { ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); }
             ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore();
         }
+
         function loadLevel(lvl) {
             targets = []; 
             let count = selectedCountVal;
@@ -733,15 +651,29 @@
             const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return;
             const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2;
             wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count;
+            
             for(let i = 0; i < count; i++) {
                 let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle;
                 wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke();
-                wCtx.save(); wCtx.translate(radius, radius); 
-                // 🟢 اصلاح زاویه چرخش متن برای خوانایی ۱۰۰٪ در دسکتاپ و موبایل
-                wCtx.rotate(startA + sliceAngle / 2); 
-                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 14px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle";
+                
+                wCtx.save(); 
+                // ۱. انتقال سیستم مختصات به مرکز چرخ دنده جهت چرخاندن اصولی متون
+                wCtx.translate(radius, radius); 
+                
+                // ۲. چرخش دقیق به اندازه زاویه وسط هر اسلایس مجزا
+                let textAngle = startA + sliceAngle / 2;
+                wCtx.rotate(textAngle); 
+                
+                // ۳. تراز کردن متن (راست‌چین برای شروع حرکت کلمات فارسی از لبه بیرونی به مرکز و ممانعت از برعکس شدن)
+                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; 
+                wCtx.font = "bold 14px sans-serif"; 
+                wCtx.textAlign = "right"; 
+                wCtx.textBaseline = "middle";
+                
+                // ۴. نوشتن نام بازیکن با حاشیه امن مستقل از مرکز چرخ دنده
                 let pName = playerNames[i] || `بازیکن ${i + 1}`;
-                wCtx.fillText(pName.substring(0, 10), radius / 2, 0); wCtx.restore();
+                wCtx.fillText(pName.substring(0, 10), radius - 20, 0); 
+                wCtx.restore();
             }
             wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.strokeStyle = "#333"; wCtx.lineWidth = 2; wCtx.stroke();
         }
@@ -788,7 +720,7 @@
                 if(wCanvas) { wCanvas.width = 240; wCanvas.height = 240; }
                 if(drawOrderBtn) drawOrderBtn.style.display = "block"; 
                 if(wheelSection) wheelSection.style.display = "flex"; 
-                drawWheel(0); 
+                drawWheel(0); // 🟢 رسم آنی و دو بخش شدن چرخ به محض لود اولیه منو با متغیر ۲ نفره
             } else { 
                 if(drawOrderBtn) drawOrderBtn.style.display = "none"; 
                 if(wheelSection) wheelSection.style.display = "none"; 
@@ -800,7 +732,6 @@
             e.stopPropagation(); 
             initAudio();
             
-            // ذخیره پویای اطلاعات بازیکنان فرعی (بدون گیر دادن به فیلد اول)
             if(!saveSubPlayersData()) return;
             
             playClickSound(1);
@@ -808,7 +739,7 @@
             let totalRotation = (Math.PI * 2 * 6) + randomRotation; 
             let startTimestamp = null; 
             const duration = 2800;
-            
+
             function animateWheel(timestamp) {
                 if (!startTimestamp) startTimestamp = timestamp;
                 let progress = timestamp - startTimestamp; 
@@ -858,11 +789,11 @@
             }
             requestAnimationFrame(animateWheel);
         };
+
         function resizeCanvas() { 
             canvas.width = window.innerWidth; 
             canvas.height = window.innerHeight; 
             
-            // متناسب‌سازی هوشمند ابعاد کادر بر اساس عرض نمایشگر موبایل یا دسکتاپ
             if (canvas.width < 600) {
                 box.w = canvas.width * 0.85; 
                 box.h = canvas.height * 0.25; 
@@ -874,7 +805,6 @@
             }
             box.x = (canvas.width - box.w) / 2; 
 
-            // قرارگیری دقیق و آزاد تیله آبی در پایین‌ترین نقطه امن کادر برای شلیک راحت با ماوس یا انگشت
             if (!player.inAir && player.progress === 0) {
                 let initX = canvas.width / 2; 
                 let initY = canvas.height - 100; 
@@ -883,13 +813,12 @@
                 player.targetX = initX; player.targetY = initY;
             }
         }
-
 function getEventPos(e) {
     let r = canvas.getBoundingClientRect(); 
     let clientX = e.clientX; 
     let clientY = e.clientY;
     
-    // 📱 مانیتورینگ صحیح تاچ موبایل با ارجاع به اولین نقطه لمس [0]
+    // 📱 مانیتورینگ صحیح تاچ موبایل با ارجاع به اولین نقطه لمس
     if (e.touches && e.touches.length > 0) { 
         clientX = e.touches[0].clientX; 
         clientY = e.touches[0].clientY; 
@@ -916,7 +845,7 @@ function getEventPos(e) {
             dragEnd.x = pos.x; 
             dragEnd.y = pos.y; 
         }
-        function handleEnd() {
+function handleEnd() {
             if (!isAiming) return; 
             isAiming = false;
             
@@ -959,15 +888,17 @@ function getEventPos(e) {
                     let hitDelay = (closestDist / 5.5) * 15;
                     
                     setTimeout(() => {
-                        let hitSpeed = 14 + (dragDist * 0.25);
-                        playClickSound(hitSpeed / 14); 
+                        // 🟢 جذاب و چالش‌برانگیز شدن بازی: سرعت ضربه اولیه را به خاطر وزن مجازی سنگین تیله‌ها کاهش دادیم تا راحت فرار نکنند
+                        let hitSpeed = 7 + (dragDist * 0.15); 
+                        playClickSound(hitSpeed / 10); 
                         let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX);
                         let steps = 0;
                         
                         let slideInterval = setInterval(() => {
                             targetHit.x += Math.cos(angle) * hitSpeed; 
                             targetHit.y += Math.sin(angle) * hitSpeed;
-                            hitSpeed *= 0.94; 
+                            // 🟢 افزایش نیروی بازدارنده و اثر جرم سنگین تیله هدف (سرعت غلتش خیلی سریع‌تر افت می‌کند)
+                            hitSpeed *= 0.88; 
                             steps++;
                             
                             if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
@@ -985,8 +916,7 @@ function getEventPos(e) {
                                     updateWalletUI();
                                 }
 
-                                // 🟢 انجماد آنی انیمیشن و اجرای سریع پاپ‌آ‌پ به محض بیرون رفتن آخرین تیله هدف
-                                let activeTargets = targets.filter(t => !t.isOut).length;
+                                let activeTargets = targets.filter(targetItem => !targetItem.isOut).length;
                                 if (activeTargets === 0) {
                                     clearInterval(slideInterval);
                                     player.vx = 0; player.vy = 0; player.inAir = false; isMoving = false;
@@ -995,9 +925,11 @@ function getEventPos(e) {
                                     return; 
                                 }
                             }
-                            if (steps > 60 || hitSpeed < 0.5 || tHit.isOut) { 
+                            
+                            // توقف فیزیکی سریع‌تر غلتش تیله به علت سنگینی جرم
+                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { 
                                 clearInterval(slideInterval); 
-                                setTimeout(resetRound, 100); 
+                                setTimeout(resetRound, 300); 
                             }
                         }, 16);
                     }, hitDelay);
@@ -1018,7 +950,6 @@ function getEventPos(e) {
                 player.inAir = true; 
                 isFirstShotOfTurn = false;
 
-                // 🟢 ارسال اطلاعات فیزیکی شلیک و ایندکس برخورد تیله هدف به گوشی مقابل روی شبکه وای‌فای داخلی
                 if (typeof peer !== 'undefined' && peer && typeof conn !== 'undefined' && conn && conn.open) {
                     let targetIndex = targets.indexOf(targetHit);
                     conn.send({
@@ -1029,7 +960,7 @@ function getEventPos(e) {
                         hitTarget: targetIndex !== -1 ? {
                             index: targetIndex,
                             angle: Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX),
-                            speed: 14 + (dragDist * 0.25)
+                            speed: 7 + (dragDist * 0.15)
                         } : null
                     });
                     isMyTurnOnline = false; 
@@ -1037,7 +968,7 @@ function getEventPos(e) {
                 }
             }
         }
-        function gameLoop() {
+function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
             let weatherFrictionModifier = selectedWeather === "rainy" ? 0.995 : (selectedWeather === "snowy" ? 0.997 : 1);
             
@@ -1050,7 +981,6 @@ function getEventPos(e) {
                 player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; 
                 player.r = player.baseR + player.z * 0.35;
                 
-                // افکت چرخیدن تصویر تیله شلیک‌کننده متناسب با پرواز
                 player.angle += 0.15; 
 
                 if (player.progress >= 1) {
@@ -1062,40 +992,33 @@ function getEventPos(e) {
                             if (dist < (player.r + t.r)) { 
                                 hitAny = true; playClickSound(0.9); 
                                 let angleHits = Math.atan2(dy, dx); 
-                                t.vx = Math.cos(angleHits) * 9; t.vy = Math.sin(angleHits) * 9; 
+                                // 🟢 کاهش شتاب ثانویه پس از برخورد سه‌بعدی برای پیاده‌سازی وزن واقعی و سخت‌تر شدن خروج تیله‌ها
+                                t.vx = Math.cos(angleHits) * 5.5; t.vy = Math.sin(angleHits) * 5.5; 
                             }
                         }
                     });
-                    if (!hitAny) { setTimeout(resetRound, 100); }
+                    // 🟢 رفع باگ نوبت‌ها: اگر پرتاب شبیه‌سازی شده به هدفی نخورد، نوبت بلافاصله به بازیکن بعدی منتقل شود
+                    if (!hitAny) { setTimeout(resetRound, 300); }
                 }
             }
-            
+
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (imgBg.complete && imgBg.naturalWidth !== 0) ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
             else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             drawDynamicBorder();
             
-            // ۲. پردازش حرکت غلتشی، چرخش زاویه‌ای و بازگشت فیزیکی تیله‌های هدف از دیواره کادر بازی
+            // ۲. پردازش حرکت غلتشی، چرخش زاویه‌ای و خروج فیزیکی تیله‌های هدف از کادر بازی (دیوارها کاملاً برداشته شده‌اند)
             targets.forEach(t => {
                 if (!t.isOut) {
                     t.x += t.vx; t.y += t.vy; 
                     t.vx *= (currentGround.friction * weatherFrictionModifier); 
                     t.vy *= (currentGround.friction * weatherFrictionModifier);
                     
-                    // محاسبه سرعت لحظه‌ای برای تعیین شدت چرخش تصویر روی تیله
                     let speed = Math.sqrt(t.vx * t.vx + t.vy * t.vy);
                     if (speed > 0.1) {
-                        t.angle += speed * 0.05; // چرخیدن پویای پوسته تیله متناسب با سرعت حرکت
+                        t.angle += speed * 0.05; 
                     }
 
-                    // 🏢 فیزیک بازگشت از لبه‌های کادر مستطیلی مسابقه (Wall Bounce)
-                    let padding = t.r + 2;
-                    if (t.x < box.x + padding) { t.x = box.x + padding; t.vx *= -0.8; playClickSound(0.3); }
-                    if (t.x > box.x + box.w - padding) { t.x = box.x + box.w - padding; t.vx *= -0.8; playClickSound(0.3); }
-                    if (t.y < box.y + padding) { t.y = box.y + padding; t.vy *= -0.8; playClickSound(0.3); }
-                    if (t.y > box.y + box.h - padding) { t.y = box.y + box.h - padding; t.vy *= -0.8; playClickSound(0.3); }
-
-                    // بررسی خروج قطعی از حاشیه‌ها جهت کسر و افزایش موجودی یا ثبت امتیاز
                     if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
                         t.isOut = true; targetOutInTurn = true; 
                         if (!isQuickRandomMode && !(typeof conn !== 'undefined' && conn)) {
@@ -1105,9 +1028,16 @@ function getEventPos(e) {
                             if(playerScores[currentPlayerIndex] !== undefined) playerScores[currentPlayerIndex]++;
                             updateWalletUI();
                         }
+
+                        let activeTargets = targets.filter(targetItem => !targetItem.isOut).length;
+                        if (activeTargets === 0) {
+                            t.vx = 0; t.vy = 0; player.vx = 0; player.vy = 0; player.inAir = false; isMoving = false;
+                            playStadiumGoalHornSound();
+                            setTimeout(showFinalScoreboard, 50); 
+                            return; 
+                        }
                     }
                     
-                    // رندر نهایی تصویر تیله‌های هدف چرخنده (وسط صفحه)
                     ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
                     else { ctx.fillStyle = "#ff5722"; ctx.fill(); }
@@ -1121,7 +1051,6 @@ function getEventPos(e) {
             else { ctx.fillStyle = "#2196f3"; ctx.fill(); }
             ctx.restore();
             
-            // ❌ حذف کامل خط نشانه‌گیری قدیمی برای افزایش چالش مسابقه
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
         function preloadAssetsAndLaunch() {
@@ -1184,7 +1113,6 @@ function getEventPos(e) {
             preloadAssetsAndLaunch();
         }
 
-        // 🏢 موتور اصلاح‌شده مسابقه آفلاین چند گوشی بر بستر شبکه داخلی وای‌فای و هات‌اسپات (بدون نیاز به اینترنت جهانی)
         function initOnlineMatch(type) {
             let code = document.getElementById("roomCodeInput").value.trim();
             if (code === "") { showCustomPopup("لطفاً یک کد اتاق ۴ رقمی وارد کنید.", "⚠️", "فهمیدم", true); return; }
@@ -1194,12 +1122,7 @@ function getEventPos(e) {
             if(!localIP) return;
 
             if (type === 'create') {
-                peer = new Peer('tile-game-' + code, {
-                    host: localIP,
-                    port: 9000,
-                    path: '/myapp',
-                    secure: false
-                });
+                peer = new Peer('tile-game-' + code, { host: localIP, port: 9000, path: '/myapp', secure: false });
                 showGameToast("⏳ اتاق محلی ساخته شد. منتظر اتصال گوشی‌های دیگر روی وای‌فای...");
                 peer.on('open', () => { showCustomPopup(`اتاق وای‌فای ساخته شد!\nکد اتاق: ${code}\nدیگران به هات‌اسپات شما متصل شوند.`, "🏢", "منتظر می‌مانم"); });
                 peer.on('connection', (connection) => {
@@ -1207,22 +1130,12 @@ function getEventPos(e) {
                     showGameToast("🚀 گوشی حریف متصل شد! شروع مسابقه آفلاین محلی..."); closeCustomPopup();
                     settingsDrawer.classList.remove("open"); overlay.style.display = "none"; launchGameDirectly();
                 });
-                peer.on('error', (err) => {
-                    console.log("Local Mode Active");
-                    isMyTurnOnline = true; launchGameDirectly();
-                });
+                peer.on('error', (err) => { console.log("Local Mode Active"); isMyTurnOnline = true; launchGameDirectly(); });
             } 
             else if (type === 'join') {
-                peer = new Peer({
-                    host: localIP,
-                    port: 9000,
-                    path: '/myapp',
-                    secure: false
-                });
+                peer = new Peer({ host: localIP, port: 9000, path: '/myapp', secure: false });
                 showGameToast("⏳ در حال جستجوی گوشی میزبان روی شبکه وای‌فای...");
-                peer.on('open', () => {
-                    conn = peer.connect('tile-game-' + code); isMyTurnOnline = false; setupOnlineListeners();
-                });
+                peer.on('open', () => { conn = peer.connect('tile-game-' + code); isMyTurnOnline = false; setupOnlineListeners(); });
             }
         }
         function setupOnlineListeners() {
@@ -1239,7 +1152,7 @@ function getEventPos(e) {
                             tHit.x += Math.cos(angle) * hitSpeed; tHit.y += Math.sin(angle) * hitSpeed; hitSpeed *= 0.94; steps++;
                             if (tHit.x < box.x || tHit.x > box.x + box.w || tHit.y < box.y || tHit.y > box.y + box.h) {
                                 tHit.isOut = true;
-                                let activeTargets = targets.filter(t => !t.isOut).length;
+                                let activeTargets = targets.filter(targetItem => !targetItem.isOut).length;
                                 if (activeTargets === 0) { clearInterval(opponentSlideInterval); player.vx = 0; player.vy = 0; player.inAir = false; isMoving = false; playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 200); return; }
                             }
                             if (steps > 60 || hitSpeed < 0.5 || tHit.isOut) { clearInterval(opponentSlideInterval); }
@@ -1250,7 +1163,6 @@ function getEventPos(e) {
             });
         }
 
-        // 🎛️ مدیریت تفکیک دکمه‌های هدر بازی و منوی کشویی
         function handleBackToMenu() {
             if (typeof initAudio === "function") initAudio(); stopAmbientSound();
             canvas.style.display = "none"; gameHeader.style.display = "none"; document.getElementById("loginScreen").style.display = "none"; gameLoopRunning = false; 
@@ -1269,7 +1181,6 @@ function getEventPos(e) {
 
         function handleDrawerExit() { handleFinalExit(); settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
 
-        // 🟢 فعال‌سازی قطعی کلید بریم و دکمه شروع بازی دایره‌ای بدون هیچ باگی
         closeDrawer.onclick = () => { initAudio(); if(!saveSubPlayersData()) return; settingsDrawer.classList.remove("open"); overlay.style.display = "none"; startAmbientSound(selectedWeather); launchGameDirectly(); };
         startBtn.onclick = () => { if (typeof initAudio === "function") initAudio(); isQuickRandomMode = false; startAmbientSound(selectedWeather); launchGameDirectly(); };
         gearBtn.onclick = () => { initAudio(); settingsDrawer.classList.add("open"); overlay.style.display = "block"; };
@@ -1285,15 +1196,20 @@ function getEventPos(e) {
             });
         }
 
-        // 📱 ثبت رویدادهای مالتی‌پلتفرم (همزمان فعال برای لمس موبایل و کلیک دسکتاپ)
         canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
         canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
         
         setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
         setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val === 'sunny') { windX = 0; windY = 0; } else if(val === 'windy') { windX = 0.08; windY = 0.02; } else if(val === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; } });
-        document.getElementById("playerCountSelect").onchange = (e) => { selectedPlayerCount = parseInt(e.target.value); updateNameInputs(selectedPlayerCount); };
-        document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
         
+        // 🟢 تراز و رسم فوری چرخنده دو تکه رنگی به محض تغییر دستی به حالت ۲ نفره در منو
+        document.getElementById("playerCountSelect").onchange = (e) => { 
+            selectedPlayerCount = parseInt(e.target.value); 
+            updateNameInputs(selectedPlayerCount); 
+            drawWheel(0); 
+        };
+        document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
+
         function showCustomPopup(text, icon, btnText, isError, callback) {
             const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pIcon = document.getElementById("popupIcon");
             const pTable = document.getElementById("finalScoreTable"); const pAction = document.getElementById("popupActionButtons");
@@ -1305,8 +1221,29 @@ function getEventPos(e) {
         }
 
         function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
+
+        // 🏆 تابع نمایش جدول نهایی مسابقات استادیوم با دکمه بازگشت امن به منو
+        function showFinalScoreboard() {
+            const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pIcon = document.getElementById("popupIcon");
+            const pTable = document.getElementById("finalScoreTable"); const pTableBody = document.getElementById("finalTableBody"); const pAction = document.getElementById("popupActionButtons");
+            if (!popup) return; if (pIcon) pIcon.innerText = "🏆"; if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
+            if (pTableBody) {
+                pTableBody.innerHTML = "";
+                for (let i = 0; i < selectedPlayerCount; i++) {
+                    let name = playerNames[i] || `بازیکن ${i + 1}`; let score = playerScores[i] || 0; let id = playerNationalIds[i] || "";
+                    let totalBank = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
+                    if (isQuickRandomMode) totalBank = "-";
+                    let tr = document.createElement("tr"); tr.innerHTML = `<td>${name}</td><td>${score} عدد</td><td>${totalBank}</td>`; pTableBody.appendChild(tr);
+                }
+            }
+            if (pTable) pTable.style.display = "table";
+            if (pAction) {
+                pAction.innerHTML = ""; const confirmBtn = document.createElement("button"); confirmBtn.className = "popup-btn success"; confirmBtn.innerText = "تایید و بازگشت به منو";
+                confirmBtn.onclick = function() { popup.style.display = "none"; if (pTable) pTable.style.display = "none"; handleBackToMenu(); }; pAction.appendChild(confirmBtn);
+            }
+            popup.style.display = "flex";
+        }
         
-        // 🟢 فعال‌سازی رسمی موتور لودینگ آفلاین PWA در مرورگر موبایل
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('sw.js')
