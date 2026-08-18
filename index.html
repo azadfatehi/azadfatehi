@@ -435,12 +435,20 @@
             playerNames = tempNames; return true;
         }
 
-        function initAudio() {
+                function initAudio() {
             try {
-                if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-                if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); }
-            } catch (error) { console.log("سیستم صوتی غیرفعال است."); }
+                // 🔊 راه‌اندازی و تعلیق‌زدایی مجدد کانال صوتی مرورگر موبایل برای جلوگیری از قطع شدن صدا
+                if (!audioCtx) { 
+                    audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
+                }
+                if (audioCtx && audioCtx.state === 'suspended') { 
+                    audioCtx.resume(); 
+                }
+            } catch (error) { 
+                console.log("سیستم صوتی موقتاً در دسترس نیست."); 
+            }
         }
+
         // 🔔 افکت صوتی جادویی و زنگوله‌ای برای پیام خوش‌آمدهای شیک منو
         function playWelcomeMelodySound() {
             try {
@@ -813,8 +821,14 @@
         function showFinalScoreboard() {
             const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pTable = document.getElementById("finalScoreTable"); const pTableBody = document.getElementById("finalTableBody"); const pAction = document.getElementById("popupActionButtons");
             if (!popup) return;
+            
+            // 🖼️ اعمال تصویر زمینه به کل صفحه پاپ‌آپ به صورت سراسری و تمام‌صفحه
+            popup.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('menu_bg.jpg') !important; background-size: cover !important; background-position: center !important; display: flex; align-items: center; justify-content: center; z-index: 160; padding: 20px;";
+            
+            // کادر جدول به حالت شیشه‌ای شفاف و ساده درآمد
             const popupBox = popup.querySelector('.custom-popup-box');
-            if (popupBox) { popupBox.style.cssText = "position: relative; background: linear-gradient(135deg, rgba(15, 20, 30, 0.65), rgba(5, 10, 15, 0.75)), url('menu_bg.jpg') !important; background-size: cover !important; background-position: center !important; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 2px solid #ffeb3b; border-radius: 28px; padding: 30px 22px; width: 100%; max-width: 380px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.85); overflow: hidden; z-index: 10;"; }
+            if (popupBox) { popupBox.style.cssText = "background: rgba(20, 24, 33, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid #ffeb3b; border-radius: 28px; padding: 25px 20px; width: 100%; max-width: 380px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.5);"; }
+            
             if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
             if (pTableBody) {
                 pTableBody.innerHTML = "";
@@ -880,7 +894,16 @@
 
         function openSettingsDrawerMenu() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; switchDashboardTab('bank'); generateMenuPreviews(); }
         function handleDrawerExit() { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
-        function handleBackToMenu() { isReturningToMenu = true; canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex"; gearBtn.style.display = "flex"; }
+        function handleBackToMenu() { 
+            isReturningToMenu = true; 
+            canvas.style.display = "none"; 
+            gameHeader.style.display = "none"; 
+            setupMenu.style.display = "flex"; 
+            gearBtn.style.display = "flex"; 
+            // 🔄 پاکسازی و پنهان‌سازی قطعی متن خوش‌آمدگویی برای عدم نمایش مجدد
+            const welcomeMsg = document.getElementById("welcomeFadingMessage");
+            if (welcomeMsg) { welcomeMsg.innerHTML = ""; welcomeMsg.style.opacity = "0"; }
+        }
         function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
 
         gearBtn.onclick = openSettingsDrawerMenu; overlay.onclick = handleDrawerExit;
