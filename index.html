@@ -8,6 +8,7 @@
         /* 🪐 اصول پایه طراحی واکنش‌گرا و مدرن استادیوم */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #111; font-family: sans-serif; }
+        
         /* 🔐 استایل مدرن شیشه‌ای صفحه احراز هویت اولیه */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a237e, #020716); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
         .login-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
@@ -40,7 +41,6 @@
             100% { text-shadow: 0 0 10px rgba(255,235,59,0.6), 0 2px 4px rgba(0,0,0,0.8); }
         }
         .animate-welcome { animation: welcomeIntro 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, textGlow 2s ease-in-out infinite; }
-
         .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; background-image: linear-gradient(rgba(17, 17, 22, 0.93), rgba(17, 17, 22, 0.93)), url('menu_bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px; z-index: 150; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl; display: flex; flex-direction: column; align-items: center; border-radius: 25px 25px 0 0; }
         .drawer.open { bottom: 0; }
         .drawer-close-btn { background: #2196f3; border: none; color: white; padding: 14px 28px; width: 100%; max-width: 320px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
@@ -51,17 +51,16 @@
         .count-button-item.active { background: #4caf50; border-color: #fff; box-shadow: 0 0 12px #4caf50; }
         .scroll-container { display: flex; justify-content: flex-start; overflow-x: auto; gap: 12px; padding: 10px 5px; width: 100%; max-width: 360px; -webkit-overflow-scrolling: touch; }
         .scroll-item { flex: 0 0 70px; border: 3px solid #555; border-radius: 12px; overflow: hidden; cursor: pointer; aspect-ratio: 1; background: rgba(0,0,0,0.4); position: relative; }
-        .scroll-item canvas { width: 100%; height: 100%; object-fit: cover; display: block; }
+        .scroll-item canvas { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none !important; }
         .scroll-item.active { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
         .custom-select { width: 100%; max-width: 260px; padding: 12px; font-size: 15px; font-weight: bold; background: rgba(37,37,37,0.9); border: 2px solid #555; border-radius: 12px; color: white; text-align: center; outline: none; cursor: pointer; }
-        /* فرم‌های اسامی تیمی بازیکنان فرعی */
         .name-input-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 340px; margin-top: 5px; }
         .player-row-item { display: flex; flex-direction: column; gap: 5px; width: 100%; background: rgba(255,255,255,0.03); border: 1px solid #333; padding: 8px; border-radius: 14px; }
         .player-inputs { display: flex; gap: 6px; width: 100%; align-items: center; }
-        .player-inputs input { flex: 1; padding: 10px; font-size: 13px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; user-select: text !important; -webkit-user-select: text !important; }
+        .player-inputs input { flex: 1; padding: 10px; font-size: 13px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; outline: none; }
         .order-badge { width: 65px; padding: 10px 0; font-size: 12px; font-weight: bold; background: #333; border: 2px solid #555; border-radius: 10px; color: #aaa; text-align: center; }
         .order-badge.assigned { background: #ff9800; border-color: #fff; color: #000; box-shadow: 0 0 8px #ff9800; }
-        /* 🎮 لایه‌های اصلی گرافیک بازی و هدر استادیومی */
+        
         #canvas { display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
         #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: fixed; top: 15px; right: 15px; z-index: 130; direction: rtl; }
         #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
@@ -70,18 +69,28 @@
         .wheel-container { display: none; flex-direction: column; align-items: center; margin: 15px 0; position: relative; }
         .wheel-pointer { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #e53935; position: absolute; top: -5px; z-index: 5; }
         #wheelCanvas { border: 4px solid #fff; border-radius: 50%; }
-        /* 🏆 استایل‌های پایه پاپ‌آ‌پ نهایی با ساختار شیشه‌ای تیره */
         .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 160; padding: 20px; }
         .custom-popup-box { background: rgba(20, 24, 33, 0.98); border-radius: 28px; padding: 30px 22px; width: 100%; max-width: 380px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.85); }
         .popup-icon { font-size: 45px; margin-bottom: 12px; display: inline-block; }
         .popup-text { font-size: 14px; line-height: 1.6; color: #fff; margin-bottom: 15px; }
-        
         .final-actions { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
         .popup-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
         .popup-btn.success { background: linear-gradient(90deg, #4caf50, #81c784); }
         .popup-btn.danger { background: linear-gradient(90deg, #ff5722, #ff8a65); }
         .game-toast { position: fixed; bottom: 25px; background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.15); z-index: 200; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); direction: rtl; }
         .game-toast.show { opacity: 1; transform: translateY(0); }
+
+        .enter-shop-btn { width: 100%; background: linear-gradient(135deg, #ff9800, #f57c00); color: #000; border: none; padding: 14px; border-radius: 14px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; transition: transform 0.1s; }
+        .shop-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 180; padding: 15px; }
+        .shop-modal-box { background: rgba(20, 24, 33, 0.95); border: 2px solid rgba(255, 235, 59, 0.2); border-radius: 28px; padding: 20px; width: 100%; max-width: 390px; max-height: 90vh; overflow-y: auto; direction: rtl; box-shadow: 0 25px 50px rgba(0,0,0,0.7); }
+        .shop-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
+        .shop-close-btn { background: #e53935; color: white; border: none; border-radius: 10px; padding: 6px 14px; font-size: 12px; font-weight: bold; cursor: pointer; }
+        .shop-products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
+        .product-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+        .product-marble-preview { width: 32px; height: 32px; border-radius: 50%; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.3); }
+        .product-title { font-size: 11px; color: #fff; font-weight: bold; }
+        .product-price { font-size: 11px; color: #ffeb3b; }
+        .product-buy-btn { width: 100%; background: #4caf50; color: white; border: none; padding: 6px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -100,26 +109,22 @@
             </div>
         </div>
     </div>
-    <!-- 🏟️ اصلاح منوی اصلی با تصویر زمینه منو و حذف کادر تیره پیام -->
     <div id="setupMenu" style="display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; background-image: url('menu_bg.jpg') !important; background-size: cover; background-position: center;">
-        <!-- سربرگ شیک و بدون بک‌گراند مزاحم (معلق در هوا) -->
         <div id="menuWelcomeHeader" style="position: absolute; top: 35px; width: 90%; max-width: 450px; text-align: center; direction: rtl; z-index: 30; pointer-events: none;">
             <div style="font-size: 15px; color: #00e676; font-weight: bold; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; display: inline-block; border: 1px solid rgba(0,230,118,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.4); margin-bottom: 12px;">
                 👤 بازیکن فعال: <span id="menuPlayerName" style="color: #fff; text-shadow: 0 0 5px #00e676;">-</span>
             </div>
-            <!-- متن خوش‌آمدگویی با جلوه متحرک -->
             <div id="welcomeFadingMessage" class="animate-welcome" style="font-size: 22px; color: #ffeb3b; font-weight: 900; letter-spacing: 0.5px; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1); opacity: 0; line-height: 1.5;"></div>
         </div>
-
-        <button id="startBtn" style="position: relative; width: 140px; height: 140px; border-radius: 50%; background-image: url('1.png'); background-size: cover; border: 4px solid #fff; color: white; font-size: 26px; font-weight: 900; cursor: pointer; z-index: 25; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.6); text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.8); font-family: sans-serif;">شروع</button>
+        <button id="startBtn">شروع</button>
     </div>
+
     <button id="gearBtn" style="display: none;">☰</button>
+
     <div class="custom-popup-overlay" id="gamePopup">
         <div class="custom-popup-box">
             <span class="popup-icon" id="popupIcon">🎉</span>
             <div class="popup-text" id="popupText">متن پیام در اینجا قرار می‌گیرد.</div>
-            
-            <!-- 📊 جدول مسابقاتی مدرن با کادر جذاب و بروز شده بر اساس تغییرات جدید -->
             <table class="final-table" id="finalScoreTable" style="display: none; width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; color: #fff; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
                 <thead>
                     <tr>
@@ -130,16 +135,15 @@
                 </thead>
                 <tbody id="finalTableBody"></tbody>
             </table>
-            
             <div class="final-actions" id="popupActionButtons">
                 <button class="popup-btn success" id="popupBtn" onclick="closeCustomPopup()">تایید و ادامه</button>
             </div>
         </div>
     </div>
+
     <div class="drawer-overlay" id="overlay"></div>
     <div class="drawer" id="settingsDrawer">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; margin-top: 5px; margin-bottom: 20px; padding: 0 5px; direction: rtl;">
-            <!-- ✨ هدر سفارشی تنظیمات آماده برای تزریق متن جذاب بازیکن فعال -->
             <h3 id="drawerDynamicTitle" style="color: #ffeb3b; font-size: 15px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.9); text-align: right; max-width: 75%;">⚙️ تنظیمات استادیوم</h3>
             <button style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.5);" onclick="handleDrawerExit()">خروج</button>
         </div>
@@ -163,7 +167,6 @@
                     <div class="count-button-item" data-val="snowy">❄️ برفی</div>
                 </div>
             </div>
-
             <div class="menu-row">
                 <label>دوست داری چند نفره باشیم؟ (آفلاین نوبتی)</label>
                 <select class="custom-select" id="playerCountSelect">
@@ -175,49 +178,18 @@
                     <option value="6">۶ نفره</option>
                 </select>
             </div>
-
+            
+            <!-- 👥 کادر تولید آنلاین فیلدهای نام بازیکن بعدی و مشخصات خریدار -->
             <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px;">
-                <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" placeholder="نام بازیکن ۱" disabled></div></div>
+                <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" disabled></div></div>
             </div>
+            
+            <!-- 🎰 گردونه و دکمه قرعه‌کشی تعیین نوبت شروع بازی -->
             <button class="lucky-wheel-btn" id="drawOrderBtn" style="display: none;">🎰 ببینیم نوبت اول کیه ؟</button>
             <div class="wheel-container" id="wheelSection"><div class="wheel-pointer"></div><canvas id="wheelCanvas" width="240" height="240"></canvas></div>
-
-            <div class="menu-row" style="background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; width: 100%; max-width: 340px; margin-top: 10px;">
-                <label style="color: #00e676;">🎮 بخش مسابقه آفلاین چند گوشی (Wi-Fi/Hotspot)</label>
-                <div style="display: flex; gap: 8px; width: 100%; margin-bottom: 8px;">
-                    <button id="createRoomBtn" style="flex: 1; background: #2196f3; color: white; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer;" onclick="initOnlineMatch('create')">🏢 ساخت اتاق</button>
-                    <button id="joinRoomBtn" style="flex: 1; background: #00e676; color: black; border: none; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer;" onclick="initOnlineMatch('join')">🔑 ورود به اتاق</button>
-                </div>
-                <input type="text" id="roomCodeInput" placeholder="کد اتاق ۴ رقمی (مثلاً: 4582)" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #555; background: #111; color: white; text-align: center; outline: none;">
-            </div>
-            <div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
-                <div style="display: flex; background: rgba(0, 0, 0, 0.4); padding: 5px; border-radius: 16px; margin-bottom: 16px; border: 1px solid rgba(255,255,255,0.05);">
-                    <button type="button" id="btnTabBank" style="flex: 1; background: #ff9800; color: #000; border: none; padding: 11px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 13px;" onclick="switchDashboardTab('bank')">💸 انتقال و دکان</button>
-                    <button type="button" id="btnTabHistory" style="flex: 1; background: transparent; color: #aaa; border: none; padding: 11px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 13px;" onclick="switchDashboardTab('history')">📊 کارنامه بازی‌ها</button>
-                </div>
-
-                <div id="tabBankContent" style="display: block;">
-                    <div style="background: rgba(0,0,0,0.25); border-radius: 14px; padding: 10px; margin-bottom: 14px; border: 1px dashed rgba(255,235,59,0.2);">
-                        <div style="color: #ffeb3b; font-size: 13px; font-weight: bold; text-align: center; margin-bottom: 8px;">💎 دکان خرید و فروش فوری</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; color: #fff;">
-                            <span>بسته ۱۰ تایی تیله</span>
-                            <button class="shop-btn buy" onclick="handleShopTransaction('buy', 10)" style="background:#4caf50; padding:4px 10px; border-radius:6px; border:none; color:white; font-weight:bold; cursor:pointer;">🛒 خرید</button>
-                        </div>
-                        <div style="display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: #fff;">
-                            <span>فروش ۱۰ تیله به صرافی</span>
-                            <button class="shop-btn sell" onclick="handleShopTransaction('sell', 10)" style="background:#e53935; padding:4px 10px; border-radius:6px; border:none; color:white; font-weight:bold; cursor:pointer;">💰 فروش</button>
-                        </div>
-                    </div>
-                    <div style="font-size: 11px; color: #ff9800; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 6px;">💳 مشخصات حساب مقصد</div>
-                    <input type="number" id="transferTargetIdInput" placeholder="کد ملی مقصد (۱۰ رقمی)" style="width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; text-align: center; font-size: 14px; margin-bottom: 12px; outline: none;">
-                    <div style="font-size: 11px; color: #ff9800; font-weight: bold; letter-spacing: 0.5px; margin-bottom: 6px;">💎 مبلغ انتقال (تعداد تیله)</div>
-                    <input type="number" id="transferAmountInput" placeholder="چه تعداد تیله ارسال شود؟" style="width: 100%; padding: 14px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); background: rgba(0,0,0,0.5); color: #fff; text-align: center; font-size: 14px; margin-bottom: 16px; outline: none;">
-                    <button type="button" style="width: 100%; background: linear-gradient(90deg, #4caf50, #66bb6a); color: white; border: none; padding: 14px; border-radius: 14px; font-weight: bold; font-size: 14px; cursor: pointer; box-shadow: 0 6px 20px rgba(76,175,80,0.4);" onclick="executeMarbleTransfer()">🚀 تایید و انتقال قطعی تیله</button>
-                </div>
-
-                <div id="tabHistoryContent" style="display: none;">
-                    <div style="max-height: 200px; overflow-y: auto; padding-right: 2px;" id="historyLogsContainer"></div>
-                </div>
+            <!-- 🏪 جعبه شیک کلید ورود به فروشگاه مرکزی استادیوم (بدون فیلدهای دکان قبلی) -->
+            <div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
+                <button type="button" class="enter-shop-btn" onclick="openStadiumStoreModal()">🏪 ورود به فروشگاه مرکزی استادیوم</button>
             </div>
 
             <div class="menu-row" style="margin-top: 20px;">
@@ -231,6 +203,7 @@
             <button class="drawer-close-btn" id="closeDrawer" style="margin-top: 15px; margin-bottom: 10px;">همه چی عالی شد! بریم؟</button>
         </div>
     </div>
+
     <div id="gameHeader">
         <div style="display: flex; gap: 8px;">
             <button id="exitBtn">خروج</button>
@@ -240,9 +213,52 @@
     </div>
 
     <canvas id="canvas"></canvas>
+
+    <!-- 🏪 لایه پاپ‌آ‌پ شیک دکان و فروشگاه آنلاین مرکزی بر اساس رنگ و ابعاد -->
+    <div class="shop-modal-overlay" id="stadiumShopModal">
+        <div class="shop-modal-box">
+            <div class="shop-modal-header">
+                <h3 style="color: #ffeb3b; font-size: 14px; margin: 0;">🏪 صرافی و فروشگاه اینترنتی تیله</h3>
+                <button class="shop-close-btn" onclick="closeStadiumStoreModal()">بستن دکان</button>
+            </div>
+            
+            <div class="shop-products-grid">
+                <div class="product-card">
+                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #00e676, #004d40);"></div>
+                    <div class="product-title">تیله زمرد (معمولی)</div>
+                    <div class="product-price">💰 ۵ تیله</div>
+                    <button class="product-buy-btn" onclick="handleStorePurchase('#00e676', 22, 5, 'زمرد معمولی')">🛒 خرید</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #ff1744, #4a0007); width: 36px; height: 36px;"></div>
+                    <div class="product-title">یاقوت لوکس (بزرگ)</div>
+                    <div class="product-price">💰 ۱۲ تیله</div>
+                    <button class="product-buy-btn" onclick="handleStorePurchase('#ff1744', 28, 12, 'یاقوت بزرگ')">🛒 خرید</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #2979ff, #0a192f); width: 26px; height: 26px;"></div>
+                    <div class="product-title">کبالت سرعتی (ریز)</div>
+                    <div class="product-price">💰 ۴ تیله</div>
+                    <button class="product-buy-btn" onclick="handleStorePurchase('#2979ff', 17, 4, 'کبالت ریز')">🛒 خرید</button>
+                </div>
+                <div class="product-card">
+                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #ffd700, #ff8f00);"></div>
+                    <div class="product-title">طلایی استادیوم (ویژه)</div>
+                    <div class="product-price">💰 ۱۵ تیله</div>
+                    <button class="product-buy-btn" onclick="handleStorePurchase('#ffd700', 22, 15, 'طلایی ویژه')">🛒 خرید</button>
+                </div>
+            </div>
+
+            <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); margin-top: 15px;">
+                <div style="color: #00e676; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 10px;">🤝 فروش تیله شخصی به بازیکن دیگر</div>
+                <input type="number" id="transferTargetIdInput" placeholder="کد ملی خریدار (۱۰ رقمی)" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #111; color: #fff; text-align: center; font-size: 13px; margin-bottom: 10px; outline: none;">
+                <input type="number" id="transferAmountInput" placeholder="تعداد تیله برای فروش" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #111; color: #fff; text-align: center; font-size: 13px; margin-bottom: 12px; outline: none;">
+                <button type="button" style="width: 100%; background: linear-gradient(90deg, #ff9800, #f57c00); color: black; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer;" onclick="executeMarbleTransfer()">💰 ثبت معامله و انتقال به خریدار</button>
+            </div>
+        </div>
+    </div>
     <script src="https://unpkg.com"></script>
     <script>
-        // ۱. المان‌های DOM و متغیرهای کلیدی بانک اطلاعاتی استادیوم
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
         const setupMenu = document.getElementById("setupMenu");
@@ -259,14 +275,9 @@
         let totalMarblesOwned = parseInt(localStorage.getItem("totalMarblesOwned")) || 10;
         let currentUsername = localStorage.getItem("currentUsername") || "";
         let currentNationalId = localStorage.getItem("currentNationalId") || "";
-        let authMode = "login"; 
-        let gameLoopRunning = false; 
-        let isQuickRandomMode = false; 
-        let isReturningToMenu = false; // 🔄 فلگ جدید برای کنترل خوش‌آمدگویی زمان برگشت
+        let authMode = "login"; let gameLoopRunning = false; let isQuickRandomMode = false; let isReturningToMenu = false; 
         
-        let playerNames = ["بازیکن ۱"];
-        let playerNationalIds = [];
-        let currentPlayerIndex = 0;
+        let playerNames = ["بازیکن ۱"]; let playerNationalIds = []; let currentPlayerIndex = 0;
         let peer = null; let conn = null; let isMyTurnOnline = true;
         let isFirstShotOfTurn = true; let currentLevel = 1; let isAiming = false; let isMoving = false;
         let hitSuccessInTurn = false; let targetOutInTurn = false; let hasBonusShot = false; let isChainMode = false;
@@ -275,30 +286,17 @@
         let box = { x: 40, y: 60, w: 320, h: 220 };
 
         let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
-        let targets = []; let selectedPlayerCount = 1; let playerScores = []; let playerOrders = []; 
+        let targets = []; let selectedPlayerCount = 1; let playerScores = []; let playerOrders = [];
 
         function showCustomPopup(text, icon, btnText, isError, callback) {
-            const popup = document.getElementById("gamePopup"); 
-            const pText = document.getElementById("popupText"); 
-            const pIcon = document.getElementById("popupIcon");
-            const pTable = document.getElementById("finalScoreTable"); 
-            const pAction = document.getElementById("popupActionButtons");
-            if(!popup) return; if(pTable) pTable.style.display = "none"; 
-            if(pText) pText.innerText = text; if(pIcon) pIcon.innerText = icon || "🎉";
-            if(pAction) {
-                pAction.innerHTML = ""; 
-                if (btnText !== "") { 
-                    const btn = document.createElement("button"); 
-                    btn.className = isError ? "popup-btn danger" : "popup-btn success"; 
-                    btn.innerText = btnText || "تایید"; 
-                    btn.onclick = function() { popup.style.display = "none"; if(typeof callback === "function") callback(); }; 
-                    pAction.appendChild(btn); 
-                }
-            }
+            const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pIcon = document.getElementById("popupIcon");
+            const pTable = document.getElementById("finalScoreTable"); const pAction = document.getElementById("popupActionButtons");
+            if(!popup) return; if(pTable) pTable.style.display = "none"; if(pText) pText.innerText = text; if(pIcon) pIcon.innerText = icon || "🎉";
+            if(pAction) { pAction.innerHTML = ""; if (btnText !== "") { const btn = document.createElement("button"); btn.className = isError ? "popup-btn danger" : "popup-btn success"; btn.innerText = btnText || "تایید"; btn.onclick = function() { popup.style.display = "none"; if(typeof callback === "function") callback(); }; pAction.appendChild(btn); } }
             popup.style.display = "flex";
         }
         function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
-        // 🟢 مقادیر فیزیک اصطکاک سنگین استادیوم‌ها جهت به چالش کشیدن شلیک‌ها
+        
         const grounds = {
             grass:   { friction: 0.93, wind: 0.08, src: 'grass.jpg',   fallbackColor: '#2e7d32' },
             carpet:  { friction: 0.91, wind: 0.02, src: 'carpet.jpg',  fallbackColor: '#b71c1c' },
@@ -306,110 +304,54 @@
             cement:  { friction: 0.95, wind: 0.04, src: 'cement.jpg',  fallbackColor: '#9e9e9e' },
             dirt:    { friction: 0.92, wind: 0.15, src: 'dirt.jpg',    fallbackColor: '#8d6e63' }
         };
-        let currentGround = grounds.grass; 
-        let imgBg = new Image(); let imgPlayer = new Image(); let imgTarget = new Image();
-        let selectedGroundVal = "grass"; let selectedCountVal = 5;
-        let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
-
+        let currentGround = grounds.grass; let imgBg = new Image(); let imgPlayer = new Image(); let imgTarget = new Image();
+        let selectedGroundVal = "grass"; let selectedCountVal = 5; let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
         function updateWalletUI() {
             let activeName = isQuickRandomMode ? "بازیکن مهمان" : (currentUsername || "بازیکن ۱");
-            
-            if (!isQuickRandomMode) {
-                if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); }
-                localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
-            }
-
-            if (document.getElementById("menuPlayerName")) {
-                document.getElementById("menuPlayerName").innerText = activeName;
-            }
-
-            // 🔄 منطق هوشمند: پیام خوش‌آمدگویی فقط در ورود اولیه پخش شود نه در زمان بازگشت به منو
+            if (!isQuickRandomMode && currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem("totalMarblesOwned", totalMarblesOwned); }
+            if (document.getElementById("menuPlayerName")) document.getElementById("menuPlayerName").innerText = activeName;
             const welcomeMsg = document.getElementById("welcomeFadingMessage");
-            if (welcomeMsg && welcomeMsg.innerHTML === "" && !isReturningToMenu) {
+            if (welcomeMsg && !isReturningToMenu && (welcomeMsg.innerHTML === "" || !welcomeMsg.innerHTML.includes(activeName))) {
                 if (typeof playWelcomeMelodySound === 'function') playWelcomeMelodySound();
-                welcomeMsg.style.opacity = "1";
-                welcomeMsg.innerHTML = isQuickRandomMode ? "⚡ حالت مهمان فعال شد<br><span style='font-size:14px; color:#ff9800;'>امروز روزِ برده، شلیک کن!</span>" : `✨ خوش آمدی ${activeName} جان<br><span style='font-size:14px; color:#00e676;'>بریم استادیوم رو فتح کنیم! 🏟️</span>`;
+                welcomeMsg.style.opacity = "1"; welcomeMsg.innerHTML = isQuickRandomMode ? "⚡ حالت مهمان فعال شد<br><span style='font-size:14px; color:#ff9800;'>امروز روزِ برده، شلیک کن!</span>" : `✨ خوش آمدی ${activeName} جان<br><span style='font-size:14px; color:#00e676;'>بریم استادیوم رو فتح کنیم! 🏟️</span>`;
                 setTimeout(() => { welcomeMsg.style.opacity = "0"; }, 3500);
             }
-
-            if (document.getElementById("drawerDynamicTitle")) {
-                document.getElementById("drawerDynamicTitle").innerText = `${activeName} جان بریم برا بازی جذاب تر!`;
-            }
-
+            if (document.getElementById("drawerDynamicTitle")) document.getElementById("drawerDynamicTitle").innerText = `${activeName} جان بریم برا بازی جذاب تر!`;
             if (turnIndicator && playerNames && playerNames[currentPlayerIndex]) {
                 let id = playerNationalIds ? (playerNationalIds[currentPlayerIndex] || "") : "";
                 let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
                 turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles} تیله)`;
             }
         }
-        function switchAuthModeToRegister() {
-            authMode = "register";
-            let usernameField = document.getElementById("usernameInput");
-            let submitBtn = document.getElementById("authSubmitBtn");
-            let formTitle = document.getElementById("authFormTitle");
-            if (usernameField) usernameField.style.display = "block";
-            if (submitBtn) submitBtn.style.display = "block";
-            if (formTitle) formTitle.innerText = "📝 عضویت بازیکن جدید";
-        }
+
+        function switchAuthModeToRegister() { authMode = "register"; let uField = document.getElementById("usernameInput"); let sBtn = document.getElementById("authSubmitBtn"); let fTitle = document.getElementById("authFormTitle"); if (uField) uField.style.display = "block"; if (sBtn) sBtn.style.display = "block"; if (fTitle) fTitle.innerText = "📝 عضویت بازیکن جدید"; }
 
         function processSmartAuth(actionType) {
-            let uName = document.getElementById("usernameInput").value.trim();
-            let uId = document.getElementById("identifierInput").value.trim();
+            let uName = document.getElementById("usernameInput").value.trim(); let uId = document.getElementById("identifierInput").value.trim();
             if (uId === "") { showCustomPopup("لطفاً ابتدا کد ملی خود را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
             if (uId.length !== 10) { showCustomPopup("کد ملی وارد شده باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح کد ملی", true); return; }
-            let savedName = localStorage.getItem(`name_${uId}`);
-            isQuickRandomMode = false; isReturningToMenu = false;
-
+            let savedName = localStorage.getItem(`name_${uId}`); isQuickRandomMode = false; isReturningToMenu = false;
             if (actionType === 'login') {
-                if (savedName === null) {
-                    showCustomPopup("این کد ملی یافت نشد! سیستم به حالت ثبت‌نام منتقل شد. نام خود را وارد کنید.", "⚠️", "ثبت‌نام جدید", true);
-                    switchAuthModeToRegister(); return;
-                }
-                currentUsername = savedName; currentNationalId = uId;
-                totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${uId}`)) || 10;
-                showCustomPopup(`خوش آمدید قهرمان، ${currentUsername}! اطلاعات شما تایید شد.`, "⚡", "", false);
-                setTimeout(() => { closeCustomPopup(); enterGameDirectly(); }, 300);
-            } 
-            else if (actionType === 'register') {
-                if (savedName !== null) {
-                    showCustomPopup("این کد ملی قبلاً ثبت شده است! در حال ورود به حساب...", "🔒", "متوجه شدم");
-                    currentUsername = savedName; currentNationalId = uId; enterGameDirectly(); return;
-                }
+                if (savedName === null) { showCustomPopup("این کد ملی یافت نشد! سیستم به حالت ثبت‌نام منتقل شد. نام خود را وارد کنید.", "⚠️", "ثبت‌نام جدید", true); switchAuthModeToRegister(); return; }
+                currentUsername = savedName; currentNationalId = uId; totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${uId}`)) || 10;
+                showCustomPopup(`خوش آمدید قهرمان، ${currentUsername}! اطلاعات شما تایید شد.`, "⚡", "", false); setTimeout(() => { closeCustomPopup(); enterGameDirectly(); }, 400);
+            } else if (actionType === 'register') {
+                if (savedName !== null) { showCustomPopup("این کد ملی قبلاً ثبت شده است! در حال ورود به حساب...", "🔒", "متوجه شدم"); currentUsername = savedName; currentNationalId = uId; enterGameDirectly(); return; }
                 if (uName === "") { showCustomPopup("لطفاً نام فارسی خود را برای ثبت‌نام وارد کنید.", "⚠️", "متوجه شدم", true); return; }
-                localStorage.setItem(`name_${uId}`, uName);
-                currentUsername = uName; currentNationalId = uId;
-                localStorage.setItem("currentUsername", currentUsername);
-                localStorage.setItem("currentNationalId", currentNationalId);
+                localStorage.setItem(`name_${uId}`, uName); currentUsername = uName; currentNationalId = uId;
+                localStorage.setItem("currentUsername", currentUsername); localStorage.setItem("currentNationalId", currentNationalId);
                 totalMarblesOwned = 10; localStorage.setItem(`marbles_${uId}`, 10);
                 showCustomPopup(`🎉 قهرمان جدید، ${currentUsername} خوش آمدید! پروفایل ساخته و ۱۰ تیله رایگان هدیه شد!`, "🎁", "بزن بریم", false, function() { enterGameDirectly(); });
             }
         }
+        function enterGameDirectly() { document.getElementById("loginScreen").style.display = "none"; setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex"; playerNames = [currentUsername]; playerNationalIds = [currentNationalId]; updateWalletUI(); }
 
-        function enterGameDirectly() {
-            document.getElementById("loginScreen").style.display = "none";
-            setupMenu.style.display = "flex";
-            if (gearBtn) gearBtn.style.display = "flex"; 
-            playerNames = [currentUsername]; playerNationalIds = [currentNationalId];
-            updateWalletUI();
-        }
         function processQuickRandomAuth() {
-            isQuickRandomMode = true; isReturningToMenu = false;
-            document.getElementById("loginScreen").style.display = "none";
-            setupMenu.style.display = "flex";
-            if (gearBtn) gearBtn.style.display = "flex";
-            
-            const groundKeys = Object.keys(grounds);
-            const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)];
-            selectedGroundVal = randomGround; currentGround = grounds[randomGround];
+            isQuickRandomMode = true; isReturningToMenu = false; document.getElementById("loginScreen").style.display = "none"; setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex";
+            const groundKeys = Object.keys(grounds); const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)]; selectedGroundVal = randomGround; currentGround = grounds[randomGround];
             selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
-            if(selectedWeather === 'sunny') { windX = 0; windY = 0; } 
-            else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } 
-            else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } 
-            else { windX = 0.01; windY = 0.02; }
-            selectedCountVal = Math.floor(Math.random() * 9) + 2; 
-            selectedPlayerCount = 1; currentPlayerIndex = 0;
-            playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; 
-            updateWalletUI();
+            if(selectedWeather === 'sunny') { windX = 0; windY = 0; } else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; }
+            selectedCountVal = Math.floor(Math.random() * 9) + 2; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; updateWalletUI();
         }
 
         function saveSubPlayersData() {
@@ -419,197 +361,49 @@
             let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
             let tempNames = [currentValidName]; playerNationalIds = [currentValidId]; 
             for (let i = 1; i < count; i++) {
-                let subNameInput = document.getElementById(`subName_${i}`);
-                let subIdInput = document.getElementById(`subId_${i}`);
-                let subName = subNameInput ? subNameInput.value.trim() : "";
-                let subId = subIdInput ? subIdInput.value.trim() : "";
+                let subNameInput = document.getElementById(`subName_${i}`); let subIdInput = document.getElementById(`subId_${i}`);
+                let subName = subNameInput ? subNameInput.value.trim() : ""; let subId = subIdInput ? subIdInput.value.trim() : "";
                 if (subName === "" || subId === "") { showCustomPopup(`لطفاً اطلاعات بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true); return false; }
                 if (subId.length !== 10) { showCustomPopup(`کد ملی بازیکن شماره ${i + 1} باید ۱۰ رقم باشد.`, "⚠️", "اصلاح کد ملی", true); return false; }
                 localStorage.setItem(`name_${subId}`, subName);
-                if (localStorage.getItem(`marbles_${subId}`) === null) { 
-                    localStorage.setItem(`marbles_${subId}`, 10); 
-                    showGameToast(`🎁 ۱۰ تیله هدیه خوش‌آمدهای به بانک ${subName} واریز شد!`);
-                }
+                if (localStorage.getItem(`marbles_${subId}`) === null) { localStorage.setItem(`marbles_${subId}`, 10); showGameToast(`🎁 ۱۰ تیله هدیه خوش‌آمدهای به بانک ${subName} واریز شد!`); }
                 tempNames.push(subName); playerNationalIds.push(subId);
             }
             playerNames = tempNames; return true;
         }
 
-                function initAudio() {
-            try {
-                // 🔊 راه‌اندازی و تعلیق‌زدایی مجدد کانال صوتی مرورگر موبایل برای جلوگیری از قطع شدن صدا
-                if (!audioCtx) { 
-                    audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-                }
-                if (audioCtx && audioCtx.state === 'suspended') { 
-                    audioCtx.resume(); 
-                }
-            } catch (error) { 
-                console.log("سیستم صوتی موقتاً در دسترس نیست."); 
-            }
-        }
-
-        // 🔔 افکت صوتی جادویی و زنگوله‌ای برای پیام خوش‌آمدهای شیک منو
-        function playWelcomeMelodySound() {
-            try {
-                initAudio();
-                let now = audioCtx.currentTime;
-                const notes = [523.25, 659.25, 783.99]; // نت‌های دو، می، سل (آکورد کریستالی فوق‌العاده لوکس)
-                notes.forEach((freq, index) => {
-                    let osc = audioCtx.createOscillator();
-                    let gain = audioCtx.createGain();
-                    osc.type = "sine";
-                    osc.frequency.setValueAtTime(freq, now + (index * 0.08));
-                    gain.gain.setValueAtTime(0.18, now + (index * 0.08));
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.6);
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.65);
-                });
-            } catch(e) {}
-        }
-
-        function playClickSound(intensity = 0.5) {
-            try {
-                initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity, 1.2));
-                let oscMain = audioCtx.createOscillator(); let gainMain = audioCtx.createGain(); 
-                oscMain.type = "triangle"; oscMain.frequency.setValueAtTime(650 + (vol * 250), now); 
-                oscMain.frequency.exponentialRampToValueAtTime(120, now + 0.04);
-                gainMain.gain.setValueAtTime(vol * 0.85, now); gainMain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-                oscMain.connect(gainMain); gainMain.connect(audioCtx.destination); 
-                oscMain.start(now); oscMain.stop(now + 0.06);
-            } catch(e) {}
-        }
-
-        function playCheeringSound() {
-            try {
-                initAudio(); let now = audioCtx.currentTime;
-                for(let i=0; i<5; i++) {
-                    let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; 
-                    osc.frequency.setValueAtTime(280 + (i * 55), now); osc.frequency.linearRampToValueAtTime(480 + (i * 25), now + 1.2); 
-                    gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
-                    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.4);
-                }
-            } catch(e){}
-        }
-
-        function playStadiumGoalHornSound() {
-            try {
-                initAudio(); let now = audioCtx.currentTime;
-                for(let i=0; i<3; i++) {
-                    let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sawtooth";
-                    osc.frequency.setValueAtTime(220 + (i * 2), now); gain.gain.setValueAtTime(0.3, now);
-                    gain.gain.linearRampToValueAtTime(0.3, now + 1.5); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8);
-                    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.8);
-                }
-            } catch(e){}
-        }
-        function playDisappointmentSound() {
-            try {
-                initAudio(); let now = audioCtx.currentTime;
-                for(let i=0; i<3; i++) {
-                    let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; 
-                    osc.frequency.setValueAtTime(240 + (i * 25), now); osc.frequency.linearRampToValueAtTime(130 + (i * 10), now + 0.85); 
-                    gain.gain.setValueAtTime(0.35, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
-                    osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.95);
-                }
-            } catch(e){}
-        }
-
-        function startAmbientSound(weather) {
-            try {
-                initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
-                ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain();
-                if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); }
-                else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); }
-                else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); }
-                ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0);
-            } catch(e){}
-        }
-
+        function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) { console.log("سیستم صوتی موقتاً در دسترس نیست."); } }
+        function playWelcomeMelodySound() { try { initAudio(); let now = audioCtx.currentTime; const notes = [523.25, 659.25, 783.99]; notes.forEach((freq, index) => { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(freq, now + (index * 0.08)); gain.gain.setValueAtTime(0.18, now + (index * 0.08)); gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.6); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.65); }); } catch(e) {} }
+        function playClickSound(intensity = 0.5) { try { initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity, 1.2)); let oscMain = audioCtx.createOscillator(); let gainMain = audioCtx.createGain(); oscMain.type = "triangle"; oscMain.frequency.setValueAtTime(650 + (vol * 250), now); oscMain.frequency.exponentialRampToValueAtTime(120, now + 0.04); gainMain.gain.setValueAtTime(vol * 0.85, now); gainMain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05); oscMain.connect(gainMain); gainMain.connect(audioCtx.destination); oscMain.start(now); oscMain.stop(now + 0.06); } catch(e) {} }
+        function playCheeringSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<5; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(280 + (i * 55), now); osc.frequency.linearRampToValueAtTime(480 + (i * 25), now + 1.2); gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.4); } } catch(e){} }
+        function playStadiumGoalHornSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<3; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sawtooth"; osc.frequency.setValueAtTime(220 + (i * 2), now); gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.3, now + 1.5); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.8); } } catch(e){} }
+        function playDisappointmentSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<3; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(240 + (i * 25), now); osc.frequency.linearRampToValueAtTime(130 + (i * 10), now + 0.85); gain.gain.setValueAtTime(0.35, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.95); } } catch(e){} }
+        function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
         function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
         function playWeatherPreviewSound(type) { startAmbientSound(type); }
+        function initWeatherParticles() { weatherParticles = []; let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80); let wW = window.innerWidth || canvas.width || 400; let wH = window.innerHeight || canvas.height || 600; for(let i=0; i<count; i++) { weatherParticles.push({ x: Math.random() * wW, y: Math.random() * wH, v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1), r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2), opacity: Math.random() * 0.5 + 0.3 }); } }
+        function initWindLines() { windLines = []; if (selectedWeather === "sunny") return; let count = selectedWeather === "windy" ? 25 : 10; for (let i = 0; i < count; i++) { windLines.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, w: Math.random() * 80 + 40, h: Math.random() * 1.5 + 0.5, v: Math.random() * 4 + 3, opacity: Math.random() * 0.2 + 0.05 }); } }
+        function updateWeatherParticles() { weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } }); windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } }); }
+        function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } ctx.restore(); }
+        function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
 
-        function initWeatherParticles() {
-            weatherParticles = []; let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80);
-            for(let i=0; i<count; i++) { 
-                weatherParticles.push({ 
-                    x: Math.random() * canvas.width, y: Math.random() * canvas.height, 
-                    v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1), 
-                    r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2), 
-                    opacity: Math.random() * 0.5 + 0.3 
-                }); 
-            }
-        }
-
-        function initWindLines() {
-            windLines = []; if (selectedWeather === "sunny") return;
-            let count = selectedWeather === "windy" ? 25 : 10;
-            for (let i = 0; i < count; i++) { 
-                windLines.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, w: Math.random() * 80 + 40, h: Math.random() * 1.5 + 0.5, v: Math.random() * 4 + 3, opacity: Math.random() * 0.2 + 0.05 }); 
-            }
-        }
-        function updateWeatherParticles() {
-            weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } });
-            windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } });
-        }
-
-        function drawWeather() {
-            ctx.save(); 
-            if(selectedWeather === "rainy") { 
-                weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); 
-            } else if(selectedWeather === "snowy") { 
-                weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); 
-            }
-            ctx.restore();
-        }
-
-        function showGameToast(message) {
-            let toast = document.getElementById("gameToast");
-            if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); }
-            toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); 
-        }
         function resetRound() {
-            player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-            isMoving = false; 
+            player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; isMoving = false; 
             let activeTargets = targets.filter(t => !t.isOut).length;
-            if (activeTargets === 0) {
-                playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 400); return;
-            }
-            if (targetOutInTurn) { 
-                playCheeringSound(); hasBonusShot = true; showGameToast("🎯 شلیک عالی! هوراااا");
-            } else {
-                playDisappointmentSound(); showGameToast("😔 اوووف! نزدیک بود...");
-                if (selectedPlayerCount === 1 || isQuickRandomMode || conn) {
-                    if (hasBonusShot) { 
-                        hasBonusShot = false; isChainMode = false; setTimeout(() => { handleBackToMenu(); }, 800); return; 
-                    } else { 
-                        let nX = canvas.width / 2; let nY = canvas.height - 100; 
-                        player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0; hasBonusShot = false; 
-                    }
-                } else {
-                    if (isChainMode || !targetOutInTurn) {
-                        isChainMode = false; currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; 
-                        let nX = canvas.width / 2; let nY = canvas.height - 100; 
-                        player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0;
-                    }
-                    hasBonusShot = false;
-                }
-            }
-            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; 
-            if (!isQuickRandomMode && !conn) updateWalletUI();
+            if (activeTargets === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 400); return; }
+            let nX = canvas.width / 2; let nY = canvas.height - 100; player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0;
+            if (targetOutInTurn) { playCheeringSound(); hasBonusShot = true; showGameToast("🎯 شلیک عالی! هوراااا"); } 
+            else { playDisappointmentSound(); showGameToast("😔 اوووف! نزدیک بود..."); if (selectedPlayerCount === 1 || isQuickRandomMode || conn) { if (hasBonusShot) { hasBonusShot = false; isChainMode = false; setTimeout(() => { handleBackToMenu(); }, 800); return; } } else { if (isChainMode || !targetOutInTurn) { isChainMode = false; currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; } hasBonusShot = false; } }
+            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; if (!isQuickRandomMode && !conn) updateWalletUI();
         }
 
-        function drawDynamicBorder() { 
-            ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h);
-            ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore();
-        }
-
+        function drawDynamicBorder() { ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore(); }
+        
         function loadLevel(lvl) {
-            targets = []; let count = selectedCountVal; let centerY = box.y + box.h / 2; let targetRadius = 16; let targetDiameter = targetRadius * 2;
-            let totalWidth = count * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius;
-            for (let i = 0; i < count; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY, r: targetRadius, vx: 0, vy: 0, angle: 0, isOut: false }); }
+            targets = []; let totalMarblesToPlace = selectedCountVal * selectedPlayerCount; let centerY = box.y + box.h / 2; let targetRadius = 14; let targetDiameter = targetRadius * 2;
+            let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius;
+            for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angle: 0, isOut: false }); }
         }
-
         function drawWheel(currentAngle = 0) {
             const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return;
             const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2;
@@ -617,9 +411,11 @@
             for(let i = 0; i < count; i++) {
                 let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle;
                 wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke();
-                wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(startA + sliceAngle / 2); 
-                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 14px sans-serif"; wCtx.textAlign = "right"; wCtx.textBaseline = "middle";
-                wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 10), radius - 20, 0); wCtx.restore();
+                let textAngle = startA + sliceAngle / 2; let normAngle = textAngle % (Math.PI * 2); if (normAngle < 0) normAngle += Math.PI * 2;
+                wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(textAngle); 
+                if (normAngle > Math.PI / 2 && normAngle < (3 * Math.PI) / 2) { wCtx.translate(radius - 65, 0); wCtx.rotate(Math.PI); } else { wCtx.translate(radius - 65, 0); }
+                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 13px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle";
+                wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 12), 0, 0); wCtx.restore();
             }
             wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke();
         }
@@ -633,91 +429,31 @@
             for(let i = 1; i < count; i++) {
                 playerOrders.push(i + 1); let row = document.createElement("div"); row.className = "player-row-item";
                 row.innerHTML = `<div class="player-inputs"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}"><input type="number" id="subId_${i}" placeholder="کد ملی"><div class="order-badge" id="pBadge_${i}">نامشخص</div></div>`; namesContainer.appendChild(row);
-                document.getElementById(`subName_${i}`).oninput = () => { let temp = [currentValidName]; for(let j=1; j<count; j++){ temp.push(document.getElementById(`subName_${j}`)?.value || `بازیکن ${j+1}`); } playerNames = temp; drawWheel(0); };
+                document.getElementById(`subName_${i}`).oninput = () => { 
+                    let temp = [currentValidName]; for(let j=1; j<count; j++){ let val = document.getElementById(`subName_${j}`)?.value.trim(); temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); } 
+                    playerNames = temp; drawWheel(0); 
+                };
             }
             let tempInit = [currentValidName]; for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); } playerNames = tempInit;
             if (count > 1) { drawOrderBtn.style.display = "block"; wheelSection.style.display = "flex"; drawWheel(0); } else { drawOrderBtn.style.display = "none"; wheelSection.style.display = "none"; }
         }
-        // 🎯 موتور محاسباتی سیستم لمس (Touch) و ماوس روی بوم استادیوم برای موبایل و دسکتاپ
+
         function getEventPos(e) { 
-            let r = canvas.getBoundingClientRect(); 
-            let cX = e.clientX, cY = e.clientY; 
-            if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } 
-            else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } 
+            let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; 
+            if (e.touches && e.touches.length > 0) { cX = e.touches.clientX; cY = e.touches.clientY; } 
+            else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches.clientX; cY = e.changedTouches.clientY; } 
             return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; 
         }
-        
-        function handleStart(e) { 
-            let pos = getEventPos(e); 
-            if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) {
-                e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return;
-            }
-            if (isMoving || player.inAir) return; 
-            isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; 
-        }
-        
-        function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
-        
-        function handleEnd() {
-            if (!isAiming) return; isAiming = false;
-            let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy);
-            if (dragDist > 5) {
-                player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; 
-                targets.forEach(t => {
-                    if (t.isOut) return;
-                    let A = dy; let B = -dx; let C = dx * player.y - dy * player.x;
-                    let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B);
-                    if (lineDist < (16 + t.r)) {
-                        let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2);
-                        if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; }
-                    }
-                });
 
-                if (targetHit && closestDist < 400) {
-                    player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y;
-                    setTimeout(() => {
-                        let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0;
-                        let slideInterval = setInterval(() => {
-                            targetHit.x += Math.cos(angle) * hitSpeed; targetHit.y += Math.sin(angle) * hitSpeed; hitSpeed *= 0.88; steps++;
-                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
-                                targetHit.isOut = true; targetOutInTurn = true;
-                                if (!isQuickRandomMode) {
-                                    // 🎯 تخصیص مستقیم امتیاز برد به نام بازیکنی که شلیک کرده است
-                                    if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
-                                    let id = playerNationalIds[currentPlayerIndex] || "";
-                                    if (id === currentNationalId) { totalMarblesOwned++; } 
-                                    else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); }
-                                    updateWalletUI();
-                                }
-                                if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 50); return; }
-                            }
-                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); }
-                        }, 16);
-                    }, (closestDist / 5.5) * 15);
-                } else {
-                    let cX = player.x + dx * 6, cY = player.y + dy * 6;
-                    player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.arcHeight = Math.min(dragDist * 0.5, 140);
-                }
-                
-                // جریمه از دست دادن تیله دارایی در صورت لغزش و خروج به بیرون از کادر
-                if (!isQuickRandomMode && !targetOutInTurn && (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h)) {
-                    let id = playerNationalIds[currentPlayerIndex] || "";
-                    if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } 
-                    else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); }
-                    showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); updateWalletUI();
-                }
-                player.progress = 0; player.inAir = true; isFirstShotOfTurn = false;
-            }
-        }
         function resizeCanvas() { 
             canvas.width = window.innerWidth; canvas.height = window.innerHeight; 
             if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; }
             box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100;
         }
 
-        // ۹. لوپ اصلی گرافیک کانواس بازی (تضمین رندر تصاویر اصلی شما)
         function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
+            gameLoopRunning = true; 
             if (player.inAir) {
                 player.progress += 0.03;
                 player.x = player.startX + (player.targetX - player.startX) * player.progress + windX * player.progress * 15;
@@ -729,52 +465,36 @@
                     if (!hitAny) { setTimeout(resetRound, 300); }
                 }
             }
-
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (imgBg.complete && imgBg.naturalWidth !== 0) ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
             else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             drawDynamicBorder();
-            
             targets.forEach(t => {
                 if (!t.isOut) {
                     t.x += t.vx; t.y += t.vy; t.vx *= 0.93; t.vy *= 0.93;
-                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { t.isOut = true; targetOutInTurn = true; if (targets.filter(targetItem => !targetItem.isOut).length === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 50); return; } }
+                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
+                        t.isOut = true; targetOutInTurn = true; 
+                        if (!isQuickRandomMode) {
+                            if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
+                            let id = playerNationalIds[currentPlayerIndex] || "";
+                            if (id === currentNationalId) { totalMarblesOwned++; } 
+                            else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); }
+                            updateWalletUI();
+                        }
+                        if (targets.filter(targetItem => !targetItem.isOut).length === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; } 
+                    }
                     ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
                     else { ctx.fillStyle = "#ff5722"; ctx.fill(); }
                     ctx.restore();
                 }
             });
-            
             ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle); ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
             if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
-            else { ctx.fillStyle = "#2196f3"; ctx.fill(); }
+            else { ctx.fillStyle = currentGround.fallbackColorPlayer || "#2196f3"; ctx.fill(); }
             ctx.restore();
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
-        // 🎰 عملکرد انیمیشن شتاب‌دار دکمه چرخنده گردونه شانس بدون باگ مسدودکننده
-        document.getElementById("drawOrderBtn").onclick = function(e) {
-            e.preventDefault(); e.stopPropagation(); try{initAudio();}catch(err){} if(!saveSubPlayersData()) return; playClickSound(1);
-            let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null;
-            function animateWheel(timestamp) {
-                if (!startTimestamp) startTimestamp = timestamp;
-                let progress = timestamp - startTimestamp; let currentAngle = (1 - Math.pow(1 - (progress / 2800), 4)) * totalRotation; drawWheel(currentAngle);
-                if (progress < 2800) { requestAnimationFrame(animateWheel); } else {
-                    let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count;
-                    document.querySelector(".order-badge").innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`;
-                    let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }];
-                    for (let i = 1; i < count; i++) {
-                        let finalOrder = ((i - winningIndex + count) % count) + 1;
-                        document.getElementById(`pBadge_${i}`).innerText = `نوبت ${finalOrder}`;
-                        document.getElementById(`pBadge_${i}`).classList.add("assigned");
-                        tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder });
-                    }
-                    tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`);
-                }
-            }
-            requestAnimationFrame(animateWheel);
-        };
-
         function generateMenuPreviews() { 
             Object.keys(grounds).forEach(key => { 
                 let pCanvas = document.getElementById(`pre_${key}`); 
@@ -787,33 +507,27 @@
             }); 
         }
 
-        function preloadAssetsAndLaunch() {
-            showGameToast("⏳ در حال تدارک اتمسفر استادیوم...");
-            imgBg.src = currentGround.src || 'grass.jpg'; imgPlayer.src = '6.png'; imgTarget.src = '1.png'; runGameInitialization();
-        }
+        function preloadAssetsAndLaunch() { showGameToast("⏳ در حال تدارک اتمسفر استادیوم..."); imgBg.src = currentGround.src || 'grass.jpg'; imgPlayer.src = '6.png'; imgTarget.src = '1.png'; runGameInitialization(); }
         
         function runGameInitialization() {
+            if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; }
             setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; 
             currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); resizeCanvas();
             isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; hasBonusShot = false; isChainMode = false;
-            loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI();
-            if (!isQuickRandomMode && turnIndicator) {
-                let id = playerNationalIds[currentPlayerIndex] || "";
-                let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles} تیله)`;
-            }
-            if (!gameLoopRunning) { gameLoopRunning = true; requestAnimationFrame(gameLoop); }
+            loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI(); gameLoopRunning = true; requestAnimationFrame(gameLoop);
         }
+
         function launchGameDirectly() {
             if (isQuickRandomMode) { preloadAssetsAndLaunch(); return; }
             for (let i = 0; i < selectedPlayerCount; i++) {
                 let id = playerNationalIds[i] || "";
                 let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
                 if (pMarbles < selectedCountVal) {
-                    showCustomPopup(`❌ موجودی بازیکن ${playerNames[i]} کافی نیست! حداقل به ${selectedCountVal} تیله نیاز است.`, "💎", "ورود به صرافی", true, function() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; }); 
+                    showCustomPopup(`❌ موجودی بازیکن ${playerNames[i]} کافی نیست!`, "💎", "ورود به صرافی", true, function() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; }); 
                     return;
                 }
-                if (id === currentNationalId) { totalMarblesOwned -= selectedCountVal; } else if (id !== "") { localStorage.setItem(`marbles_${id}`, pMarbles - selectedCountVal); }
+                if (id === currentNationalId) { totalMarblesOwned -= selectedCountVal; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); } 
+                else if (id !== "") { localStorage.setItem(`marbles_${id}`, pMarbles - selectedCountVal); }
             }
             preloadAssetsAndLaunch();
         }
@@ -821,14 +535,7 @@
         function showFinalScoreboard() {
             const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pTable = document.getElementById("finalScoreTable"); const pTableBody = document.getElementById("finalTableBody"); const pAction = document.getElementById("popupActionButtons");
             if (!popup) return;
-            
-            // 🖼️ اعمال تصویر زمینه به کل صفحه پاپ‌آپ به صورت سراسری و تمام‌صفحه
-            popup.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('menu_bg.jpg') !important; background-size: cover !important; background-position: center !important; display: flex; align-items: center; justify-content: center; z-index: 160; padding: 20px;";
-            
-            // کادر جدول به حالت شیشه‌ای شفاف و ساده درآمد
-            const popupBox = popup.querySelector('.custom-popup-box');
-            if (popupBox) { popupBox.style.cssText = "background: rgba(20, 24, 33, 0.85); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid #ffeb3b; border-radius: 28px; padding: 25px 20px; width: 100%; max-width: 380px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.5);"; }
-            
+            popup.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('menu_bg.jpg') !important; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; z-index: 160; padding: 20px;";
             if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
             if (pTableBody) {
                 pTableBody.innerHTML = "";
@@ -836,96 +543,127 @@
                     let name = playerNames[i] || `بازیکن ${i + 1}`; let score = playerScores[i] || 0; let id = playerNationalIds[i] || "";
                     let totalBank = isQuickRandomMode ? "-" : ((id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0));
                     let tr = document.createElement("tr"); 
-                    tr.innerHTML = `<td style="font-weight: bold; color: #fff; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${name}</td><td style="color: #00e676; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${score} تیله برد</td><td style="color: #ffeb3b; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${totalBank}</td>`; pTableBody.appendChild(tr);
+                    tr.innerHTML = `<td style="font-weight: bold; color: #fff; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${name}</td><td style="color: #00e676; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${score} برد</td><td style="color: #ffeb3b; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${totalBank}</td>`; pTableBody.appendChild(tr);
                 }
             }
             if (pTable) pTable.style.display = "table";
             if (pAction) {
                 pAction.innerHTML = ""; const confirmBtn = document.createElement("button"); confirmBtn.className = "popup-btn success"; confirmBtn.innerText = "تایید و بازگشت به منو";
-                confirmBtn.onclick = function() { popup.style.display = "none"; if (pTable) pTable.style.display = "none"; handleBackToMenu(); }; pAction.appendChild(confirmBtn);
+                confirmBtn.onclick = function() { popup.style.display = "none"; if (pTable) pTable.style.display = "none"; gameLoopRunning = false; handleBackToMenu(); }; 
+                pAction.appendChild(confirmBtn);
             }
             popup.style.display = "flex";
         }
 
-        function switchDashboardTab(tabName) {
-            const bankTab = document.getElementById("tabBankContent"); const historyTab = document.getElementById("tabHistoryContent"); const btnBank = document.getElementById("btnTabBank"); const btnHistory = document.getElementById("btnTabHistory");
-            if (tabName === 'bank') {
-                if (bankTab) bankTab.style.display = "block"; if (historyTab) historyTab.style.display = "none";
-                if(btnBank) { btnBank.style.background = "#ff9800"; btnBank.style.color = "#000"; }
-                if(btnHistory) { btnHistory.style.background = "transparent"; btnHistory.style.color = "#aaa"; }
-            } else {
-                if (bankTab) bankTab.style.display = "none"; if (historyTab) historyTab.style.display = "block";
-                if(btnBank) { btnBank.style.background = "transparent"; btnBank.style.color = "#aaa"; }
-                if(btnHistory) { btnHistory.style.background = "#2196f3"; btnHistory.style.color = "#fff"; }
-                renderStadiumHistoryLogs(); 
-            }
+        function openSettingsDrawerMenu() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; generateMenuPreviews(); }
+        function handleDrawerExit() { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
+        function handleBackToMenu() { isReturningToMenu = true; canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex"; gearBtn.style.display = "flex"; const welcomeMsg = document.getElementById("welcomeFadingMessage"); if (welcomeMsg) { welcomeMsg.innerHTML = ""; welcomeMsg.style.opacity = "0"; } }
+        function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
+        function openStadiumStoreModal() { const modal = document.getElementById("stadiumShopModal"); if(modal) modal.style.display = "flex"; }
+        function closeStadiumStoreModal() { const modal = document.getElementById("stadiumShopModal"); if(modal) modal.style.display = "none"; }
+        function handleStorePurchase(colorCode, targetRadius, cost, productName) {
+            if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان خرید از فروشگاه نیست.", "⚠️", "متوجه شدم", true); return; }
+            if (totalMarblesOwned < cost) { showCustomPopup(`موجودی کافی نیست! به ${cost} تیله نیاز دارید.`, "⚠️", "متوجه شدم", true); return; }
+            totalMarblesOwned -= cost; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); }
+            player.baseR = targetRadius; player.r = targetRadius; currentGround.fallbackColorPlayer = colorCode;
+            updateWalletUI(); playClickSound(1.2); showCustomPopup(`🛒 خرید موفق! تیله ${productName} مجهز شد.`, "✅", "عالی", false);
         }
-        function handleShopTransaction(type, amount) {
-            if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان خرید و فروش نیست.", "⚠️", "متوجه شدم", true); return; }
-            if (type === 'buy') { totalMarblesOwned += amount; showGameToast(`🛒 حساب شما ${amount} تیله شارژ شد!`); } 
-            else {
-                if (totalMarblesOwned < amount) { showCustomPopup("موجودی تیله‌های شما کافی نیست!", "⚠️", "اصلاح مقدار", true); return; }
-                totalMarblesOwned -= amount; showGameToast(`💰 ${amount} تیله به صرافی فروخته شد.`);
-            }
-            updateWalletUI();
-        }
-
         function executeMarbleTransfer() {
             let targetId = document.getElementById("transferTargetIdInput").value.trim(); let amount = parseInt(document.getElementById("transferAmountInput").value.trim());
-            if (targetId === "" || targetId.length !== 10 || isNaN(amount) || amount <= 0 || targetId === currentNationalId || totalMarblesOwned < amount) {
-                showCustomPopup("کد ملی مقصد اشتباه است، یا موجودی بانک شما کافی نیست.", "⚠️", "اصلاح اطلاعات", true); return;
-            }
-            let targetName = localStorage.getItem(`name_${targetId}`) || `بازیکن جدید (${targetId.substring(6)})`; let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10;
-            totalMarblesOwned -= amount; targetMarbles += amount; localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles);
-            updateWalletUI(); showCustomPopup(`🎉 تعداد ${amount} تیله با موفقیت به حساب ${targetName} انتقال یافت.`, "✅", "دریافت رسید", false);
+            if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان معامله وجود ندارد.", "⚠️", "متوجه شدم", true); return; }
+            if (targetId === "" || targetId.length !== 10 || isNaN(amount) || amount <= 0 || targetId === currentNationalId || totalMarblesOwned < amount) { showCustomPopup("کد ملی مقصد اشتباه است، یا موجودی کافی نیست.", "⚠️", "اصلاح اطلاعات", true); return; }
+            let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10;
+            totalMarblesOwned -= amount; targetMarbles += amount; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles);
+            updateWalletUI(); showCustomPopup(`🎉 تعداد ${amount} تیله با موفقیت به حساب خریدار فروخته شد.`, "✅", "تایید رسید دکان", false);
             document.getElementById("transferTargetIdInput").value = ""; document.getElementById("transferAmountInput").value = "";
         }
-
-        function renderStadiumHistoryLogs() {
-            const container = document.getElementById("historyLogsContainer"); if (!container) return; container.innerHTML = "";
-            let keys = Object.keys(localStorage).filter(k => k.startsWith("name_")).map(k => k.replace("name_", ""));
-            if (keys.length === 0) { container.innerHTML = "<div style='text-align:center; color:#666; font-size:12px; padding:10px;'>هنوز مسابقه‌ای ثبت نشده است.</div>"; return; }
-            keys.forEach(id => {
-                let name = localStorage.getItem(`name_${id}`);
-                let row = document.createElement("div"); row.style.cssText = "display:flex; justify-content:space-between; background:rgba(255,255,255,0.02); padding:8px 12px; border-radius:10px; margin-bottom:5px; color:#fff; font-size:12px;";
-                row.innerHTML = `<div>👤 ${name}</div><div style='color:#00e676;'>عضو استادیوم</div>`; container.appendChild(row);
-            });
-        }
-
-        function openSettingsDrawerMenu() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; switchDashboardTab('bank'); generateMenuPreviews(); }
-        function handleDrawerExit() { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
-        function handleBackToMenu() { 
-            isReturningToMenu = true; 
-            canvas.style.display = "none"; 
-            gameHeader.style.display = "none"; 
-            setupMenu.style.display = "flex"; 
-            gearBtn.style.display = "flex"; 
-            // 🔄 پاکسازی و پنهان‌سازی قطعی متن خوش‌آمدگویی برای عدم نمایش مجدد
-            const welcomeMsg = document.getElementById("welcomeFadingMessage");
-            if (welcomeMsg) { welcomeMsg.innerHTML = ""; welcomeMsg.style.opacity = "0"; }
-        }
-        function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
+        document.getElementById("drawOrderBtn").onclick = function(e) {
+            e.preventDefault(); e.stopPropagation(); try{initAudio();}catch(err){} if(!saveSubPlayersData()) return; playClickSound(1);
+            let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null;
+            function animateWheel(timestamp) {
+                if (!startTimestamp) startTimestamp = timestamp; let progress = timestamp - startTimestamp; let progressRatio = Math.min(progress / 2800, 1); let currentAngle = (1 - Math.pow(1 - progressRatio, 4)) * totalRotation; drawWheel(currentAngle);
+                if (progress < 2800) { requestAnimationFrame(animateWheel); } else {
+                    let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count;
+                    document.querySelector(".order-badge").innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`;
+                    let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }];
+                    for (let i = 1; i < count; i++) { let finalOrder = ((i - winningIndex + count) % count) + 1; document.getElementById(`pBadge_${i}`).innerText = `نوبت ${finalOrder}`; document.getElementById(`pBadge_${i}`).classList.add("assigned"); tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder }); }
+                    tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`);
+                }
+            }
+            requestAnimationFrame(animateWheel);
+        };
 
         gearBtn.onclick = openSettingsDrawerMenu; overlay.onclick = handleDrawerExit;
         closeDrawer.onclick = () => { if(!saveSubPlayersData()) return; handleDrawerExit(); gearBtn.style.display = "none"; launchGameDirectly(); };
-        startBtn.onclick = () => { isQuickRandomMode = false; gearBtn.style.display = "none"; launchGameDirectly(); }; exitBtn.onclick = handleFinalExit;
+        startBtn.onclick = () => { isQuickRandomMode = false; if (selectedPlayerCount > 1) { if(!saveSubPlayersData()) return; } gearBtn.style.display = "none"; launchGameDirectly(); }; exitBtn.onclick = handleFinalExit;
         document.getElementById("playerCountSelect").onchange = (e) => { selectedPlayerCount = parseInt(e.target.value); updateNameInputs(selectedPlayerCount); };
         document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
+
+        function handleStart(e) { 
+            let pos = getEventPos(e); 
+            if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) { e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return; }
+            if (isMoving || player.inAir) return; 
+            isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; 
+            player.startX = player.x; player.startY = player.y; 
+        }
+        function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
+
+        function handleEnd() {
+            if (!isAiming) return; isAiming = false; player.vx = 0; player.vy = 0;
+            let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy);
+            if (dragDist > 5) {
+                player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; 
+                targets.forEach(t => {
+                    if (t.isOut) return;
+                    let A = dy; let B = -dx; let C = dx * player.y - dy * player.x;
+                    let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B);
+                    if (lineDist < (16 + t.r)) {
+                        let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2);
+                        if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; }
+                    }
+                });
+                if (targetHit && closestDist < 400) {
+                    player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y;
+                    setTimeout(() => {
+                        let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0;
+                        let slideInterval = setInterval(() => {
+                            targetHit.x += Math.cos(angle) * hitSpeed; targetHit.y += Math.sin(angle) * hitSpeed; hitSpeed *= 0.88; steps++;
+                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
+                                targetHit.isOut = true; targetOutInTurn = true;
+                                if (!isQuickRandomMode) {
+                                    if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
+                                    let id = playerNationalIds[currentPlayerIndex] || "";
+                                    if (id === currentNationalId) { totalMarblesOwned++; } 
+                                    else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); }
+                                    updateWalletUI();
+                                }
+                                if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; }
+                            }
+                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); }
+                        }, 16);
+                    }, (closestDist / 5.5) * 15);
+                } else {
+                    let cX = player.x + dx * 6, cY = player.y + dy * 6;
+                    player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.arcHeight = Math.min(dragDist * 0.5, 140);
+                }
+                if (!isQuickRandomMode && !targetHit) {
+                    if (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h) {
+                        let id = playerNationalIds[currentPlayerIndex] || "";
+                        if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } 
+                        else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); }
+                        showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); updateWalletUI();
+                    }
+                }
+                player.progress = 0; player.inAir = true; isFirstShotOfTurn = false;
+            }
+        }
 
         canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
         canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
 
-        function setupGridSelector(gridId, activeClass, callback) { 
-            const grid = document.getElementById(gridId); if(!grid) return; 
-            grid.addEventListener('click', (e) => { 
-                const item = e.target.closest('[data-val]'); if(!item) return; 
-                grid.querySelectorAll('.' + activeClass).forEach(el => el.classList.remove(activeClass)); 
-                item.classList.add(activeClass); callback(item.getAttribute('data-val')); 
-            }); 
-        }
-
+        function setupGridSelector(gridId, activeClass, callback) { const grid = document.getElementById(gridId); if(!grid) return; grid.addEventListener('click', (e) => { const item = e.target.closest('[data-val]'); if(!item) return; grid.querySelectorAll('.' + activeClass).forEach(el => el.classList.remove(activeClass)); item.classList.add(activeClass); callback(item.getAttribute('data-val')); }); }
         setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
-        setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val==='sunny'){windX=0;windY=0;}else if(val==='windy'){windX=0.08;windY=0.02;}else if(val==='rainy'){windX=0.03;windY=0.05;}else{windX=0.01;windY=0.02;} });
+        setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val==='sunny'){windX=0;windY=0;} else if(val==='windy'){windX=0.08;windY=0.02;} else if(val==='rainy'){windX=0.03;windY=0.05;} else {windX=0.01;windY=0.02;} if (typeof playWeatherPreviewSound === 'function') { playWeatherPreviewSound(val); } });
         
         if (document.readyState === "loading") { window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); } 
         else { generateMenuPreviews(); resizeCanvas(); } window.addEventListener("resize", resizeCanvas);
