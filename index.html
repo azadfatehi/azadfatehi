@@ -228,8 +228,17 @@
                     <option value="online">📡 اتصال به گوشی‌های دیگر (رادار بی‌سیم)</option>
                 </select>
             </div>
+                        <!-- 📡 کادر پیشرفته رادار چندگوشی با تعیین ظرفیت آنلاین -->
             <div id="p2pConnectionBox" style="display: none; width: 100%; max-width: 340px; background: rgba(33, 150, 243, 0.1); border: 1px dashed #2196f3; padding: 12px; border-radius: 14px; margin-top: 10px; text-align: center; direction: rtl;">
                 <div id="p2pStatusText" style="color: #2196f3; font-size: 13px; font-weight: bold; margin-bottom: 8px;">وضعیت رادار: خاموش</div>
+                <div id="onlineCountRow" style="margin-bottom: 10px;">
+                    <span style="color:#fff; font-size:12px;">تعداد گوشی‌های مسابقه:</span>
+                    <select id="onlinePlayersCount" style="background:#111; color:#fff; border:1px solid #444; border-radius:6px; padding:4px; font-size:12px;">
+                        <option value="2" selected>۲ گوشی</option>
+                        <option value="3">۳ گوشی</option>
+                        <option value="4">۴ گوشی</option>
+                    </select>
+                </div>
                 <div id="p2pActionButtons">
                     <button type="button" style="background: #2196f3; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin: 4px;" onclick="initiateRadarHost()">ایجاد اتاق مسابقه</button>
                     <button type="button" style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin: 4px;" onclick="showRadarJoinInput()">ورود به اتاق دیگران</button>
@@ -239,6 +248,7 @@
                     <button type="button" style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 4px;" onclick="connectToRadarHost()">اتصال</button>
                 </div>
             </div>
+
             <!-- 👥 کادر تولید آنلاین فیلدهای نام بازیکن بعدی و مشخصات خریدار با ترتیب اصولی -->
             <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px; width:100%; max-width:340px;">
                 <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div></div>
@@ -399,31 +409,39 @@
         function switchAuthModeToRegister() { authMode = "register"; let uField = document.getElementById("usernameInput"); let sBtn = document.getElementById("authSubmitBtn"); let fTitle = document.getElementById("authFormTitle"); if (uField) uField.style.display = "block"; if (sBtn) sBtn.style.display = "block"; if (fTitle) fTitle.innerText = "📝 عضویت بازیکن جدید"; }
 
         function processSmartAuth(actionType) {
-            let uName = document.getElementById("usernameInput").value.trim(); let uId = document.getElementById("identifierInput").value.trim();
+            let uName = document.getElementById("usernameInput") ? document.getElementById("usernameInput").value.trim() : "";
+            let uId = document.getElementById("identifierInput") ? document.getElementById("identifierInput").value.trim() : "";
             if (uId === "") { showCustomPopup("لطفاً ابتدا کد ملی خود را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
             if (uId.length !== 10) { showCustomPopup("کد ملی وارد شده باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح کد ملی", true); return; }
-            let savedName = localStorage.getItem(`name_${uId}`); isQuickRandomMode = false; isReturningToMenu = false;
+            isQuickRandomMode = false; isReturningToMenu = false;
             if (actionType === 'login') {
+                let savedName = localStorage.getItem(`name_${uId}`);
                 if (savedName === null) { showCustomPopup("این کد ملی یافت نشد! سیستم به حالت ثبت‌نام منتقل شد. نام خود را وارد کنید.", "⚠️", "ثبت‌نام جدید", true); switchAuthModeToRegister(); return; }
                 currentUsername = savedName; currentNationalId = uId; totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${uId}`)) || 10;
                 showCustomPopup(`خوش آمدید قهرمان، ${currentUsername}! اطلاعات شما تایید شد.`, "⚡", "", false); setTimeout(() => { closeCustomPopup(); enterGameDirectly(); }, 400);
             } else if (actionType === 'register') {
-                if (savedName !== null) { showCustomPopup("این کد ملی قبلاً ثبت شده است! در حال ورود به حساب...", "🔒", "متوجه شدم"); currentUsername = savedName; currentNationalId = uId; enterGameDirectly(); return; }
                 if (uName === "") { showCustomPopup("لطفاً نام فارسی خود را برای ثبت‌نام وارد کنید.", "⚠️", "متوجه شدم", true); return; }
                 localStorage.setItem(`name_${uId}`, uName); currentUsername = uName; currentNationalId = uId;
                 localStorage.setItem("currentUsername", currentUsername); localStorage.setItem("currentNationalId", currentNationalId);
                 totalMarblesOwned = 10; localStorage.setItem(`marbles_${uId}`, 10);
-                showCustomPopup(`🎉 قهرمان جدید، ${currentUsername} خوش آمدید! پروفایل ساخته و ۱۰ تیله رایگان هدیه شد!`, "🎁", "بزن بریم", false, function() { enterGameDirectly(); });
+                showCustomPopup(`🎉 قهرمان جدید، ${currentUsername} خوش آمدید!`, "🎁", "بزن بریم", false, function() { enterGameDirectly(); });
             }
         }
         function enterGameDirectly() { document.getElementById("loginScreen").style.display = "none"; setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex"; playerNames = [currentUsername]; playerNationalIds = [currentNationalId]; updateWalletUI(); }
 
         function processQuickRandomAuth() {
-            isQuickRandomMode = true; isReturningToMenu = false; document.getElementById("loginScreen").style.display = "none"; setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex";
+            isQuickRandomMode = true; isReturningToMenu = false;
+            let loginScr = document.getElementById("loginScreen"); if(loginScr) loginScr.style.display = "none";
+            if (setupMenu) setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex";
             const groundKeys = Object.keys(grounds); const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)]; selectedGroundVal = randomGround; currentGround = grounds[randomGround];
             selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
             if(selectedWeather === 'sunny') { windX = 0; windY = 0; } else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; }
             selectedCountVal = Math.floor(Math.random() * 9) + 2; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; updateWalletUI();
+        }
+        function enterGameDirectly() {
+            let loginScr = document.getElementById("loginScreen"); if(loginScr) loginScr.style.display = "none";
+            if(setupMenu) setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex";
+            playerNames = [currentUsername || "بازیکن ۱"]; playerNationalIds = [currentNationalId || ""]; updateWalletUI();
         }
         function checkSubPlayerIdAuto(index) {
             let idInput = document.getElementById(`subId_${index}`);
@@ -609,16 +627,27 @@
                 e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return;
             }
             // 📡 قفل هوشمند رادار: اگر حالت آنلاین فعال است و نوبت این گوشی نیست، پرتاب لمسی را غیرفعال کن
-            if (document.getElementById("playerCountSelect").value === "online") {
-                let isHost = playerNames[currentPlayerIndex] === (currentUsername || "میزبان");
-                if ((isHost && !isMyTurnOnline) || (!isHost && isMyTurnOnline)) {
-                    showGameToast("⏳ منتظر پرتاب حریف از گوشی مقابل باش..."); return;
-                }
+        document.getElementById("playerCountSelect").onchange = (e) => {
+            let val = e.target.value;
+            let pBox = document.getElementById("p2pConnectionBox");
+            let cRow = document.getElementById("onlineCountRow");
+            if (val === "online") {
+                if (pBox) pBox.style.display = "block";
+                if (cRow) cRow.style.display = "block";
+                selectedPlayerCount = parseInt(document.getElementById("onlinePlayersCount").value);
+                updateNameInputs(1);
+            } else {
+                selectedPlayerCount = parseInt(val);
+                if (pBox) pBox.style.display = "none";
+                updateNameInputs(selectedPlayerCount);
             }
-            if (isMoving || player.inAir) return;
-            isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y;
-            player.startX = player.x; player.startY = player.y;
-        }
+        };
+        // شنود تغییر منوی تعداد گوشی‌های آنلاین
+        document.getElementById("onlinePlayersCount").onchange = (e) => {
+            if (document.getElementById("playerCountSelect").value === "online") {
+                selectedPlayerCount = parseInt(e.target.value);
+            }
+        };
         function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
         function handleEnd() { if (!isAiming) return; isAiming = false; player.vx = 0; player.vy = 0; let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy); if (dragDist > 5) { player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; targets.forEach(t => { if (t.isOut) return; let A = dy; let B = -dx; let C = dx * player.y - dy * player.x; let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B); if (lineDist < (16 + t.r)) { let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2); if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; } } }); if (targetHit && closestDist < 400) { player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y; player.vx = Math.cos(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); player.vy = Math.sin(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); setTimeout(() => { let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0; let slideInterval = setInterval(() => { targetHit.x += Math.cos(angle) * (hitSpeed * 1.35); targetHit.y += Math.sin(angle) * (hitSpeed * 1.35); hitSpeed *= 0.88; steps++; if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) { targetHit.isOut = true; targetOutInTurn = true; if (!isQuickRandomMode) { if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; } let id = playerNationalIds[currentPlayerIndex] || ""; if (id === currentNationalId) { totalMarblesOwned++; } else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); } updateWalletUI(); } if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; } } if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); } }, 16); }, (closestDist / 5.5) * 15); } else { let cX = player.x + dx * 6, cY = player.y + dy * 6; player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.vx = dx * 0.15; player.vy = dy * 0.15; player.arcHeight = Math.min(dragDist * 0.5, 140); } if (!isQuickRandomMode && !targetHit) { if (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h) { let id = playerNationalIds[currentPlayerIndex] || ""; if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); } showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); updateWalletUI(); } } player.progress = 0; player.inAir = true; isFirstShotOfTurn = false; } }
         canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
@@ -627,6 +656,14 @@
         setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
         setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val==='sunny'){windX=0;windY=0;} else if(val==='windy'){windX=0.08;windY=0.02;} else if(val==='rainy'){windX=0.03;windY=0.05;} else {windX=0.01;windY=0.02;} if (typeof playWeatherPreviewSound === 'function') { playWeatherPreviewSound(val); } });
         if (document.readyState === "loading") { window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); } else { generateMenuPreviews(); resizeCanvas(); } window.addEventListener("resize", resizeCanvas);
+        if (document.readyState === "loading") { window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); } else { generateMenuPreviews(); resizeCanvas(); } window.addEventListener("resize", resizeCanvas);
+		        if (document.readyState === "loading") { 
+            window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); 
+        } else { 
+            generateMenuPreviews(); resizeCanvas(); 
+        } 
+        window.addEventListener("resize", resizeCanvas);
+
     </script>
 </body>
 </html>
