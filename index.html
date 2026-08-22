@@ -8,7 +8,6 @@
         /* 🪐 اصول پایه طراحی واکنش‌گرا و مدرن استادیوم */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
         body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #111; font-family: sans-serif; }
-        
         /* 🔐 استایل مدرن شیشه‌ای صفحه احراز هویت اولیه */
         #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a237e, #020716); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
         .login-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
@@ -23,24 +22,12 @@
         /* ☰ منوی اصلی و کلید همبرگری مدرن تنظیمات */
         #setupMenu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 20; }
         #gearBtn { position: fixed; top: 15px; left: 15px; background: rgba(17, 17, 22, 0.95); border: 2px solid rgba(255,255,255,0.45); border-radius: 12px; width: 48px; height: 48px; font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 140; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.15s; touch-action: manipulation; }
-        #startBtn { position: relative; width: 140px; height: 140px; border-radius: 50%; background-image: url('1.png'); background-size: cover; border: 4px solid #fff; color: white; font-size: 26px; font-weight: 900; cursor: pointer; z-index: 25; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(0,0,0,0.6); text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.8); font-family: sans-serif; }
+        #startBtn { position: relative !important; width: 140px !important; height: 140px !important; border-radius: 50% !important; background-image: url('6.png') !important; background-size: cover !important; background-position: center !important; background-repeat: no-repeat !important; border: 4px solid #ffffff !important; color: #ffffff !important; font-size: 26px !important; font-weight: 900 !important; cursor: pointer !important; z-index: 25 !important; display: flex !important; align-items: center !important; justify-content: center !important; box-shadow: 0 10px 25px rgba(0,0,0,0.65), inset -10px -10px 25px rgba(0,0,0,0.5), inset 10px 10px 25px rgba(255,255,255,0.4) !important; text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.8) !important; font-family: sans-serif !important; transition: transform 0.1s, box-shadow 0.2s !important; }
+        #startBtn:active { transform: scale(0.95) !important; box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important; }
         #startBtn:active, #gearBtn:active { transform: scale(0.95); }
 
         /* ⚙️ کشوی لغزنده تنظیمات پیشرفته استادیوم (Drawer) */
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 145; display: none; }
-
-        /* ✨ افکت مدرن متن خوش‌آمدگویی متحرک و درخشان */
-        @keyframes welcomeIntro {
-            0% { transform: scale(0.3) translateY(-50px); opacity: 0; filter: blur(10px); }
-            70% { transform: scale(1.1) translateY(10px); filter: blur(0); }
-            100% { transform: scale(1) translateY(0); opacity: 1; }
-        }
-        @keyframes textGlow {
-            0% { text-shadow: 0 0 10px rgba(255,235,59,0.6), 0 2px 4px rgba(0,0,0,0.8); }
-            50% { text-shadow: 0 0 25px rgba(255,235,59,0.9), 0 2px 10px rgba(0,230,118,0.4), 0 2px 4px rgba(0,0,0,0.8); }
-            100% { text-shadow: 0 0 10px rgba(255,235,59,0.6), 0 2px 4px rgba(0,0,0,0.8); }
-        }
-        .animate-welcome { animation: welcomeIntro 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, textGlow 2s ease-in-out infinite; }
         .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; background-image: linear-gradient(rgba(17, 17, 22, 0.93), rgba(17, 17, 22, 0.93)), url('menu_bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px; z-index: 150; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl; display: flex; flex-direction: column; align-items: center; border-radius: 25px 25px 0 0; }
         .drawer.open { bottom: 0; }
         .drawer-close-btn { background: #2196f3; border: none; color: white; padding: 14px 28px; width: 100%; max-width: 320px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
@@ -60,37 +47,33 @@
         .player-inputs input { flex: 1; padding: 10px; font-size: 13px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; outline: none; }
         .order-badge { width: 65px; padding: 10px 0; font-size: 12px; font-weight: bold; background: #333; border: 2px solid #555; border-radius: 10px; color: #aaa; text-align: center; }
         .order-badge.assigned { background: #ff9800; border-color: #fff; color: #000; box-shadow: 0 0 8px #ff9800; }
-        
         #canvas { display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        #gameHeader { display: none; width: 90vw; max-width: 430px; justify-content: space-between; align-items: center; position: fixed; top: 15px; right: 15px; z-index: 130; direction: rtl; }
-        #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3); }
-        #turnIndicator { font-size: 16px; font-weight: bold; color: #ffeb3b; background: rgba(0,0,0,0.6); padding: 6px 14px; border-radius: 10px; }
-        .lucky-wheel-btn { background: #ff9800; color: black; border: none; border-radius: 12px; padding: 10px 20px; font-size: 14px; font-weight: bold; cursor: pointer; margin-top: 15px; }
-        .wheel-container { display: none; flex-direction: column; align-items: center; margin: 15px 0; position: relative; }
-        .wheel-pointer { width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #e53935; position: absolute; top: -5px; z-index: 5; }
-        #wheelCanvas { border: 4px solid #fff; border-radius: 50%; }
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: none; align-items: center; justify-content: center; z-index: 160; padding: 20px; }
-        .custom-popup-box { background: rgba(20, 24, 33, 0.98); border-radius: 28px; padding: 30px 22px; width: 100%; max-width: 380px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.85); }
+        #gameHeader { display: none; width: 92vw; max-width: 500px; justify-content: space-between; align-items: center; position: fixed; top: 15px; right: 15px; z-index: 130; direction: rtl; gap: 10px; }
+        #turnIndicator { color: #ffffff !important; font-size: 14px; font-weight: bold; background: rgba(0, 0, 0, 0.65); padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.4); text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+        #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .custom-popup-box { background: rgba(26,26,36,0.96); border: 2px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 25px; width: 100%; max-width: 360px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.85); }
         .popup-icon { font-size: 45px; margin-bottom: 12px; display: inline-block; }
         .popup-text { font-size: 14px; line-height: 1.6; color: #fff; margin-bottom: 15px; }
         .final-actions { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
         .popup-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
         .popup-btn.success { background: linear-gradient(90deg, #4caf50, #81c784); }
         .popup-btn.danger { background: linear-gradient(90deg, #ff5722, #ff8a65); }
-        .game-toast { position: fixed; bottom: 25px; background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.15); z-index: 200; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); direction: rtl; }
+        .game-toast { position: fixed; bottom: 25px; background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.15); z-index: 500; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); direction: rtl; }
         .game-toast.show { opacity: 1; transform: translateY(0); }
-
         .enter-shop-btn { width: 100%; background: linear-gradient(135deg, #ff9800, #f57c00); color: #000; border: none; padding: 14px; border-radius: 14px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; transition: transform 0.1s; }
-        .shop-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 180; padding: 15px; }
-        .shop-modal-box { background: rgba(20, 24, 33, 0.95); border: 2px solid rgba(255, 235, 59, 0.2); border-radius: 28px; padding: 20px; width: 100%; max-width: 390px; max-height: 90vh; overflow-y: auto; direction: rtl; box-shadow: 0 25px 50px rgba(0,0,0,0.7); }
+        .shop-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 350 !important; padding: 10px; pointer-events: auto !important; }
+        .shop-modal-box { background: rgba(20, 24, 33, 0.98); border: 2px solid rgba(255, 235, 59, 0.2); border-radius: 24px; padding: 15px; width: 100%; max-width: 380px; max-height: 92vh; overflow-y: auto; direction: rtl; box-shadow: 0 25px 50px rgba(0,0,0,0.7); position: relative; z-index: 360 !important; }
         .shop-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
         .shop-close-btn { background: #e53935; color: white; border: none; border-radius: 10px; padding: 6px 14px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .shop-products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 15px; }
-        .product-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 10px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 6px; }
-        .product-marble-preview { width: 32px; height: 32px; border-radius: 50%; box-shadow: inset -5px -5px 10px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.3); }
+        .shop-products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; width: 100%; }
+        .product-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; width: 100%; }
+        .product-marble-wrapper { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.05); box-shadow: inset -3px -3px 8px rgba(0,0,0,0.6), 0 3px 6px rgba(0,0,0,0.3); padding: 0; margin-bottom: 4px; }
+        .product-marble-preview { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 50% !important; display: block !important; margin: 0 !important; padding: 0 !important; }
         .product-title { font-size: 11px; color: #fff; font-weight: bold; }
         .product-price { font-size: 11px; color: #ffeb3b; }
         .product-buy-btn { width: 100%; background: #4caf50; color: white; border: none; padding: 6px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .product-card input { user-select: text !important; -webkit-user-select: text !important; }
     </style>
 </head>
 <body>
@@ -118,9 +101,7 @@
         </div>
         <button id="startBtn">شروع</button>
     </div>
-
     <button id="gearBtn" style="display: none;">☰</button>
-
     <div class="custom-popup-overlay" id="gamePopup">
         <div class="custom-popup-box">
             <span class="popup-icon" id="popupIcon">🎉</span>
@@ -140,7 +121,6 @@
             </div>
         </div>
     </div>
-
     <div class="drawer-overlay" id="overlay"></div>
     <div class="drawer" id="settingsDrawer">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; margin-top: 5px; margin-bottom: 20px; padding: 0 5px; direction: rtl;">
@@ -178,20 +158,21 @@
                     <option value="6">۶ نفره</option>
                 </select>
             </div>
-            
-            <!-- 👥 کادر تولید آنلاین فیلدهای نام بازیکن بعدی و مشخصات خریدار -->
-            <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px;">
-                <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" disabled></div></div>
+            <!-- 👥 کادر تولید آنلاین فیلدهای نام بازیکن بعدی و مشخصات خریدار با ترتیب اصولی -->
+            <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px; width:100%; max-width:340px;">
+                <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div></div>
             </div>
             
-            <!-- 🎰 گردونه و دکمه قرعه‌کشی تعیین نوبت شروع بازی -->
-            <button class="lucky-wheel-btn" id="drawOrderBtn" style="display: none;">🎰 ببینیم نوبت اول کیه ؟</button>
-            <div class="wheel-container" id="wheelSection"><div class="wheel-pointer"></div><canvas id="wheelCanvas" width="240" height="240"></canvas></div>
-            <!-- 🏪 جعبه شیک کلید ورود به فروشگاه مرکزی استادیوم (بدون فیلدهای دکان قبلی) -->
+            <!-- 🎰 گردونه و دکمه قرعه‌کشی تعیین نوبت شروع بازی همراه با نشانگر فیزیکی نوبت -->
+            <button class="lucky-wheel-btn" id="drawOrderBtn" style="display: none; width: 100%; max-width: 260px; padding: 12px; background: linear-gradient(135deg, #673ab7, #512da8); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px;">🎰 ببینیم نوبت اول کیه ؟</button>
+            <div class="wheel-container" id="wheelSection" style="position: relative; width: 240px; height: 240px; margin-top: 15px; display: none; justify-content: center; align-items: center;">
+                <div class="wheel-pointer" style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #ff9800; z-index: 10;"></div>
+                <canvas id="wheelCanvas" width="240" height="240" style="width: 100%; height: 100%;"></canvas>
+            </div>
+            <!-- 🏪 جعبه شیک کلید ورود به فروشگاه مرکزی استادیوم -->
             <div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
                 <button type="button" class="enter-shop-btn" onclick="openStadiumStoreModal()">🏪 ورود به فروشگاه مرکزی استادیوم</button>
             </div>
-
             <div class="menu-row" style="margin-top: 20px;">
                 <label>با چند تا تیله بریم بازی؟</label>
                 <select class="custom-select" id="marbleCountSelect">
@@ -203,7 +184,6 @@
             <button class="drawer-close-btn" id="closeDrawer" style="margin-top: 15px; margin-bottom: 10px;">همه چی عالی شد! بریم؟</button>
         </div>
     </div>
-
     <div id="gameHeader">
         <div style="display: flex; gap: 8px;">
             <button id="exitBtn">خروج</button>
@@ -214,41 +194,55 @@
 
     <canvas id="canvas"></canvas>
 
-    <!-- 🏪 لایه پاپ‌آ‌پ شیک دکان و فروشگاه آنلاین مرکزی بر اساس رنگ و ابعاد -->
+    <!-- 🏪 لایه پاپ‌آ‌پ شیک دکان و فروشگاه آنلاین مرکزی با تراز دایره‌ای عکس‌ها -->
     <div class="shop-modal-overlay" id="stadiumShopModal">
         <div class="shop-modal-box">
             <div class="shop-modal-header">
                 <h3 style="color: #ffeb3b; font-size: 14px; margin: 0;">🏪 صرافی و فروشگاه اینترنتی تیله</h3>
                 <button class="shop-close-btn" onclick="closeStadiumStoreModal()">بستن دکان</button>
             </div>
-            
             <div class="shop-products-grid">
                 <div class="product-card">
-                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #00e676, #004d40);"></div>
+                    <div class="product-marble-wrapper"><img src="emerald.png" class="product-marble-preview" alt="تیله زمرد" onerror="this.style.background='radial-gradient(circle at 35% 35%, #00e676, #004d40)'"></div>
                     <div class="product-title">تیله زمرد (معمولی)</div>
-                    <div class="product-price">💰 ۵ تیله</div>
-                    <button class="product-buy-btn" onclick="handleStorePurchase('#00e676', 22, 5, 'زمرد معمولی')">🛒 خرید</button>
+                    <div class="product-price">قیمت واحد: ۵ تیله</div>
+                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
+                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
+                        <input type="number" id="qty_emerald" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
+                    </div>
+                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#00e676', 22, 5, 'زمرد معمولی', 'qty_emerald')">🛒 خرید کالا</button>
                 </div>
                 <div class="product-card">
-                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #ff1744, #4a0007); width: 36px; height: 36px;"></div>
+                    <div class="product-marble-wrapper"><img src="ruby.png" class="product-marble-preview" alt="یاقوت لوکس" onerror="this.style.background='radial-gradient(circle at 35% 35%, #ff1744, #4a0007)'"></div>
                     <div class="product-title">یاقوت لوکس (بزرگ)</div>
-                    <div class="product-price">💰 ۱۲ تیله</div>
-                    <button class="product-buy-btn" onclick="handleStorePurchase('#ff1744', 28, 12, 'یاقوت بزرگ')">🛒 خرید</button>
+                    <div class="product-price">قیمت واحد: ۱۲ تیله</div>
+                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
+                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
+                        <input type="number" id="qty_ruby" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
+                    </div>
+                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#ff1744', 28, 12, 'یاقوت بزرگ', 'qty_ruby')">🛒 خرید کالا</button>
                 </div>
                 <div class="product-card">
-                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #2979ff, #0a192f); width: 26px; height: 26px;"></div>
+                    <div class="product-marble-wrapper"><img src="cobalt.png" class="product-marble-preview" alt="کبالت سرعتی" onerror="this.style.background='radial-gradient(circle at 35% 35%, #2979ff, #0a192f)'"></div>
                     <div class="product-title">کبالت سرعتی (ریز)</div>
-                    <div class="product-price">💰 ۴ تیله</div>
-                    <button class="product-buy-btn" onclick="handleStorePurchase('#2979ff', 17, 4, 'کبالت ریز')">🛒 خرید</button>
+                    <div class="product-price">قیمت واحد: ۴ تیله</div>
+                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
+                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
+                        <input type="number" id="qty_cobalt" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
+                    </div>
+                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#2979ff', 17, 4, 'کبالت ریز', 'qty_cobalt')">🛒 خرید کالا</button>
                 </div>
                 <div class="product-card">
-                    <div class="product-marble-preview" style="background: radial-gradient(circle at 35% 35%, #ffd700, #ff8f00);"></div>
+                    <div class="product-marble-wrapper"><img src="gold.png" class="product-marble-preview" alt="طلایی استادیوم" onerror="this.style.background='radial-gradient(circle at 35% 35%, #ffd700, #ff8f00)'"></div>
                     <div class="product-title">طلایی استادیوم (ویژه)</div>
-                    <div class="product-price">💰 ۱۵ تیله</div>
-                    <button class="product-buy-btn" onclick="handleStorePurchase('#ffd700', 22, 15, 'طلایی ویژه')">🛒 خرید</button>
+                    <div class="product-price">قیمت واحد: ۱۵ تیله</div>
+                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
+                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
+                        <input type="number" id="qty_gold" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
+                    </div>
+                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#ffd700', 22, 15, 'طلایی ویژه', 'qty_gold')">🛒 خرید کالا</button>
                 </div>
             </div>
-
             <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); margin-top: 15px;">
                 <div style="color: #00e676; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 10px;">🤝 فروش تیله شخصی به بازیکن دیگر</div>
                 <input type="number" id="transferTargetIdInput" placeholder="کد ملی خریدار (۱۰ رقمی)" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #111; color: #fff; text-align: center; font-size: 13px; margin-bottom: 10px; outline: none;">
@@ -257,7 +251,7 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com"></script>
+
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -276,7 +270,6 @@
         let currentUsername = localStorage.getItem("currentUsername") || "";
         let currentNationalId = localStorage.getItem("currentNationalId") || "";
         let authMode = "login"; let gameLoopRunning = false; let isQuickRandomMode = false; let isReturningToMenu = false; 
-        
         let playerNames = ["بازیکن ۱"]; let playerNationalIds = []; let currentPlayerIndex = 0;
         let peer = null; let conn = null; let isMyTurnOnline = true;
         let isFirstShotOfTurn = true; let currentLevel = 1; let isAiming = false; let isMoving = false;
@@ -284,8 +277,7 @@
         let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
         let windX = 0; let windY = 0; let selectedWeather = "sunny"; let weatherParticles = []; let windLines = [];
         let box = { x: 40, y: 60, w: 320, h: 220 };
-
-        let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
+        let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, angleX: 0, angleY: 0, z: 0, progress: 0, arcHeight: 0, inAir: false }; 
         let targets = []; let selectedPlayerCount = 1; let playerScores = []; let playerOrders = [];
 
         function showCustomPopup(text, icon, btnText, isError, callback) {
@@ -296,7 +288,6 @@
             popup.style.display = "flex";
         }
         function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
-        
         const grounds = {
             grass:   { friction: 0.93, wind: 0.08, src: 'grass.jpg',   fallbackColor: '#2e7d32' },
             carpet:  { friction: 0.91, wind: 0.02, src: 'carpet.jpg',  fallbackColor: '#b71c1c' },
@@ -320,10 +311,10 @@
             if (turnIndicator && playerNames && playerNames[currentPlayerIndex]) {
                 let id = playerNationalIds ? (playerNationalIds[currentPlayerIndex] || "") : "";
                 let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                turnIndicator.innerText = `نوبت: ${playerNames[currentPlayerIndex]} (بانک: ${pMarbles} تیله)`;
+                // الحاق متن نوبت دهی با کادر شیشه‌ای و سفید رنگ
+                turnIndicator.innerHTML = `🏁 نوبت: <span style="color:#ffeb3b;">${playerNames[currentPlayerIndex]}</span> (💰 بانک: <span style="color:#00e676; font-weight:900;">${pMarbles}</span> تیله)`;
             }
         }
-
         function switchAuthModeToRegister() { authMode = "register"; let uField = document.getElementById("usernameInput"); let sBtn = document.getElementById("authSubmitBtn"); let fTitle = document.getElementById("authFormTitle"); if (uField) uField.style.display = "block"; if (sBtn) sBtn.style.display = "block"; if (fTitle) fTitle.innerText = "📝 عضویت بازیکن جدید"; }
 
         function processSmartAuth(actionType) {
@@ -353,7 +344,34 @@
             if(selectedWeather === 'sunny') { windX = 0; windY = 0; } else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; }
             selectedCountVal = Math.floor(Math.random() * 9) + 2; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; updateWalletUI();
         }
-
+        function checkSubPlayerIdAuto(index) {
+            let idInput = document.getElementById(`subId_${index}`);
+            let nameInput = document.getElementById(`subName_${index}`);
+            if (!idInput || !nameInput) return;
+            let uId = idInput.value.trim();
+            if (uId.length === 10) {
+                let savedName = localStorage.getItem(`name_${uId}`);
+                if (savedName !== null) {
+                    nameInput.value = savedName; nameInput.disabled = true;
+                    nameInput.style.backgroundColor = "rgba(76, 175, 80, 0.15)"; nameInput.style.borderColor = "#4caf50";
+                    showGameToast(`👤 بازیکن ${savedName} شناسایی و قفل شد.`);
+                    let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
+                    let temp = [currentValidName];
+                    for(let j = 1; j < selectedPlayerCount; j++) {
+                        let val = document.getElementById(`subName_${j}`)?.value.trim();
+                        temp.push(val !== "" && val ? val : `بازیکن ${j+1}`);
+                    }
+                    playerNames = temp; drawWheel(0);
+                } else {
+                    nameInput.disabled = false; nameInput.style.backgroundColor = "rgba(26,26,26,0.9)"; nameInput.style.borderColor = "#444";
+                }
+            } else {
+                if (nameInput.disabled) {
+                    nameInput.disabled = false; nameInput.value = "";
+                    nameInput.style.backgroundColor = "rgba(26,26,26,0.9)"; nameInput.style.borderColor = "#444";
+                }
+            }
+        }
         function saveSubPlayersData() {
             if (isQuickRandomMode || conn) return true; 
             let count = selectedPlayerCount;
@@ -363,7 +381,7 @@
             for (let i = 1; i < count; i++) {
                 let subNameInput = document.getElementById(`subName_${i}`); let subIdInput = document.getElementById(`subId_${i}`);
                 let subName = subNameInput ? subNameInput.value.trim() : ""; let subId = subIdInput ? subIdInput.value.trim() : "";
-                if (subName === "" || subId === "") { showCustomPopup(`لطفاً اطلاعات بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true); return false; }
+                if (subId === "" || subName === "") { showCustomPopup(`لطفاً اطلاعات بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true); return false; }
                 if (subId.length !== 10) { showCustomPopup(`کد ملی بازیکن شماره ${i + 1} باید ۱۰ رقم باشد.`, "⚠️", "اصلاح کد ملی", true); return false; }
                 localStorage.setItem(`name_${subId}`, subName);
                 if (localStorage.getItem(`marbles_${subId}`) === null) { localStorage.setItem(`marbles_${subId}`, 10); showGameToast(`🎁 ۱۰ تیله هدیه خوش‌آمدهای به بانک ${subName} واریز شد!`); }
@@ -371,97 +389,73 @@
             }
             playerNames = tempNames; return true;
         }
-
         function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) { console.log("سیستم صوتی موقتاً در دسترس نیست."); } }
         function playWelcomeMelodySound() { try { initAudio(); let now = audioCtx.currentTime; const notes = [523.25, 659.25, 783.99]; notes.forEach((freq, index) => { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(freq, now + (index * 0.08)); gain.gain.setValueAtTime(0.18, now + (index * 0.08)); gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.6); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.65); }); } catch(e) {} }
-        function playClickSound(intensity = 0.5) { try { initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity, 1.2)); let oscMain = audioCtx.createOscillator(); let gainMain = audioCtx.createGain(); oscMain.type = "triangle"; oscMain.frequency.setValueAtTime(650 + (vol * 250), now); oscMain.frequency.exponentialRampToValueAtTime(120, now + 0.04); gainMain.gain.setValueAtTime(vol * 0.85, now); gainMain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05); oscMain.connect(gainMain); gainMain.connect(audioCtx.destination); oscMain.start(now); oscMain.stop(now + 0.06); } catch(e) {} }
-        function playCheeringSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<5; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(280 + (i * 55), now); osc.frequency.linearRampToValueAtTime(480 + (i * 25), now + 1.2); gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.4); } } catch(e){} }
+        
+        // 🔮 تولید صدای کریستالی برخورد سنگ دو تیله واقعی بر اساس شدت برخورد
+        function playClickSound(intensity = 0.5) { try { initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity * 1.3, 1.5)); let oscMain = audioCtx.createOscillator(); let gainMain = audioCtx.createGain(); oscMain.type = "triangle"; oscMain.frequency.setValueAtTime(750 + (vol * 300), now); oscMain.frequency.exponentialRampToValueAtTime(140, now + 0.03); gainMain.gain.setValueAtTime(vol * 0.95, now); gainMain.gain.exponentialRampToValueAtTime(0.0001, now + 0.04); oscMain.connect(gainMain); gainMain.connect(audioCtx.destination); oscMain.start(now); oscMain.stop(now + 0.05); } catch(e) {} }
+        // 🔊 صدای هورای پرشور تماشاگران استادیوم برای پرتاب‌های موفق
+        function playCheeringSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<6; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(300 + (i * 60), now); osc.frequency.linearRampToValueAtTime(500 + (i * 30), now + 1.4); gain.gain.setValueAtTime(0.28, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.5); } } catch(e){} }
+        // 🔊 صدای آه و حسرت تماشاگران استادیوم در صورت خطا رفتن شلیک
+        function playDisappointmentSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<4; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(220 + (i * 20), now); osc.frequency.linearRampToValueAtTime(110 + (i * 8), now + 0.95); gain.gain.setValueAtTime(0.38, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.05); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.05); } } catch(e){} }
         function playStadiumGoalHornSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<3; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sawtooth"; osc.frequency.setValueAtTime(220 + (i * 2), now); gain.gain.setValueAtTime(0.3, now); gain.gain.linearRampToValueAtTime(0.3, now + 1.5); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.8); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.8); } } catch(e){} }
-        function playDisappointmentSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<3; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(240 + (i * 25), now); osc.frequency.linearRampToValueAtTime(130 + (i * 10), now + 0.85); gain.gain.setValueAtTime(0.35, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.95); } } catch(e){} }
         function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
         function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
         function playWeatherPreviewSound(type) { startAmbientSound(type); }
         function initWeatherParticles() { weatherParticles = []; let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80); let wW = window.innerWidth || canvas.width || 400; let wH = window.innerHeight || canvas.height || 600; for(let i=0; i<count; i++) { weatherParticles.push({ x: Math.random() * wW, y: Math.random() * wH, v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1), r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2), opacity: Math.random() * 0.5 + 0.3 }); } }
-        function initWindLines() { windLines = []; if (selectedWeather === "sunny") return; let count = selectedWeather === "windy" ? 25 : 10; for (let i = 0; i < count; i++) { windLines.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, w: Math.random() * 80 + 40, h: Math.random() * 1.5 + 0.5, v: Math.random() * 4 + 3, opacity: Math.random() * 0.2 + 0.05 }); } }
+        function initWindLines() { windLines = []; if (selectedWeather === "sunny") return; let count = selectedWeather === "windy" ? 25 : 10; let wW = canvas.width || window.innerWidth || 400; let wH = canvas.height || window.innerHeight || 600; for (let i = 0; i < count; i++) { windLines.push({ x: Math.random() * wW, y: Math.random() * wH, w: Math.random() * 80 + 40, h: Math.random() * 1.5 + 0.5, v: Math.random() * 4 + 3, opacity: Math.random() * 0.2 + 0.05 }); } }
         function updateWeatherParticles() { weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } }); windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } }); }
-        function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } ctx.restore(); }
+        function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } if (selectedWeather === "windy" || selectedWeather === "rainy" || selectedWeather === "snowy") { windLines.forEach(w => { ctx.fillStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.fillRect(w.x, w.y, w.w, w.h); }); } ctx.restore(); }
         function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
-
         function resetRound() {
-            player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; isMoving = false; 
+            player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; isMoving = false;
             let activeTargets = targets.filter(t => !t.isOut).length;
             if (activeTargets === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 400); return; }
-            let nX = canvas.width / 2; let nY = canvas.height - 100; player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0;
-            if (targetOutInTurn) { playCheeringSound(); hasBonusShot = true; showGameToast("🎯 شلیک عالی! هوراااا"); } 
-            else { playDisappointmentSound(); showGameToast("😔 اوووف! نزدیک بود..."); if (selectedPlayerCount === 1 || isQuickRandomMode || conn) { if (hasBonusShot) { hasBonusShot = false; isChainMode = false; setTimeout(() => { handleBackToMenu(); }, 800); return; } } else { if (isChainMode || !targetOutInTurn) { isChainMode = false; currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; } hasBonusShot = false; } }
+            let nX = canvas.width / 2; let nY = canvas.height - 100; player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0; player.angleX = 0; player.angleY = 0;
+            if (targetOutInTurn) {
+                playCheeringSound(); // 🔊 صدای هورای تماشاچیان در صورت خروج موفق تیله هدف
+                hasBonusShot = true; showGameToast("🎯 شلیک عالی! هوراااا");
+            } else {
+                playDisappointmentSound(); // 🔊 صدای آه و افسوس تماشاچیان در صورت عدم خروج یا پرتاب ناموفق
+                showGameToast("😔 اوووف! نزدیک بود...");
+                if (selectedPlayerCount === 1 || isQuickRandomMode || conn) { hasBonusShot = false; isChainMode = false; } else {
+                    if (isChainMode || !targetOutInTurn) { isChainMode = false; currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; }
+                    hasBonusShot = false;
+                }
+            }
             isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; if (!isQuickRandomMode && !conn) updateWalletUI();
         }
-
         function drawDynamicBorder() { ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore(); }
-        
-        function loadLevel(lvl) {
-            targets = []; let totalMarblesToPlace = selectedCountVal * selectedPlayerCount; let centerY = box.y + box.h / 2; let targetRadius = 14; let targetDiameter = targetRadius * 2;
-            let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius;
-            for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angle: 0, isOut: false }); }
-        }
-        function drawWheel(currentAngle = 0) {
-            const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return;
-            const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2;
-            wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count;
-            for(let i = 0; i < count; i++) {
-                let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle;
-                wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke();
-                let textAngle = startA + sliceAngle / 2; let normAngle = textAngle % (Math.PI * 2); if (normAngle < 0) normAngle += Math.PI * 2;
-                wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(textAngle); 
-                if (normAngle > Math.PI / 2 && normAngle < (3 * Math.PI) / 2) { wCtx.translate(radius - 65, 0); wCtx.rotate(Math.PI); } else { wCtx.translate(radius - 65, 0); }
-                wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 13px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle";
-                wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 12), 0, 0); wCtx.restore();
-            }
-            wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke();
-        }
-
-        function updateNameInputs(count) {
-            namesContainer.innerHTML = ""; playerOrders = []; const drawOrderBtn = document.getElementById("drawOrderBtn"); const wheelSection = document.getElementById("wheelSection");
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
-            let mainRow = document.createElement("div"); mainRow.className = "player-row-item";
-            mainRow.innerHTML = `<div class="player-inputs"><input type="text" value="${currentValidName}" disabled><div class="order-badge assigned">نوبت ۱</div></div>`;
-            namesContainer.appendChild(mainRow); playerOrders.push(1);
-            for(let i = 1; i < count; i++) {
-                playerOrders.push(i + 1); let row = document.createElement("div"); row.className = "player-row-item";
-                row.innerHTML = `<div class="player-inputs"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}"><input type="number" id="subId_${i}" placeholder="کد ملی"><div class="order-badge" id="pBadge_${i}">نامشخص</div></div>`; namesContainer.appendChild(row);
-                document.getElementById(`subName_${i}`).oninput = () => { 
-                    let temp = [currentValidName]; for(let j=1; j<count; j++){ let val = document.getElementById(`subName_${j}`)?.value.trim(); temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); } 
-                    playerNames = temp; drawWheel(0); 
-                };
-            }
-            let tempInit = [currentValidName]; for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); } playerNames = tempInit;
-            if (count > 1) { drawOrderBtn.style.display = "block"; wheelSection.style.display = "flex"; drawWheel(0); } else { drawOrderBtn.style.display = "none"; wheelSection.style.display = "none"; }
-        }
-
-        function getEventPos(e) { 
-            let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; 
-            if (e.touches && e.touches.length > 0) { cX = e.touches.clientX; cY = e.touches.clientY; } 
-            else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches.clientX; cY = e.changedTouches.clientY; } 
-            return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; 
-        }
-
-        function resizeCanvas() { 
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight; 
-            if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; }
-            box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100;
-        }
-
+        function loadLevel(lvl) { targets = []; let totalMarblesToPlace = selectedCountVal * selectedPlayerCount; let centerY = box.y + box.h / 2; let targetRadius = 14; let targetDiameter = targetRadius * 2; let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius; for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angle: 0, angleX: 0, angleY: 0, isOut: false }); } }
+        function drawWheel(currentAngle = 0) { const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return; const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2; wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count; for(let i = 0; i < count; i++) { let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle; wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke(); let textAngle = startA + sliceAngle / 2; let normAngle = textAngle % (Math.PI * 2); if (normAngle < 0) normAngle += Math.PI * 2; wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(textAngle); if (normAngle > Math.PI / 2 && normAngle < (3 * Math.PI) / 2) { wCtx.translate(radius - 65, 0); wCtx.rotate(Math.PI); } else { wCtx.translate(radius - 65, 0); } wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 13px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle"; wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 12), 0, 0); wCtx.restore(); } wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke(); }
+        function updateNameInputs(count) { namesContainer.innerHTML = ""; playerOrders = []; const drawOrderBtn = document.getElementById("drawOrderBtn"); const wheelSection = document.getElementById("wheelSection"); let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱"; let mainRow = document.createElement("div"); mainRow.className = "player-row-item"; mainRow.innerHTML = `<div class="player-inputs"><input type="text" value="${currentValidName}" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div>`; namesContainer.appendChild(mainRow); playerOrders.push(1); for(let i = 1; i < count; i++) { playerOrders.push(i + 1); let row = document.createElement("div"); row.className = "player-row-item"; row.innerHTML = `<div class="player-inputs"><input type="number" id="subId_${i}" placeholder="کد ملی بازیکن ${i + 1}" oninput="checkSubPlayerIdAuto(${i})" style="width:40%;"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}" style="width:40%;"><div class="order-badge" id="pBadge_${i}" style="width:20%; font-size:11px;">نامشخص</div></div>`; namesContainer.appendChild(row); document.getElementById(`subName_${i}`).oninput = () => { let temp = [currentValidName]; for(let j=1; j<count; j++){ let val = document.getElementById(`subName_${j}`)?.value.trim(); temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); } playerNames = temp; drawWheel(0); }; } let tempInit = [currentValidName]; for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); } playerNames = tempInit; if (count > 1) { drawOrderBtn.style.display = "block"; wheelSection.style.display = "flex"; drawWheel(0); } else { drawOrderBtn.style.display = "none"; wheelSection.style.display = "none"; } }
+        function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; } box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100; }
         function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
-            gameLoopRunning = true; 
+            gameLoopRunning = true;
             if (player.inAir) {
                 player.progress += 0.03;
                 player.x = player.startX + (player.targetX - player.startX) * player.progress + windX * player.progress * 15;
                 player.y = player.startY + (player.targetY - player.startY) * player.progress + windY * player.progress * 15;
-                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; player.r = player.baseR + player.z * 0.35; player.angle += 0.15; 
+                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight;
+                player.r = player.baseR + player.z * 0.35;
+                player.angleX += player.vx * 0.05; player.angleY += player.vy * 0.05; player.angle += 0.15;
                 if (player.progress >= 1) {
-                    player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; playClickSound(0.5); let hitAny = false;
-                    targets.forEach(t => { if (!t.isOut) { let dx = t.x - player.x, dy = t.y - player.y; if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) { hitAny = true; playClickSound(0.9); t.vx = Math.cos(Math.atan2(dy, dx)) * 5.5; t.vy = Math.sin(Math.atan2(dy, dx)) * 5.5; } } });
+                    player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
+                    playClickSound(0.5); let hitAny = false;
+                    targets.forEach(t => {
+                        if (!t.isOut) {
+                            let dx = t.x - player.x, dy = t.y - player.y;
+                            if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) {
+                                hitAny = true;
+                                let hitSpeed = Math.sqrt(player.vx*player.vx + player.vy*player.vy) || 5.5;
+                                playClickSound(hitSpeed / 6);
+                                t.vx = Math.cos(Math.atan2(dy, dx)) * (hitSpeed * 1.35);
+                                t.vy = Math.sin(Math.atan2(dy, dx)) * (hitSpeed * 1.35);
+                            }
+                        }
+                    });
                     if (!hitAny) { setTimeout(resetRound, 300); }
                 }
             }
@@ -471,202 +465,60 @@
             drawDynamicBorder();
             targets.forEach(t => {
                 if (!t.isOut) {
-                    t.x += t.vx; t.y += t.vy; t.vx *= 0.93; t.vy *= 0.93;
-                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) { 
-                        t.isOut = true; targetOutInTurn = true; 
+                    t.x += t.vx; t.y += t.vy; t.vx *= currentGround.friction; t.vy *= currentGround.friction;
+                    t.angleX += t.vx * 0.05; t.angleY += t.vy * 0.05; t.angle += (Math.abs(t.vx) + Math.abs(t.vy)) * 0.02;
+                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) {
+                        t.isOut = true; targetOutInTurn = true;
                         if (!isQuickRandomMode) {
                             if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
                             let id = playerNationalIds[currentPlayerIndex] || "";
-                            if (id === currentNationalId) { totalMarblesOwned++; } 
-                            else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); }
+                            if (id === currentNationalId) { totalMarblesOwned++; } else if (id !== "") {
+                                let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1);
+                            }
                             updateWalletUI();
                         }
-                        if (targets.filter(targetItem => !targetItem.isOut).length === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; } 
+                        if (targets.filter(targetItem => !targetItem.isOut).length === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; }
                     }
                     ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
                     if (imgTarget.complete && imgTarget.naturalWidth !== 0) ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
-                    else { ctx.fillStyle = "#ff5722"; ctx.fill(); }
-                    ctx.restore();
+                    else { ctx.fillStyle = "#ff5722"; ctx.fill(); } ctx.restore();
                 }
             });
             ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle); ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
             if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
-            else { ctx.fillStyle = currentGround.fallbackColorPlayer || "#2196f3"; ctx.fill(); }
-            ctx.restore();
+            else { ctx.fillStyle = currentGround.fallbackColorPlayer || "#2196f3"; ctx.fill(); } ctx.restore();
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
-        function generateMenuPreviews() { 
-            Object.keys(grounds).forEach(key => { 
-                let pCanvas = document.getElementById(`pre_${key}`); 
-                if (pCanvas) { 
-                    let pCtx = pCanvas.getContext("2d"); pCanvas.width = 70; pCanvas.height = 70; 
-                    let tempImg = new Image(); tempImg.src = grounds[key].src;
-                    tempImg.onload = function() { pCtx.drawImage(tempImg, 0, 0, 70, 70); };
-                    tempImg.onerror = function() { pCtx.fillStyle = grounds[key].fallbackColor; pCtx.fillRect(0, 0, 70, 70); };
-                } 
-            }); 
-        }
-
+        function generateMenuPreviews() { Object.keys(grounds).forEach(key => { let pCanvas = document.getElementById(`pre_${key}`); if (pCanvas) { let pCtx = pCanvas.getContext("2d"); pCanvas.width = 70; pCanvas.height = 70; let tempImg = new Image(); tempImg.src = grounds[key].src; tempImg.onload = function() { pCtx.drawImage(tempImg, 0, 0, 70, 70); }; tempImg.onerror = function() { pCtx.fillStyle = grounds[key].fallbackColor; pCtx.fillRect(0, 0, 70, 70); }; } }); }
         function preloadAssetsAndLaunch() { showGameToast("⏳ در حال تدارک اتمسفر استادیوم..."); imgBg.src = currentGround.src || 'grass.jpg'; imgPlayer.src = '6.png'; imgTarget.src = '1.png'; runGameInitialization(); }
-        
-        function runGameInitialization() {
-            if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; }
-            setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; 
-            currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); resizeCanvas();
-            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; hasBonusShot = false; isChainMode = false;
-            loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI(); gameLoopRunning = true; requestAnimationFrame(gameLoop);
-        }
-
-        function launchGameDirectly() {
-            if (isQuickRandomMode) { preloadAssetsAndLaunch(); return; }
-            for (let i = 0; i < selectedPlayerCount; i++) {
-                let id = playerNationalIds[i] || "";
-                let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                if (pMarbles < selectedCountVal) {
-                    showCustomPopup(`❌ موجودی بازیکن ${playerNames[i]} کافی نیست!`, "💎", "ورود به صرافی", true, function() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; }); 
-                    return;
-                }
-                if (id === currentNationalId) { totalMarblesOwned -= selectedCountVal; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); } 
-                else if (id !== "") { localStorage.setItem(`marbles_${id}`, pMarbles - selectedCountVal); }
-            }
-            preloadAssetsAndLaunch();
-        }
-
-        function showFinalScoreboard() {
-            const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pTable = document.getElementById("finalScoreTable"); const pTableBody = document.getElementById("finalTableBody"); const pAction = document.getElementById("popupActionButtons");
-            if (!popup) return;
-            popup.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('menu_bg.jpg') !important; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; z-index: 160; padding: 20px;";
-            if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
-            if (pTableBody) {
-                pTableBody.innerHTML = "";
-                for (let i = 0; i < selectedPlayerCount; i++) {
-                    let name = playerNames[i] || `بازیکن ${i + 1}`; let score = playerScores[i] || 0; let id = playerNationalIds[i] || "";
-                    let totalBank = isQuickRandomMode ? "-" : ((id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0));
-                    let tr = document.createElement("tr"); 
-                    tr.innerHTML = `<td style="font-weight: bold; color: #fff; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${name}</td><td style="color: #00e676; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${score} برد</td><td style="color: #ffeb3b; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${totalBank}</td>`; pTableBody.appendChild(tr);
-                }
-            }
-            if (pTable) pTable.style.display = "table";
-            if (pAction) {
-                pAction.innerHTML = ""; const confirmBtn = document.createElement("button"); confirmBtn.className = "popup-btn success"; confirmBtn.innerText = "تایید و بازگشت به منو";
-                confirmBtn.onclick = function() { popup.style.display = "none"; if (pTable) pTable.style.display = "none"; gameLoopRunning = false; handleBackToMenu(); }; 
-                pAction.appendChild(confirmBtn);
-            }
-            popup.style.display = "flex";
-        }
-
+        function runGameInitialization() { if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; } setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); resizeCanvas(); isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; hasBonusShot = false; isChainMode = false; loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI(); gameLoopRunning = true; requestAnimationFrame(gameLoop); }
+        function launchGameDirectly() { if (isQuickRandomMode) { preloadAssetsAndLaunch(); return; } for (let i = 0; i < selectedPlayerCount; i++) { let id = playerNationalIds[i] || ""; let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0); if (pMarbles < selectedCountVal) { showCustomPopup(`❌ موجودی تیله ${playerNames[i]} کافی نیست! برای ورود به این مسابقه حداقل به ${selectedCountVal} تیله نیاز دارید.`, `🏪`, `ورود به فروشگاه مرکزی`, true, function() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; openStadiumStoreModal(); }); return; } if (id === currentNationalId) { totalMarblesOwned -= selectedCountVal; localStorage.setItem(`marbles_${id}`, totalMarblesOwned); localStorage.setItem("totalMarblesOwned", totalMarblesOwned); } else if (id !== "") { localStorage.setItem(`marbles_${id}`, pMarbles - selectedCountVal); } } preloadAssetsAndLaunch(); }
+        function showFinalScoreboard() { const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pTable = document.getElementById("finalScoreTable"); const pTableBody = document.getElementById("finalTableBody"); const pAction = document.getElementById("popupActionButtons"); if (!popup) return; popup.style.cssText = "position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background-image: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('menu_bg.jpg') !important; background-size: cover; background-position: center; display: flex; align-items: center; justify-content: center; z-index: 160; padding: 20px;"; if (pText) pText.innerText = "🏆 مسابقه با موفقیت به پایان رسید! جدول رده‌بندی نهایی استادیوم:";
+        if (pTableBody) { pTableBody.innerHTML = ""; for (let i = 0; i < selectedPlayerCount; i++) { let name = playerNames[i] || `بازیکن ${i + 1}`; let score = playerScores[i] || 0; let id = playerNationalIds[i] || ""; let totalBank = isQuickRandomMode ? "-" : ((id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0)); let tr = document.createElement("tr"); tr.innerHTML = `<td style="font-weight: bold; color: #fff; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${name}</td><td style="color: #00e676; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${score} برد</td><td style="color: #ffeb3b; font-weight: bold; padding: 12px 8px; border-bottom: 1px solid rgba(255,255,255,0.05);">${totalBank}</td>`; pTableBody.appendChild(tr); } }
+        if (pTable) pTable.style.display = "table"; if (pAction) { pAction.innerHTML = ""; const confirmBtn = document.createElement("button"); confirmBtn.className = "popup-btn success"; confirmBtn.innerText = "تایید و بازگشت به منو"; confirmBtn.onclick = function() { popup.style.display = "none"; if (pTable) pTable.style.display = "none"; gameLoopRunning = false; handleBackToMenu(); }; pAction.appendChild(confirmBtn); } popup.style.display = "flex"; }
         function openSettingsDrawerMenu() { settingsDrawer.classList.add("open"); overlay.style.display = "block"; generateMenuPreviews(); }
         function handleDrawerExit() { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
         function handleBackToMenu() { isReturningToMenu = true; canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex"; gearBtn.style.display = "flex"; const welcomeMsg = document.getElementById("welcomeFadingMessage"); if (welcomeMsg) { welcomeMsg.innerHTML = ""; welcomeMsg.style.opacity = "0"; } }
         function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
         function openStadiumStoreModal() { const modal = document.getElementById("stadiumShopModal"); if(modal) modal.style.display = "flex"; }
         function closeStadiumStoreModal() { const modal = document.getElementById("stadiumShopModal"); if(modal) modal.style.display = "none"; }
-        function handleStorePurchase(colorCode, targetRadius, cost, productName) {
-            if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان خرید از فروشگاه نیست.", "⚠️", "متوجه شدم", true); return; }
-            if (totalMarblesOwned < cost) { showCustomPopup(`موجودی کافی نیست! به ${cost} تیله نیاز دارید.`, "⚠️", "متوجه شدم", true); return; }
-            totalMarblesOwned -= cost; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); }
-            player.baseR = targetRadius; player.r = targetRadius; currentGround.fallbackColorPlayer = colorCode;
-            updateWalletUI(); playClickSound(1.2); showCustomPopup(`🛒 خرید موفق! تیله ${productName} مجهز شد.`, "✅", "عالی", false);
-        }
-        function executeMarbleTransfer() {
-            let targetId = document.getElementById("transferTargetIdInput").value.trim(); let amount = parseInt(document.getElementById("transferAmountInput").value.trim());
-            if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان معامله وجود ندارد.", "⚠️", "متوجه شدم", true); return; }
-            if (targetId === "" || targetId.length !== 10 || isNaN(amount) || amount <= 0 || targetId === currentNationalId || totalMarblesOwned < amount) { showCustomPopup("کد ملی مقصد اشتباه است، یا موجودی کافی نیست.", "⚠️", "اصلاح اطلاعات", true); return; }
-            let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10;
-            totalMarblesOwned -= amount; targetMarbles += amount; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles);
-            updateWalletUI(); showCustomPopup(`🎉 تعداد ${amount} تیله با موفقیت به حساب خریدار فروخته شد.`, "✅", "تایید رسید دکان", false);
-            document.getElementById("transferTargetIdInput").value = ""; document.getElementById("transferAmountInput").value = "";
-        }
-        document.getElementById("drawOrderBtn").onclick = function(e) {
-            e.preventDefault(); e.stopPropagation(); try{initAudio();}catch(err){} if(!saveSubPlayersData()) return; playClickSound(1);
-            let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null;
-            function animateWheel(timestamp) {
-                if (!startTimestamp) startTimestamp = timestamp; let progress = timestamp - startTimestamp; let progressRatio = Math.min(progress / 2800, 1); let currentAngle = (1 - Math.pow(1 - progressRatio, 4)) * totalRotation; drawWheel(currentAngle);
-                if (progress < 2800) { requestAnimationFrame(animateWheel); } else {
-                    let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count;
-                    document.querySelector(".order-badge").innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`;
-                    let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }];
-                    for (let i = 1; i < count; i++) { let finalOrder = ((i - winningIndex + count) % count) + 1; document.getElementById(`pBadge_${i}`).innerText = `نوبت ${finalOrder}`; document.getElementById(`pBadge_${i}`).classList.add("assigned"); tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder }); }
-                    tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`);
-                }
-            }
-            requestAnimationFrame(animateWheel);
-        };
-
+        function handleStorePurchase(colorCode, targetRadius, costPerUnit, productName, inputId) { if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان خرید از فروشگاه نیست.", "⚠️", "متوجه شدم", true); return; } let qtyInput = document.getElementById(inputId); let quantity = qtyInput ? parseInt(qtyInput.value) : 1; if (isNaN(quantity) || quantity <= 0) { showCustomPopup("لطفاً تعداد معتبری برای خرید وارد کنید.", "⚠️", "متوجه شدم", true); return; } let totalCost = costPerUnit * quantity; if (totalMarblesOwned < totalCost) { showCustomPopup(`موجودی کافی نیست! هزینه کل این خرید ${totalCost} تیله است اما بانک شما ${totalMarblesOwned} تیله دارد.`, "⚠️", "متوجه شدم", true); return; } totalMarblesOwned -= totalCost; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); } player.baseR = targetRadius; player.r = targetRadius; currentGround.fallbackColorPlayer = colorCode; updateWalletUI(); playClickSound(1.2); showCustomPopup(`🛒 خرید موفق! تعداد ${quantity} عدد تیله ${productName} مجهز و به حساب شما اضافه شد.`, "✅", "عالی", false); }
+        function executeMarbleTransfer() { let targetId = document.getElementById("transferTargetIdInput").value.trim(); let amount = parseInt(document.getElementById("transferAmountInput").value.trim()); if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان معامله وجود ندارد.", "⚠️", "متوجه شدم", true); return; } if (targetId === "" || targetId.length !== 10) { showCustomPopup("کد ملی خریدار باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح اطلاعات", true); return; } if (isNaN(amount) || amount <= 0) { showCustomPopup("تعداد تیله‌های فروشی باید بزرگتر از صفر باشد.", "⚠️", "اصلاح اطلاعات", true); return; } if (targetId === currentNationalId) { showCustomPopup("شما نمی‌توانید به کد ملی خودتان تیله بفروشید!", "⚠️", "اصلاح اطلاعات", true); return; } if (totalMarblesOwned < amount) { showCustomPopup("موجودی شما کافی نیست. قصد فروش تیله را دارید اما بانک شما کمتر است.", "⚠️", "اصلاح اطلاعات", true); return; } let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10; totalMarblesOwned -= amount; targetMarbles += amount; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles); updateWalletUI(); showCustomPopup(`🎉 معامله ثبت شد! تعداد ${amount} تیله کسر و به بانک کاربر با کد ملی (${targetId}) انتقال یافت.`, "✅", "تایید رسید دکان", false); document.getElementById("transferTargetIdInput").value = ""; document.getElementById("transferAmountInput").value = ""; }
+        document.getElementById("drawOrderBtn").onclick = function(e) { e.preventDefault(); e.stopPropagation(); try{initAudio();}catch(err){} if(!saveSubPlayersData()) return; playClickSound(1); let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null; function animateWheel(timestamp) { if (!startTimestamp) startTimestamp = timestamp; let progress = timestamp - startTimestamp; let progressRatio = Math.min(progress / 2800, 1); let currentAngle = (1 - Math.pow(1 - progressRatio, 4)) * totalRotation; drawWheel(currentAngle); if (progress < 2800) { requestAnimationFrame(animateWheel); } else { let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count; let mainBadge = document.getElementById("mainPlayerBadge"); if (mainBadge) { mainBadge.innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`; } let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }]; for (let i = 1; i < count; i++) { let finalOrder = ((i - winningIndex + count) % count) + 1; let b = document.getElementById(`pBadge_${i}`); if(b) { b.innerText = `نوبت ${finalOrder}`; b.classList.add("assigned"); } tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder }); } tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; updateWalletUI(); showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`); } } requestAnimationFrame(animateWheel); };
         gearBtn.onclick = openSettingsDrawerMenu; overlay.onclick = handleDrawerExit;
         closeDrawer.onclick = () => { if(!saveSubPlayersData()) return; handleDrawerExit(); gearBtn.style.display = "none"; launchGameDirectly(); };
         startBtn.onclick = () => { isQuickRandomMode = false; if (selectedPlayerCount > 1) { if(!saveSubPlayersData()) return; } gearBtn.style.display = "none"; launchGameDirectly(); }; exitBtn.onclick = handleFinalExit;
         document.getElementById("playerCountSelect").onchange = (e) => { selectedPlayerCount = parseInt(e.target.value); updateNameInputs(selectedPlayerCount); };
         document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
-
-        function handleStart(e) { 
-            let pos = getEventPos(e); 
-            if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) { e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return; }
-            if (isMoving || player.inAir) return; 
-            isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; 
-            player.startX = player.x; player.startY = player.y; 
-        }
+        function handleStart(e) { let pos = getEventPos(e); if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) { e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return; } if (isMoving || player.inAir) return; isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; player.startX = player.x; player.startY = player.y; }
         function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
-
-        function handleEnd() {
-            if (!isAiming) return; isAiming = false; player.vx = 0; player.vy = 0;
-            let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy);
-            if (dragDist > 5) {
-                player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; 
-                targets.forEach(t => {
-                    if (t.isOut) return;
-                    let A = dy; let B = -dx; let C = dx * player.y - dy * player.x;
-                    let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B);
-                    if (lineDist < (16 + t.r)) {
-                        let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2);
-                        if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; }
-                    }
-                });
-                if (targetHit && closestDist < 400) {
-                    player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y;
-                    setTimeout(() => {
-                        let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0;
-                        let slideInterval = setInterval(() => {
-                            targetHit.x += Math.cos(angle) * hitSpeed; targetHit.y += Math.sin(angle) * hitSpeed; hitSpeed *= 0.88; steps++;
-                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) {
-                                targetHit.isOut = true; targetOutInTurn = true;
-                                if (!isQuickRandomMode) {
-                                    if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
-                                    let id = playerNationalIds[currentPlayerIndex] || "";
-                                    if (id === currentNationalId) { totalMarblesOwned++; } 
-                                    else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); }
-                                    updateWalletUI();
-                                }
-                                if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; }
-                            }
-                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); }
-                        }, 16);
-                    }, (closestDist / 5.5) * 15);
-                } else {
-                    let cX = player.x + dx * 6, cY = player.y + dy * 6;
-                    player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.arcHeight = Math.min(dragDist * 0.5, 140);
-                }
-                if (!isQuickRandomMode && !targetHit) {
-                    if (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h) {
-                        let id = playerNationalIds[currentPlayerIndex] || "";
-                        if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } 
-                        else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); }
-                        showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); updateWalletUI();
-                    }
-                }
-                player.progress = 0; player.inAir = true; isFirstShotOfTurn = false;
-            }
-        }
-
+        function handleEnd() { if (!isAiming) return; isAiming = false; player.vx = 0; player.vy = 0; let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy); if (dragDist > 5) { player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; targets.forEach(t => { if (t.isOut) return; let A = dy; let B = -dx; let C = dx * player.y - dy * player.x; let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B); if (lineDist < (16 + t.r)) { let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2); if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; } } }); if (targetHit && closestDist < 400) { player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y; player.vx = Math.cos(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); player.vy = Math.sin(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); setTimeout(() => { let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0; let slideInterval = setInterval(() => { targetHit.x += Math.cos(angle) * (hitSpeed * 1.35); targetHit.y += Math.sin(angle) * (hitSpeed * 1.35); hitSpeed *= 0.88; steps++; if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) { targetHit.isOut = true; targetOutInTurn = true; if (!isQuickRandomMode) { if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; } let id = playerNationalIds[currentPlayerIndex] || ""; if (id === currentNationalId) { totalMarblesOwned++; } else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); } updateWalletUI(); } if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; } } if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); } }, 16); }, (closestDist / 5.5) * 15); } else { let cX = player.x + dx * 6, cY = player.y + dy * 6; player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.vx = dx * 0.15; player.vy = dy * 0.15; player.arcHeight = Math.min(dragDist * 0.5, 140); } if (!isQuickRandomMode && !targetHit) { if (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h) { let id = playerNationalIds[currentPlayerIndex] || ""; if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); } showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); updateWalletUI(); } } player.progress = 0; player.inAir = true; isFirstShotOfTurn = false; } }
         canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
         canvas.addEventListener("touchstart", handleStart, { passive: false }); canvas.addEventListener("touchmove", handleMove, { passive: false }); canvas.addEventListener("touchend", handleEnd, { passive: false });
-
         function setupGridSelector(gridId, activeClass, callback) { const grid = document.getElementById(gridId); if(!grid) return; grid.addEventListener('click', (e) => { const item = e.target.closest('[data-val]'); if(!item) return; grid.querySelectorAll('.' + activeClass).forEach(el => el.classList.remove(activeClass)); item.classList.add(activeClass); callback(item.getAttribute('data-val')); }); }
         setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
         setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val==='sunny'){windX=0;windY=0;} else if(val==='windy'){windX=0.08;windY=0.02;} else if(val==='rainy'){windX=0.03;windY=0.05;} else {windX=0.01;windY=0.02;} if (typeof playWeatherPreviewSound === 'function') { playWeatherPreviewSound(val); } });
-        
-        if (document.readyState === "loading") { window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); } 
-        else { generateMenuPreviews(); resizeCanvas(); } window.addEventListener("resize", resizeCanvas);
+        if (document.readyState === "loading") { window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); } else { generateMenuPreviews(); resizeCanvas(); } window.addEventListener("resize", resizeCanvas);
     </script>
 </body>
 </html>
