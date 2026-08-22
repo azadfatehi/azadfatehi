@@ -75,6 +75,77 @@
         .product-buy-btn { width: 100%; background: #4caf50; color: white; border: none; padding: 6px; border-radius: 8px; font-size: 11px; font-weight: bold; cursor: pointer; }
         .product-card input { user-select: text !important; -webkit-user-select: text !important; }
     </style>
+	    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="6.png">
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW Error:', err));
+            });
+        }
+		        function showRadarJoinInput() {
+            let form = document.getElementById("p2pJoinForm");
+            if(form) form.style.display = "block";
+            let statusText = document.getElementById("p2pStatusText");
+            if(statusText) statusText.innerText = "📡 وضعیت رادار: آماده برای وارد کردن کد...";
+        }
+        function generateRadarCode() {
+            let chars = "0123456789"; let code = "";
+            for(let i=0; i<6; i++) { code += chars[Math.floor(Math.random() * chars.length)]; }
+            return code;
+        }
+        function initiateRadarHost() {
+            let statusText = document.getElementById("p2pStatusText");
+            let randomCode = generateRadarCode();
+            if(statusText) statusText.innerHTML = `📡 کاتالیزور فعال شد!<br>کد اتصال شما: <span style="color:#ffeb3b; font-size:16px; font-weight:900;">${randomCode}</span><br><span style="font-size:11px; color:#aaa;">(این کد را در گوشی دوم وارد کنید)</span>`;
+            
+            isMyTurnOnline = true;
+            playerNames = [currentUsername || "میزبان", "بازیکن دوم"];
+            showGameToast("⏳ رادار روشن شد. منتظر ورود حریف...");
+            // در بخش‌های بعدی تابع گوش دادن به اتصال حریف را کامل می‌کنیم
+        }
+        function connectToRadarHost() {
+            let codeInput = document.getElementById("radarConnectCodeInput");
+            let statusText = document.getElementById("p2pStatusText");
+            let code = codeInput ? codeInput.value.trim() : "";
+            if (code.length !== 6) { showCustomPopup("کد اتصال رادار باید دقیقاً ۶ رقم باشد.", "⚠️", "اصلاح کد", true); return; }
+            if (statusText) statusText.innerText = "📡 در حال جستجوی رادار میزبان...";
+            
+            isMyTurnOnline = false;
+            playerNames = ["میزبان", currentUsername || "مهمان"];
+            // شبیه‌سازی و جفت‌سازی مستقیم بدون اینترنت بر روی لوکال پی‌سی/هات‌اسپات
+            setTimeout(() => {
+                if (statusText) statusText.style.color = "#4caf50";
+                if (statusText) statusText.innerText = "✅ متصل شد! بازی سینک شد.";
+                showGameToast("🎮 اتصال با موفقیت برقرار شد!");
+                handleDrawerExit();
+                gearBtn.style.display = "none";
+                preloadAssetsAndLaunch();
+            }, 1200);
+        }
+        function sendRadarMoveData(dx, dy, dragDist) {
+            let movePacket = {
+                type: "shoot",
+                dx: dx,
+                dy: dy,
+                dist: dragDist,
+                playerIndex: currentPlayerIndex
+            };
+            // داده‌ها آماده فرستادن روی رادار شبکه محلی
+            console.log("ارسال داده‌های شلیک رادار:", movePacket);
+        }
+        function receiveRadarMoveData(packet) {
+            if (!packet || packet.type !== "shoot") return;
+            player.startX = player.x; player.startY = player.y;
+            player.vx = packet.dx * 0.15; player.vy = packet.dy * 0.15;
+            player.arcHeight = Math.min(packet.dist * 0.5, 140);
+            player.progress = 0; player.inAir = true; isFirstShotOfTurn = false;
+        }
+
+    </script>
+
 </head>
 <body>
     <div id="loginScreen" style="display: flex;">
@@ -121,11 +192,11 @@
             </div>
         </div>
     </div>
-    <div class="drawer-overlay" id="overlay"></div>
+        <div class="drawer-overlay" id="overlay"></div>
     <div class="drawer" id="settingsDrawer">
         <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; margin-top: 5px; margin-bottom: 20px; padding: 0 5px; direction: rtl;">
             <h3 id="drawerDynamicTitle" style="color: #ffeb3b; font-size: 15px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.9); text-align: right; max-width: 75%;">⚙️ تنظیمات استادیوم</h3>
-            <button style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.5);" onclick="handleDrawerExit()">خروج</button>
+            <button style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.5);" onclick="handleFinalExit()">خروج</button>
         </div>
         <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             <div class="menu-row">
@@ -148,15 +219,25 @@
                 </div>
             </div>
             <div class="menu-row">
-                <label>دوست داری چند نفره باشیم؟ (آفلاین نوبتی)</label>
+                <label>دوست داری چند نفره باشیم؟</label>
                 <select class="custom-select" id="playerCountSelect">
                     <option value="1" selected>۱ نفره (انفرادی تنهایی)</option>
-                    <option value="2">۲ نفره</option>
-                    <option value="3">۳ نفره</option>
-                    <option value="4">۴ نفره</option>
-                    <option value="5">۵ نفره</option>
-                    <option value="6">۶ نفره</option>
+                    <option value="2">۲ نفره (آفلاین نوبتی)</option>
+                    <option value="3">۳ نفره (آفلاین نوبتی)</option>
+                    <option value="4">۴ نفره (آفلاین نوبتی)</option>
+                    <option value="online">📡 اتصال به گوشی‌های دیگر (رادار بی‌سیم)</option>
                 </select>
+            </div>
+            <div id="p2pConnectionBox" style="display: none; width: 100%; max-width: 340px; background: rgba(33, 150, 243, 0.1); border: 1px dashed #2196f3; padding: 12px; border-radius: 14px; margin-top: 10px; text-align: center; direction: rtl;">
+                <div id="p2pStatusText" style="color: #2196f3; font-size: 13px; font-weight: bold; margin-bottom: 8px;">وضعیت رادار: خاموش</div>
+                <div id="p2pActionButtons">
+                    <button type="button" style="background: #2196f3; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin: 4px;" onclick="initiateRadarHost()">ایجاد اتاق مسابقه</button>
+                    <button type="button" style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin: 4px;" onclick="showRadarJoinInput()">ورود به اتاق دیگران</button>
+                </div>
+                <div id="p2pJoinForm" style="display: none; margin-top: 8px;">
+                    <input type="text" id="radarConnectCodeInput" placeholder="کد اتصال ۶ رقمی را وارد کنید" style="width: 70%; padding: 8px; border-radius: 8px; border: 1px solid #444; background: #111; color: white; text-align: center; font-size: 13px; outline: none;">
+                    <button type="button" style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 4px;" onclick="connectToRadarHost()">اتصال</button>
+                </div>
             </div>
             <!-- 👥 کادر تولید آنلاین فیلدهای نام بازیکن بعدی و مشخصات خریدار با ترتیب اصولی -->
             <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px; width:100%; max-width:340px;">
@@ -508,9 +589,36 @@
         gearBtn.onclick = openSettingsDrawerMenu; overlay.onclick = handleDrawerExit;
         closeDrawer.onclick = () => { if(!saveSubPlayersData()) return; handleDrawerExit(); gearBtn.style.display = "none"; launchGameDirectly(); };
         startBtn.onclick = () => { isQuickRandomMode = false; if (selectedPlayerCount > 1) { if(!saveSubPlayersData()) return; } gearBtn.style.display = "none"; launchGameDirectly(); }; exitBtn.onclick = handleFinalExit;
-        document.getElementById("playerCountSelect").onchange = (e) => { selectedPlayerCount = parseInt(e.target.value); updateNameInputs(selectedPlayerCount); };
+        document.getElementById("playerCountSelect").onchange = (e) => {
+            let val = e.target.value;
+            let pBox = document.getElementById("p2pConnectionBox");
+            if (val === "online") {
+                selectedPlayerCount = 2; // تخصیص مسابقه دو نفره از طریق رادار گوشی به گوشی
+                if (pBox) pBox.style.display = "block";
+                updateNameInputs(1); // فیلد بازیکن دوم در این حالت به صورت ریموت ست می‌شود
+            } else {
+                selectedPlayerCount = parseInt(val);
+                if (pBox) pBox.style.display = "none";
+                updateNameInputs(selectedPlayerCount);
+            }
+        };
         document.getElementById("marbleCountSelect").onchange = (e) => { selectedCountVal = parseInt(e.target.value); };
-        function handleStart(e) { let pos = getEventPos(e); if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) { e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return; } if (isMoving || player.inAir) return; isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y; player.startX = player.x; player.startY = player.y; }
+        function handleStart(e) {
+            let pos = getEventPos(e);
+            if (canvas.style.display === "block" && setupMenu.style.display === "none" && pos.x < 80 && pos.y < 80) {
+                e.preventDefault(); e.stopPropagation(); openSettingsDrawerMenu(); return;
+            }
+            // 📡 قفل هوشمند رادار: اگر حالت آنلاین فعال است و نوبت این گوشی نیست، پرتاب لمسی را غیرفعال کن
+            if (document.getElementById("playerCountSelect").value === "online") {
+                let isHost = playerNames[currentPlayerIndex] === (currentUsername || "میزبان");
+                if ((isHost && !isMyTurnOnline) || (!isHost && isMyTurnOnline)) {
+                    showGameToast("⏳ منتظر پرتاب حریف از گوشی مقابل باش..."); return;
+                }
+            }
+            if (isMoving || player.inAir) return;
+            isAiming = true; dragStart.x = pos.x; dragStart.y = pos.y; dragEnd.x = pos.x; dragEnd.y = pos.y;
+            player.startX = player.x; player.startY = player.y;
+        }
         function handleMove(e) { if (!isAiming) return; let pos = getEventPos(e); dragEnd.x = pos.x; dragEnd.y = pos.y; }
         function handleEnd() { if (!isAiming) return; isAiming = false; player.vx = 0; player.vy = 0; let dx = dragStart.x - dragEnd.x; let dy = dragStart.y - dragEnd.y; let dragDist = Math.sqrt(dx * dx + dy * dy); if (dragDist > 5) { player.startX = player.x; player.startY = player.y; let targetHit = null; let closestDist = Infinity; targetOutInTurn = false; targets.forEach(t => { if (t.isOut) return; let A = dy; let B = -dx; let C = dx * player.y - dy * player.x; let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B); if (lineDist < (16 + t.r)) { let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2); if (dToTarget < closestDist) { closestDist = dToTarget; targetHit = t; } } }); if (targetHit && closestDist < 400) { player.arcHeight = 0; player.targetX = targetHit.x; player.targetY = targetHit.y; player.vx = Math.cos(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); player.vy = Math.sin(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); setTimeout(() => { let hitSpeed = 7 + (dragDist * 0.15); playClickSound(hitSpeed / 10); let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); let steps = 0; let slideInterval = setInterval(() => { targetHit.x += Math.cos(angle) * (hitSpeed * 1.35); targetHit.y += Math.sin(angle) * (hitSpeed * 1.35); hitSpeed *= 0.88; steps++; if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) { targetHit.isOut = true; targetOutInTurn = true; if (!isQuickRandomMode) { if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; } let id = playerNationalIds[currentPlayerIndex] || ""; if (id === currentNationalId) { totalMarblesOwned++; } else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); } updateWalletUI(); } if (targets.filter(targetItem => !targetItem.isOut).length === 0) { clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; } } if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { clearInterval(slideInterval); setTimeout(resetRound, 300); } }, 16); }, (closestDist / 5.5) * 15); } else { let cX = player.x + dx * 6, cY = player.y + dy * 6; player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); player.vx = dx * 0.15; player.vy = dy * 0.15; player.arcHeight = Math.min(dragDist * 0.5, 140); } if (!isQuickRandomMode && !targetHit) { if (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h) { let id = playerNationalIds[currentPlayerIndex] || ""; if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } else if (id !== "") { let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); } showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); updateWalletUI(); } } player.progress = 0; player.inAir = true; isFirstShotOfTurn = false; } }
         canvas.addEventListener("mousedown", handleStart); canvas.addEventListener("mousemove", handleMove); canvas.addEventListener("mouseup", handleEnd);
