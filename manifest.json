@@ -1,17 +1,17 @@
 {
   "short_name": "تیله‌بازی",
-  "name": "استادیوم آنلاین تیله‌بازی",
+  "name": "استادیوم ملی تیله‌بازی PWA",
+  "start_url": "index.html",
+  "background_color": "#020716",
+  "theme_color": "#1a237e",
+  "display": "standalone",
+  "orientation": "portrait",
   "icons": [
     {
-      "src": "icon.png",
+      "src": "6.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
     }
-  ],
-  "start_url": "index.html",
-  "background_color": "#111116",
-  "theme_color": "#2196f3",
-  "display": "standalone",
-  "orientation": "portrait"
+  ]
 }
