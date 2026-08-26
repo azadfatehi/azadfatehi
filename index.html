@@ -250,10 +250,12 @@
                 <div class="wheel-pointer" style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #ff9800; z-index: 10;"></div>
                 <canvas id="wheelCanvas" width="240" height="240" style="width: 100%; height: 100%;"></canvas>
             </div>
-            <!-- 🏪 جعبه شیک کلید ورود به فروشگاه مرکزی استادیوم -->
-            <div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
-                <button type="button" class="enter-shop-btn" onclick="openStadiumStoreModal()">🏪 ورود به فروشگاه مرکزی استادیوم</button>
-            </div>
+<!-- باکس دکمه استادیوم در صفحه اصلی -->
+<div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
+    <!-- اضافه شدن target="_blank" برای باز شدن در تب جدید -->
+    <a href="shop.html" target="_blank" class="enter-shop-btn" style="text-decoration: none; display: block; text-align: center;">🏪 ورود به فروشگاه مرکزی استادیوم</a>
+</div>
+
             <div class="menu-row" style="margin-top: 20px;">
                 <label>با چند تا تیله بریم بازی؟</label>
                 <select class="custom-select" id="marbleCountSelect">
@@ -272,67 +274,8 @@
         </div>
         <div id="turnIndicator">نوبت: بازیکن ۱</div>
     </div>
-
     <canvas id="canvas"></canvas>
-
     <!-- 🏪 لایه پاپ‌آ‌پ شیک دکان و فروشگاه آنلاین مرکزی با تراز دایره‌ای عکس‌ها -->
-    <div class="shop-modal-overlay" id="stadiumShopModal">
-        <div class="shop-modal-box">
-            <div class="shop-modal-header">
-                <h3 style="color: #ffeb3b; font-size: 14px; margin: 0;">🏪 صرافی و فروشگاه اینترنتی تیله</h3>
-                <button class="shop-close-btn" onclick="closeStadiumStoreModal()">بستن دکان</button>
-            </div>
-            <div class="shop-products-grid">
-                <div class="product-card">
-                    <div class="product-marble-wrapper"><img src="emerald.png" class="product-marble-preview" alt="تیله زمرد" onerror="this.style.background='radial-gradient(circle at 35% 35%, #00e676, #004d40)'"></div>
-                    <div class="product-title">تیله زمرد (معمولی)</div>
-                    <div class="product-price">قیمت واحد: ۵ تیله</div>
-                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
-                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
-                        <input type="number" id="qty_emerald" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
-                    </div>
-                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#00e676', 22, 5, 'زمرد معمولی', 'qty_emerald')">🛒 خرید کالا</button>
-                </div>
-                <div class="product-card">
-                    <div class="product-marble-wrapper"><img src="ruby.png" class="product-marble-preview" alt="یاقوت لوکس" onerror="this.style.background='radial-gradient(circle at 35% 35%, #ff1744, #4a0007)'"></div>
-                    <div class="product-title">یاقوت لوکس (بزرگ)</div>
-                    <div class="product-price">قیمت واحد: ۱۲ تیله</div>
-                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
-                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
-                        <input type="number" id="qty_ruby" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
-                    </div>
-                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#ff1744', 28, 12, 'یاقوت بزرگ', 'qty_ruby')">🛒 خرید کالا</button>
-                </div>
-                <div class="product-card">
-                    <div class="product-marble-wrapper"><img src="cobalt.png" class="product-marble-preview" alt="کبالت سرعتی" onerror="this.style.background='radial-gradient(circle at 35% 35%, #2979ff, #0a192f)'"></div>
-                    <div class="product-title">کبالت سرعتی (ریز)</div>
-                    <div class="product-price">قیمت واحد: ۴ تیله</div>
-                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
-                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
-                        <input type="number" id="qty_cobalt" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
-                    </div>
-                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#2979ff', 17, 4, 'کبالت ریز', 'qty_cobalt')">🛒 خرید کالا</button>
-                </div>
-                <div class="product-card">
-                    <div class="product-marble-wrapper"><img src="gold.png" class="product-marble-preview" alt="طلایی استادیوم" onerror="this.style.background='radial-gradient(circle at 35% 35%, #ffd700, #ff8f00)'"></div>
-                    <div class="product-title">طلایی استادیوم (ویژه)</div>
-                    <div class="product-price">قیمت واحد: ۱۵ تیله</div>
-                    <div style="display: flex; gap: 4px; align-items: center; margin: 4px 0;">
-                        <span style="color:#aaa; font-size:11px;">تعداد:</span>
-                        <input type="number" id="qty_gold" value="1" min="1" style="width: 50px; padding: 4px; background: #111; border: 1px solid #444; color: #fff; text-align: center; border-radius: 6px; font-size: 12px;">
-                    </div>
-                    <button type="button" class="product-buy-btn" onclick="handleStorePurchase('#ffd700', 22, 15, 'طلایی ویژه', 'qty_gold')">🛒 خرید کالا</button>
-                </div>
-            </div>
-            <div style="background: rgba(0,0,0,0.3); border-radius: 16px; padding: 12px; border: 1px solid rgba(255,255,255,0.05); margin-top: 15px;">
-                <div style="color: #00e676; font-size: 12px; font-weight: bold; text-align: center; margin-bottom: 10px;">🤝 فروش تیله شخصی به بازیکن دیگر</div>
-                <input type="number" id="transferTargetIdInput" placeholder="کد ملی خریدار (۱۰ رقمی)" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #111; color: #fff; text-align: center; font-size: 13px; margin-bottom: 10px; outline: none;">
-                <input type="number" id="transferAmountInput" placeholder="تعداد تیله برای فروش" style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #444; background: #111; color: #fff; text-align: center; font-size: 13px; margin-bottom: 12px; outline: none;">
-                <button type="button" style="width: 100%; background: linear-gradient(90deg, #ff9800, #f57c00); color: black; border: none; padding: 12px; border-radius: 10px; font-weight: bold; font-size: 13px; cursor: pointer;" onclick="executeMarbleTransfer()">💰 ثبت معامله و انتقال به خریدار</button>
-            </div>
-        </div>
-    </div>
-
     <script>
         const canvas = document.getElementById("canvas");
         const ctx = canvas.getContext("2d");
@@ -581,9 +524,6 @@
         function handleDrawerExit() { settingsDrawer.classList.remove("open"); overlay.style.display = "none"; }
         function handleBackToMenu() { isReturningToMenu = true; canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex"; gearBtn.style.display = "flex"; const welcomeMsg = document.getElementById("welcomeFadingMessage"); if (welcomeMsg) { welcomeMsg.innerHTML = ""; welcomeMsg.style.opacity = "0"; } }
         function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
-        function openStadiumStoreModal() { const modal = document.getElementById("stadiumShopModal"); if(modal) modal.style.display = "flex"; }
-        function closeStadiumStoreModal() { const modal = document.getElementById("stadiumShopModal"); if(modal) modal.style.display = "none"; }
-        function handleStorePurchase(colorCode, targetRadius, costPerUnit, productName, inputId) { if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان خرید از فروشگاه نیست.", "⚠️", "متوجه شدم", true); return; } let qtyInput = document.getElementById(inputId); let quantity = qtyInput ? parseInt(qtyInput.value) : 1; if (isNaN(quantity) || quantity <= 0) { showCustomPopup("لطفاً تعداد معتبری برای خرید وارد کنید.", "⚠️", "متوجه شدم", true); return; } let totalCost = costPerUnit * quantity; if (totalMarblesOwned < totalCost) { showCustomPopup(`موجودی کافی نیست! هزینه کل این خرید ${totalCost} تیله است اما بانک شما ${totalMarblesOwned} تیله دارد.`, "⚠️", "متوجه شدم", true); return; } totalMarblesOwned -= totalCost; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); if (currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); } player.baseR = targetRadius; player.r = targetRadius; currentGround.fallbackColorPlayer = colorCode; updateWalletUI(); playClickSound(1.2); showCustomPopup(`🛒 خرید موفق! تعداد ${quantity} عدد تیله ${productName} مجهز و به حساب شما اضافه شد.`, "✅", "عالی", false); }
         function executeMarbleTransfer() { let targetId = document.getElementById("transferTargetIdInput").value.trim(); let amount = parseInt(document.getElementById("transferAmountInput").value.trim()); if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان معامله وجود ندارد.", "⚠️", "متوجه شدم", true); return; } if (targetId === "" || targetId.length !== 10) { showCustomPopup("کد ملی خریدار باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح اطلاعات", true); return; } if (isNaN(amount) || amount <= 0) { showCustomPopup("تعداد تیله‌های فروشی باید بزرگتر از صفر باشد.", "⚠️", "اصلاح اطلاعات", true); return; } if (targetId === currentNationalId) { showCustomPopup("شما نمی‌توانید به کد ملی خودتان تیله بفروشید!", "⚠️", "اصلاح اطلاعات", true); return; } if (totalMarblesOwned < amount) { showCustomPopup("موجودی شما کافی نیست. قصد فروش تیله را دارید اما بانک شما کمتر است.", "⚠️", "اصلاح اطلاعات", true); return; } let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10; totalMarblesOwned -= amount; targetMarbles += amount; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles); updateWalletUI(); showCustomPopup(`🎉 معامله ثبت شد! تعداد ${amount} تیله کسر و به بانک کاربر با کد ملی (${targetId}) انتقال یافت.`, "✅", "تایید رسید دکان", false); document.getElementById("transferTargetIdInput").value = ""; document.getElementById("transferAmountInput").value = ""; }
         document.getElementById("drawOrderBtn").onclick = function(e) { e.preventDefault(); e.stopPropagation(); try{initAudio();}catch(err){} if(!saveSubPlayersData()) return; playClickSound(1); let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null; function animateWheel(timestamp) { if (!startTimestamp) startTimestamp = timestamp; let progress = timestamp - startTimestamp; let progressRatio = Math.min(progress / 2800, 1); let currentAngle = (1 - Math.pow(1 - progressRatio, 4)) * totalRotation; drawWheel(currentAngle); if (progress < 2800) { requestAnimationFrame(animateWheel); } else { let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count; let mainBadge = document.getElementById("mainPlayerBadge"); if (mainBadge) { mainBadge.innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`; } let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }]; for (let i = 1; i < count; i++) { let finalOrder = ((i - winningIndex + count) % count) + 1; let b = document.getElementById(`pBadge_${i}`); if(b) { b.innerText = `نوبت ${finalOrder}`; b.classList.add("assigned"); } tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder }); } tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; updateWalletUI(); showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`); } } requestAnimationFrame(animateWheel); };
         gearBtn.onclick = openSettingsDrawerMenu; overlay.onclick = handleDrawerExit;
@@ -627,6 +567,25 @@
         setupGridSelector('groundGrid', 'active', (val) => { selectedGroundVal = val; currentGround = grounds[val]; });
         setupGridSelector('weatherGrid', 'active', (val) => { selectedWeather = val; if(val==='sunny'){windX=0;windY=0;} else if(val==='windy'){windX=0.08;windY=0.02;} else if(val==='rainy'){windX=0.03;windY=0.05;} else {windX=0.01;windY=0.02;} if (typeof playWeatherPreviewSound === 'function') { playWeatherPreviewSound(val); } });
         if (document.readyState === "loading") { window.addEventListener("DOMContentLoaded", () => { generateMenuPreviews(); resizeCanvas(); }); } else { generateMenuPreviews(); resizeCanvas(); } window.addEventListener("resize", resizeCanvas);
+		// تابع باز کردن فرم فروشگاه جدید شما
+function openYourCustomShopForm() {
+    const customShop = document.getElementById("shop");
+    if (customShop) {
+        customShop.style.display = "flex"; // یا هر استایلی که فرم شما برای نمایش نیاز دارد (مثل block)
+        
+        // پیدا کردن خودکار کلید خروج درون فرم شما و فعال کردن آن
+        const closeBtn = customShop.querySelector(".shop-close-btn") || customShop.querySelector("button[onclick*='close']");
+        if (closeBtn) {
+            closeBtn.onclick = function() {
+                customShop.style.display = "none";
+            };
+        }
+    } else {
+        showGameToast("⚠️ فرم فروشگاه با نام shop یافت نشد!");
+    }
+}
+
     </script>
+
 </body>
 </html>
