@@ -230,13 +230,9 @@
             </div>
             <div id="p2pConnectionBox" style="display: none; width: 100%; max-width: 340px; background: rgba(33, 150, 243, 0.1); border: 1px dashed #2196f3; padding: 12px; border-radius: 14px; margin-top: 10px; text-align: center; direction: rtl;">
                 <div id="p2pStatusText" style="color: #2196f3; font-size: 13px; font-weight: bold; margin-bottom: 8px;">وضعیت رادار: خاموش</div>
-                <div id="p2pActionButtons">
-                    <button type="button" style="background: #2196f3; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin: 4px;" onclick="initiateRadarHost()">ایجاد اتاق مسابقه</button>
-                    <button type="button" style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin: 4px;" onclick="showRadarJoinInput()">ورود به اتاق دیگران</button>
-                </div>
-                <div id="p2pJoinForm" style="display: none; margin-top: 8px;">
-                    <input type="text" id="radarConnectCodeInput" placeholder="کد اتصال ۶ رقمی را وارد کنید" style="width: 70%; padding: 8px; border-radius: 8px; border: 1px solid #444; background: #111; color: white; text-align: center; font-size: 13px; outline: none;">
-                    <button type="button" style="background: #4caf50; color: white; border: none; padding: 8px 12px; border-radius: 8px; font-size: 12px; font-weight: bold; cursor: pointer; margin-right: 4px;" onclick="connectToRadarHost()">اتصال</button>
+                <div id="p2pActionButtons" style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
+                    <button type="button" style="background: #2196f3; color: white; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer;" onclick="initiateRadarHost()">🏟️ ایجاد استادیوم (من میزبانم)</button>
+                    <button type="button" style="background: #4caf50; color: white; border: none; padding: 12px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer;" onclick="autoDiscoverAndConnect()">⚡ جستجو و اتصال سریع به حریف</button>
                 </div>
             </div>
             <!-- 👥 کادر تولید آنلاین فیلدهای نام بازیکن بعدی و مشخصات خریدار با ترتیب اصولی -->
@@ -295,7 +291,7 @@
         let currentNationalId = localStorage.getItem("currentNationalId") || "";
         let authMode = "login"; let gameLoopRunning = false; let isQuickRandomMode = false; let isReturningToMenu = false; 
         let playerNames = ["بازیکن ۱"]; let playerNationalIds = []; let currentPlayerIndex = 0;
-        let peer = null; let conn = null; let isMyTurnOnline = true;
+let localSocket = null; let isMyTurnOnline = true;
         let isFirstShotOfTurn = true; let currentLevel = 1; let isAiming = false; let isMoving = false;
         let hitSuccessInTurn = false; let targetOutInTurn = false; let hasBonusShot = false; let isChainMode = false;
         let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
@@ -584,21 +580,124 @@ function openYourCustomShopForm() {
         showGameToast("⚠️ فرم فروشگاه با نام shop یافت نشد!");
     }
 }
-// اتصال فایل منیفست به سند
-const linkManifest = document.createElement('link');
-linkManifest.rel = 'manifest';
-linkManifest.href = 'manifest.json';
-document.head.appendChild(linkManifest);
+let localSocket = null;
 
-// ثبت سرویس ورکر در مرورگر برای قابلیت نصب
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js')
-      .then(reg => console.log('سرویس ورکر با موفقیت فعال شد.'))
-      .catch(err => console.log('خطا در ثبت سرویس ورکر:', err));
-  });
+// ۱. راه‌اندازی استادیوم توسط میزبان (کسی که هات‌اسپات را روشن کرده است)
+function initiateRadarHost() {
+    document.getElementById("p2pStatusText").innerHTML = "🟢 استادیوم محلی ساخته شد.<br><span style='color:#fff; font-size:12px;'>کافیست حریف دکمه «اتصال سریع» را در گوشی خود بزند.</span>";
+    showGameToast("🏟️ منتظر ورود بازیکنان...");
+    
+    // در حالت اپلیکیشن بومی، میزبان سرور وب‌ساکت محلی را روی پورت 8080 اجرا می‌کند
+    setTimeout(() => {
+        try {
+            localSocket = new WebSocket("ws://127.0.0.1:8080");
+            setupSocketListeners();
+        } catch(e) {
+            console.log("خطا در راه‌اندازی اولیه سوکت میزبان");
+        }
+    }, 500);
 }
 
+// ۲. رادار هوشمند اسکن و اتصال خودکار بدون نیاز به تایپ آی‌پی توسط حریف
+function autoDiscoverAndConnect() {
+    document.getElementById("p2pStatusText").innerText = "📡 در حال اسکن فرکانس‌های استادیوم حریف...";
+    showGameToast("⏳ رادار در حال جستجو...");
+
+    // لیست آی‌پي‌های استاندارد و رایج هات‌اسپات در اندروید و آیفون
+    const commonGateways = [
+        "192.168.43.1",  // اکثر گوشی‌های اندرویدی
+        "192.168.1.1",   // آیفون و برخی اندرویدها
+        "192.168.0.1",   // شبکه‌های مودم خانگی
+        "172.20.10.1",   // هات‌اسپات اختصاصی آیفون (iOS)
+        "10.0.0.1"       // سایر شبکه‌های محلی خاص
+    ];
+
+    let foundHost = false;
+
+    commonGateways.forEach((ip) => {
+        if (foundHost) return;
+
+        // تست اتصال به تک تک آی‌پی‌ها به صورت همزمان
+        let tempSocket = new WebSocket(`ws://${ip}:8080`);
+
+        // به محض اینکه یکی از آی‌پی‌ها پاسخ داد، به عنوان میزبان اصلی متصل می‌شود
+        tempSocket.onopen = () => {
+            if (!foundHost) {
+                foundHost = true;
+                localSocket = tempSocket;
+                setupSocketListeners();
+                document.getElementById("p2pStatusText").innerText = "✅ متصل شد! در حال ورود به زمین مسابقه...";
+                showGameToast("⚡ استادیوم پیدا شد!");
+                
+                // ارسال مشخصات بازیکن مهمان به میزبان جهت شروع بازی
+                let activeName = isQuickRandomMode ? "بازیکن مهمان" : (currentUsername || "بازیکن ۲");
+                localSocket.send(JSON.stringify({ type: 'GUEST_JOINED', guestName: activeName }));
+            }
+        };
+
+        // اگر روی این آی‌پی سروری نبود، اتصال موقت را می‌بندد
+        tempSocket.onerror = () => {
+            tempSocket.close();
+        };
+    });
+
+    // بررسی نهایی پس از ۴ ثانیه در صورت پیدا نشدن حریف
+    setTimeout(() => {
+        if (!foundHost) {
+            document.getElementById("p2pStatusText").innerHTML = "❌ حریف پیدا نشد!<br><span style='color:#ff9800; font-size:11px;'>مطمئن شوید به وای‌فای یا هات‌اسپات یکدیگر وصل هستید.</span>";
+        }
+    }, 4000);
+}
+
+// ۳. مدیریت ارسال و دریافت داده‌های فیزیک بازی به صورت آفلاین
+function setupSocketListeners() {
+    localSocket.onopen = () => {
+        console.log("اتصال سوکت محلی با موفقیت برقرار شد.");
+    };
+
+    localSocket.onmessage = (event) => {
+        let data = JSON.parse(event.data);
+        
+        // وقتی مهمان وصل می‌شود (مخصوص گوشی میزبان)
+        if (data.type === 'GUEST_JOINED') {
+            playerNames = [currentUsername || "بازیکن ۱", data.guestName];
+            selectedPlayerCount = 2;
+            showGameToast(`🎮 ${data.guestName} وارد استادیوم شد!`);
+            
+            // همگام‌سازی کل استادیوم و ارسال دستور شروع به مهمان
+            localSocket.send(JSON.stringify({
+                type: 'START_GAME',
+                players: playerNames,
+                ground: selectedGroundVal,
+                weather: selectedWeather,
+                marbles: selectedCountVal
+            }));
+            setTimeout(launchGameDirectly, 1000);
+        }
+
+        // دریافت دستور شروع بازی (مخصوص گوشی مهمان)
+        if (data.type === 'START_GAME') {
+            playerNames = data.players;
+            selectedGroundVal = data.ground;
+            currentGround = grounds[data.ground];
+            selectedWeather = data.weather;
+            selectedCountVal = data.marbles;
+            selectedPlayerCount = 2;
+            isMyTurnOnline = false; // نوبت اول همیشه با میزبان است
+            launchGameDirectly();
+        }
+        
+        // دریافت پوزیشن و جهت شلیک تیله از گوشی مقابل حین بازی
+        if (data.type === 'SHOOT') {
+            player.x = data.x; player.y = data.y;
+            player.targetX = data.targetX; player.targetY = data.targetY;
+            player.vx = data.vx; player.vy = data.vy;
+            player.arcHeight = data.arcHeight;
+            player.inAir = true;
+            isMyTurnOnline = true; // نوبت شلیک به این گوشی منتقل می‌شود
+        }
+    };
+}
     </script>
 
 </body>
