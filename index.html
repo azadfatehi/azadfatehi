@@ -584,6 +584,20 @@ function openYourCustomShopForm() {
         showGameToast("⚠️ فرم فروشگاه با نام shop یافت نشد!");
     }
 }
+// اتصال فایل منیفست به سند
+const linkManifest = document.createElement('link');
+linkManifest.rel = 'manifest';
+linkManifest.href = 'manifest.json';
+document.head.appendChild(linkManifest);
+
+// ثبت سرویس ورکر در مرورگر برای قابلیت نصب
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js')
+      .then(reg => console.log('سرویس ورکر با موفقیت فعال شد.'))
+      .catch(err => console.log('خطا در ثبت سرویس ورکر:', err));
+  });
+}
 
     </script>
 
