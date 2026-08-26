@@ -1,4 +1,4 @@
-const CACHE_NAME = 'marbles-stadium-v1';
+const CACHE_NAME = 'marbles-stadium-v2';
 const ASSETS = [
   'index.html',
   'shop.html', // 🏪 اضافه شدن صفحه فروشگاه برای دسترسی آفلاین
