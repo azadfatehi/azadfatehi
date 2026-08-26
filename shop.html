@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no">
+    <title>صرافی مجلل و روشن استادیوم تیله‌بازی</title>
+    <style>
+        /* ☀️ پس‌زمینه بسیار روشن، پرانرژی و مچ شده با تم استادیوم */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { margin: 0; padding: 20px; background: radial-gradient(circle at 50% 50%, #fffdf0 0%, #f4ebd0 100%); color: #2d3748; direction: rtl; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        
+        /* ✨ فریم شیشه‌ای سفید براق و روشن با حاشیه‌های طلایی */
+        .container { width: 100%; max-width: 800px; background: rgba(255, 255, 255, 0.85); border: 2px solid #d4af37; border-radius: 28px; padding: 25px; backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); box-shadow: 0 20px 40px rgba(212, 175, 55, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.6); margin-bottom: 25px; position: relative; }
+        
+        /* 🏆 تیترهای لوکس طلاکوب شده روشن */
+        h2, h3 { text-align: center; color: #b8860b; margin-top: 0; margin-bottom: 20px; font-size: 18px; font-weight: 900; text-shadow: 0 2px 4px rgba(0,0,0,0.05); border-bottom: 2px solid rgba(212, 175, 55, 0.3); padding-bottom: 12px; }
+        
+        /* 📂 فیلدهای ورودی روشن و هماهنگ */
+        input { width: 100%; padding: 14px; font-size: 14px; font-weight: bold; background: #ffffff; border: 2px solid rgba(212, 175, 55, 0.4); border-radius: 16px; color: #2d3748; outline: none; text-align: center; margin-bottom: 15px; transition: all 0.3s; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        input:focus { border-color: #b8860b; box-shadow: 0 0 12px rgba(212, 175, 55, 0.5); background: #fff; }
+        
+        /* 🛒 ویترین محصولات واکنش‌گرای روشن */
+        .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 15px; }
+        /* 💎 کارت‌های لوکس شیشه‌ای سفید و درخشان */
+        .product-card:hover { transform: scale(1.03); border-color: #b8860b; box-shadow: 0 12px 25px rgba(212, 175, 55, 0.3); background: #ffffff; }
+        .product-card .marble-glow { position: relative; width: 65px; height: 65px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: rgba(255,255,255,0.8); box-shadow: inset -3px -3px 8px rgba(0,0,0,0.1), 0 5px 12px rgba(212,175,55,0.2); margin-bottom: 5px; }
+        .product-card img { width: 85%; height: 85%; object-fit: cover; border-radius: 50%; filter: drop-shadow(0 0 4px rgba(212,175,55,0.3)); }
+        .product-name { font-size: 14px; font-weight: 900; color: #2d3748; }
+        .product-price { font-size: 12px; color: #b8860b; font-weight: bold; }
+        .qty-box { display: flex; gap: 6px; align-items: center; font-size: 12px; color: #718096; }
+        .qty-box input { width: 50px; padding: 6px; margin: 0; border-radius: 8px; border: 1px solid rgba(212, 175, 55, 0.5); background: #fff; }
+        
+        /* ⚡ دکمه‌های مجلل با طلایی درخشان و زرق‌وبرق استادیوم */
+        .action-btn { width: 100%; color: #000; border: none; padding: 12px; border-radius: 14px; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 10px rgba(212, 175, 55, 0.3); background: linear-gradient(135deg, #ffd700 0%, #d4af37 100%); border: 1px solid rgba(255,255,255,0.5); }
+        .action-btn:hover { transform: scale(1.04); box-shadow: 0 0 15px rgba(212, 175, 55, 0.8); }
+        .btn-orange { background: linear-gradient(135deg, #ff9800 0%, #fb8c00 100%); color: #fff; box-shadow: 0 4px 10px rgba(255, 152, 0, 0.3); }
+        .btn-orange:hover { box-shadow: 0 0 15px rgba(255, 152, 0, 0.7); }
+        
+        .bank-info-box { background: rgba(33, 150, 243, 0.08); border: 2px dashed #2196f3; border-radius: 18px; padding: 15px; font-size: 13px; text-align: center; margin-top: 15px; display: none; line-height: 1.8; color: #2d3748; }
+        .admin-box { border: 2px dashed #ff1744; background: linear-gradient(135deg, #fff5f5 0%, #ffebee 100%); display: none; color: #2d3748; }
+        .request-item { background: #ffffff; border: 1px solid rgba(0,0,0,0.08); border-radius: 16px; padding: 14px; margin-bottom: 12px; font-size: 13px; display: flex; flex-direction: column; gap: 4px; text-align: right; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+        .admin-actions { display: flex; gap: 8px; margin-top: 8px; }
+        .admin-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; font-size: 12px; font-weight: bold; cursor: pointer; color: white; }
+        .admin-btn.approve { background: #2e7d32; }
+        .admin-btn.reject { background: #c62828; }
+        
+        @media (max-width: 600px) { .products-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .container { padding: 15px; border-radius: 20px; } }
+		        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-family: tahoma;
+        }
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+    </style>
+</head>
+<body>
+    <!-- دکمه ورود به فروشگاه -->
+<!-- دکمه خروج در صفحه دوم -->
+<!-- این دکمه تب فروشگاه را می‌بندد و کاربر به صفحه اصلی برمی‌گردد -->
+<!-- دکمه خروج شیک و هماهنگ با تم صفحه استادیوم -->
+<div style="text-align: center; margin: 20px 0;">
+    <a href="#" onclick="window.close(); return false;" style="
+        display: inline-block;
+        padding: 10px 30px;
+        background: linear-gradient(135deg, #ffd700, #ffb300);
+        color: #222;
+        font-family: 'tahoma', sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+        text-decoration: none;
+        border-radius: 50px;
+        box-shadow: 0 4px 15px rgba(255, 179, 0, 0.3);
+        transition: all 0.3s ease;
+        border: 1px solid #cca300;
+    " onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 6px 20px rgba(255, 179, 0, 0.5)';" 
+       onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 15px rgba(255, 179, 0, 0.3)';"
+    >
+        ❌ خروج از فروشگاه استادیوم
+    </a>
+</div>
+
+    <div class="container">
+        <!-- 🔙 هدر صرافی مجهز به دکمه خروج و برگشت هوشمند -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid rgba(212, 175, 55, 0.3); padding-bottom: 12px; width: 100%;">
+            <h2 style="margin: 0; border: none; padding: 0; font-size: 17px; text-align: left;">🏪 صرافی و کارتابل معامله استادیوم</h2>
+        </div>
+        <div class="products-grid">
+            <!-- محصول ۱: زمرد -->
+            <div class="product-card">
+                <div class="marble-glow"><img src="emerald.png" alt="زمرد" onerror="this.src='6.png'"></div>
+                <div class="product-name">تیله زمرد</div>
+                <div class="product-price">۵,۰۰۰ تومان</div>
+                <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_emerald" value="1" min="1"></div>
+                <button class="action-btn" onclick="requestPurchase('emerald.png', 5000, 'qty_emerald', 'زمرد')">🪙 خرید</button>
+            </div>
+            <!-- محصول ۲: یاقوت -->
+            <div class="product-card">
+                <div class="marble-glow"><img src="ruby.png" alt="یاقوت" onerror="this.src='6.png'"></div>
+                <div class="product-name">تیله یاقوت</div>
+                <div class="product-price">۱۲,۰۰۰ تومان</div>
+                <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_ruby" value="1" min="1"></div>
+                <button class="action-btn" onclick="requestPurchase('ruby.png', 12000, 'qty_ruby', 'یاقوت')">🪙 خرید </button>
+            </div>
+            <!-- محصول ۳: کبالت -->
+            <div class="product-card">
+                <div class="marble-glow"><img src="cobalt.png" alt="کبالت" onerror="this.src='6.png'"></div>
+                <div class="product-name">تیله کبالت</div>
+                <div class="product-price">۴,۰۰۰ تومان</div>
+                <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_cobalt" value="1" min="1"></div>
+                <button class="action-btn" onclick="requestPurchase('cobalt.png', 4000, 'qty_cobalt', 'کبالت')">🪙 خرید </button>
+            </div>
+            <!-- محصول ۴: طلایی سلطنتی -->
+            <div class="product-card">
+                <div class="marble-glow"><img src="gold.png" alt="طلایی" onerror="this.src='6.png'"></div>
+                <div class="product-name">طلایی سلطنتی</div>
+                <div class="product-price">۱۵,۰۰۰ تومان</div>
+                <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_gold" value="1" min="1"></div>
+                <button class="action-btn" onclick="requestPurchase('gold.png', 15000, 'qty_gold', 'طلایی')">🪙 خرید </button>
+            </div>
+            <!-- محصول ۵: بلور الماس -->
+            <div class="product-card">
+                <div class="marble-glow"><img src="diamond.png" alt="الماس" onerror="this.src='6.png'"></div>
+                <div class="product-name">بلور الماس</div>
+                <div class="product-price">۲۵,۰۰۰ تومان</div>
+                <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_diamond" value="1" min="1"></div>
+                <button class="action-btn" onclick="requestPurchase('diamond.png', 25000, 'qty_diamond', 'الماس')">🪙 خرید </button>
+            </div>
+            <!-- product ۶: عقیق سیاه -->
+            <div class="product-card">
+                <div class="marble-glow"><img src="onyx.png" alt="عقیق" onerror="this.src='6.png'"></div>
+                <div class="product-name">عقیق سیاه</div>
+                <div class="product-price">۹,۰۰۰ تومان</div>
+                <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_onyx" value="1" min="1"></div>
+                <button class="action-btn" onclick="requestPurchase('onyx.png', 9000, 'qty_onyx', 'عقیق')">🪙 خرید </button>
+            </div>
+        </div>
+        <!-- کادر فاکتور و اطلاعات حساب ادمین -->
+        <div class="bank-info-box" id="bankInfoBox">
+            <div style="font-weight: 900; color: #b8860b; margin-bottom: 5px;">👑 صرافی مرکزی و هوشمند استادیوم</div>
+            <div>لطفاً مبلغ کل را به شماره کارت زیر کارت‌به‌کارت فرمایید:</div>
+            <strong style="color:#b8860b; font-size:16px; display:block; margin:6px 0; letter-spacing: 1px;">۶۰۳۷-۹۹۷۹-۱۲۳۴-۵۶۷۸</strong>
+            <div>سپس شناسه پیگیری یا شماره فیش تراکنش خود را ثبت کنید:</div>
+            <input type="text" id="receiptRefInput" placeholder="کد پیگیری یا شماره فیش بانکی" style="margin-top:10px;">
+            <button class="action-btn" style="padding:10px; font-size:12px;" onclick="submitReceipt()">🎯 ثبت و ارسال فیش به مدیریت</button>
+        </div>
+
+        <!-- کارتابل معامله شخص به شخص روشن -->
+        <div class="transfer-box" style="margin-top:25px; border-top:1px solid rgba(212,175,55,0.3); padding-top:20px;">
+            <label style="display:block; text-align:center; color:#b8860b; font-weight:900; font-size:13px; margin-bottom:12px;">🤝 کارتابل رسمی انتقال مالکیت به کد ملی دیگر</label>
+            <input type="text" pattern="[0-9]*" inputmode="numeric" maxlength="10" id="transferTargetIdInput" placeholder="کد ملی خریدار (۱۰ رقمی)">
+            <input type="number" id="transferAmountInput" placeholder="تعداد تیله برای انتقال">
+            <button class="action-btn btn-orange" onclick="executeMarbleTransfer()">💰 ثبت معامله و کسر دارایی</button>
+        </div>
+    </div>
+
+    <!-- کارتابل مدیریت قفل‌شده -->
+    <div class="container admin-box" id="adminBoxPanel">
+        <h3>👑 میز کار و کارتابل تایید ادمین (مدیریت استادیوم)</h3>
+        <div id="adminRequestsContainer"></div>
+    </div>
+    <script>
+        // 🔐 قفل امنیتی: کد ملی خودتان را دقیقاً بین دو کوتیشن زیر جایگزین کنید
+        const ADMIN_NATIONAL_ID = "0058875840"; 
+        
+        let currentOrder = null;
+        let activeUserId = localStorage.getItem("currentNationalId") || "0058875840";
+
+        // سیستم هوشمند بررسی کارتابل ادمین
+        function checkAdminAccess() {
+            let adminPanel = document.getElementById("adminBoxPanel");
+            if (!adminPanel) return;
+            if (activeUserId === ADMIN_NATIONAL_ID) {
+                adminPanel.style.display = "block";
+                renderAdminRequests();
+            } else {
+                adminPanel.style.display = "none";
+            }
+        }
+
+        function requestPurchase(imageSrc, unitPrice, inputId, productName) {
+            let qtyInput = document.getElementById(inputId);
+            let quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+            if (isNaN(quantity) || quantity < 1) { alert("⚠️ تعداد وارد شده معتبر نیست."); return; }
+            let totalPrice = unitPrice * quantity;
+            currentOrder = { productName: productName, quantity: quantity, totalPrice: totalPrice, imageSrc: imageSrc, buyerId: activeUserId };
+            let infoBox = document.getElementById("bankInfoBox");
+            if (infoBox) { infoBox.style.display = "block"; infoBox.scrollIntoView({ behavior: 'smooth' }); }
+            alert(`🛒 فاکتور خرید صادر شد.\n💰 مبلغ قابل واریز: ${totalPrice.toLocaleString()} تومان`);
+        }
+
+        function submitReceipt() {
+            let refInput = document.getElementById("receiptRefInput");
+            let refText = refInput ? refInput.value.trim() : "";
+            if (refText === "") { alert("⚠️ لطفاً شماره فیش یا شناسه پیگیری را وارد کنید."); return; }
+            if (!currentOrder) { alert("⚠️ ابتدا محصولی را انتخاب کنید."); return; }
+            let allRequests = JSON.parse(localStorage.getItem("admin_marble_requests")) || [];
+            allRequests.push({ id: Date.now(), buyerId: currentOrder.buyerId, productName: currentOrder.productName, quantity: currentOrder.quantity, totalPrice: currentOrder.totalPrice, refText: refText, status: "pending" });
+            localStorage.setItem("admin_marble_requests", JSON.stringify(allRequests));
+            if (refInput) refInput.value = "";
+            document.getElementById("bankInfoBox").style.display = "none";
+            currentOrder = null;
+            alert("🎯 فیش شما با موفقیت ثبت شد و در کارتابل تایید ادمین قرار گرفت.");
+            checkAdminAccess();
+        }
+
+        // 📋 تابع هوشمند رندر فیش‌ها همراه با نمایش نام و نام خانوادگی خریدار
+        function renderAdminRequests() {
+            let container = document.getElementById("adminRequestsContainer");
+            if (!container) return;
+            let allRequests = JSON.parse(localStorage.getItem("admin_marble_requests")) || [];
+            let pendingRequests = allRequests.filter(r => r.status === "pending");
+            if (pendingRequests.length === 0) {
+                container.innerHTML = `<div style="text-align:center; color:#888; font-size:12px; padding:10px;">درخواستی در صف انتظار نیست.</div>`;
+                return;
+            }
+            container.innerHTML = "";
+            pendingRequests.forEach(req => {
+                // 🔍 استخراج هوشمند نام فارسی بازیکن از روی کد ملی ثبت‌شده در حافظه مرورگر
+                let buyerRealName = localStorage.getItem(`name_${req.buyerId}`) || "بازیکن ثبت‌نام نشده/مهمان";
+                
+                let div = document.createElement("div");
+                div.className = "request-item";
+                div.innerHTML = `
+                    <div>👤 <strong>خریدار:</strong> <span style="color:#b8860b; font-weight:900;">${buyerRealName}</span> <span style="font-size:11px; color:#666;">(کد ملی: ${req.buyerId})</span></div>
+                    <div>💎 <strong>محصول:</strong> ${req.quantity} عدد تیله ${req.productName}</div>
+                    <div>💰 <strong>مبلغ فاکتور:</strong> ${req.totalPrice.toLocaleString()} تومان</div>
+                    <div>🧾 <strong>کد فیش بانکی:</strong> <span style="color:#00e676; font-weight:bold;">${req.refText}</span></div>
+                    <div class="admin-actions">
+                        <button class="admin-btn approve" onclick="processOrder(${req.id}, 'approve')">✅ تایید و شارژ حساب</button>
+                        <button class="admin-btn reject" onclick="processOrder(${req.id}, 'reject')">❌ رد فیش</button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function processOrder(reqId, action) {
+            let allRequests = JSON.parse(localStorage.getItem("admin_marble_requests")) || [];
+            let reqIndex = allRequests.findIndex(r => r.id === reqId);
+            if (reqIndex === -1) return;
+            let req = allRequests[reqIndex];
+            if (action === "approve") {
+                let currentMarbles = parseInt(localStorage.getItem(`marbles_${req.buyerId}`)) || 10;
+                let newBalance = currentMarbles + req.quantity;
+                localStorage.setItem(`marbles_${req.buyerId}`, newBalance);
+                if (req.buyerId === localStorage.getItem("currentNationalId")) { localStorage.setItem("totalMarblesOwned", newBalance); }
+                alert(`✅ حساب کاربر ${req.buyerId} با موفقیت ${req.quantity} تیله شارژ شد.`);
+            } else { alert("❌ درخواست خرید رد شد."); }
+            allRequests.splice(reqIndex, 1);
+            localStorage.setItem("admin_marble_requests", JSON.stringify(allRequests));
+            checkAdminAccess();
+            if (window.parent && typeof window.parent.updateWalletUI === "function") { window.parent.updateWalletUI(); }
+        }
+
+        function executeMarbleTransfer() {
+            let totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${activeUserId}`)) || 10;
+            let targetId = document.getElementById("transferTargetIdInput").value.trim();
+            let amountInput = document.getElementById("transferAmountInput");
+            let transferAmount = amountInput ? parseInt(amountInput.value) : 0;
+            if (targetId.length !== 10 || isNaN(targetId)) { alert("⚠️ کد ملی خریدار باید دقیقاً ۱۰ رقم عددی باشد."); return; }
+            if (targetId === activeUserId) { alert("⚠️ شما نمی‌توانید به کد ملی خودتان تیله انتقال دهید!"); return; }
+            if (isNaN(transferAmount) || transferAmount < 1) { alert("⚠️ تعداد تیله معتبر نیست."); return; }
+            if (totalMarblesOwned < transferAmount) { alert("❌ موجودی تیله‌های کارتابل شما کافی نیست."); return; }
+            let buyerName = localStorage.getItem(`name_${targetId}`);
+            if (!buyerName) { alert("❌ کد ملی مقصد در استادیوم ثبت‌نام نکرده است!"); return; }
+            totalMarblesOwned -= transferAmount;
+            let buyerCurrentMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10;
+            localStorage.setItem(`marbles_${activeUserId}`, totalMarblesOwned);
+            localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
+            localStorage.setItem(`marbles_${targetId}`, buyerCurrentMarbles + transferAmount);
+            document.getElementById("transferTargetIdInput").value = "";
+            if (amountInput) amountInput.value = "";
+            alert(`🤝 معامله ثبت شد! ${transferAmount} تیله به کارتابل بازیکن "${buyerName}" منتقل شد.`);
+            if (window.parent && typeof window.parent.updateWalletUI === "function") { window.parent.updateWalletUI(); }
+        }
+
+        checkAdminAccess();
+		// تزریق و رونویسی نهایی تابع دکمه منو برای باز کردن فرم جدید صرافی روشن
+function openStadiumStoreModal() {
+    const newShopFrame = document.getElementById("shop");
+    if (newShopFrame) {
+        newShopFrame.style.display = "flex"; // بالا آوردن دکان جدید ۶ تایی شما
+        activeUserId = localStorage.getItem("currentNationalId") || currentNationalId || "1234567890";
+        if (typeof checkAdminAccess === "function") { checkAdminAccess(); }
+    } else {
+        alert("⚠️ لایه صرافی روشن با شناسه id='shop' پیدا نشد. لطفاً گام اول را دوباره کپی کنید.");
+    }
+}
+
+// تابع بستن دکان با دکمه برگشت هوشمند جدید شما
+function handleBackAction() {
+    const newShopFrame = document.getElementById("shop");
+    if (newShopFrame) { newShopFrame.style.display = "none"; }
+}
+
+function closeStadiumStoreModal() {
+    handleBackAction();
+}
+
+    </script>
+	    <!-- 🏪 لایه پاپ‌آ‌پ شیک فروشگاه مجلل و روشن جدید شما (فرم shop) -->
+    <div id="shop" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 350; padding: 15px; overflow-y: auto;">
+        
+        <div class="container" style="margin-bottom: 0; max-height: 94vh; overflow-y: auto; width: 100%; max-width: 800px;">
+            
+            <!-- 🔙 هدر صرافی مجهز به دکمه خروج و برگشت هوشمند -->
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 2px solid rgba(212, 175, 55, 0.3); padding-bottom: 12px; width: 100%;">
+                <button type="button" style="background: linear-gradient(135deg, #ff5722 0%, #d32f2f 100%); color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 10px rgba(211, 47, 47, 0.3); transition: all 0.2s;" onclick="handleBackAction()">🔙 برگشت به بازی</button>
+                <h2 style="margin: 0; border: none; padding: 0; font-size: 17px; text-align: left;">🏪 صرافی و کارتابل معامله استادیوم</h2>
+            </div>
+
+            <div class="products-grid">
+                <!-- محصول ۱: زمرد -->
+                <div class="product-card">
+                    <div class="marble-glow"><img src="emerald.png" alt="زمرد" onerror="this.src='6.png'"></div>
+                    <div class="product-name">تیله زمرد</div>
+                    <div class="product-price">۵,۰۰۰ تومان</div>
+                    <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_emerald" value="1" min="1"></div>
+                    <button type="button" class="action-btn" onclick="requestPurchase('emerald.png', 5000, 'qty_emerald', 'زمرد')">🪙  مجلل</button>
+                </div>
+                <!-- محصول ۲: یاقوت -->
+                <div class="product-card">
+                    <div class="marble-glow"><img src="ruby.png" alt="یاقوت" onerror="this.src='6.png'"></div>
+                    <div class="product-name">تیله یاقوت</div>
+                    <div class="product-price">۱۲,۰۰۰ تومان</div>
+                    <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_ruby" value="1" min="1"></div>
+                    <button type="button" class="action-btn" onclick="requestPurchase('ruby.png', 12000, 'qty_ruby', 'یاقوت')">🪙  مجلل</button>
+                </div>
+                <!-- محصول ۳: کبالت -->
+                <div class="product-card">
+                    <div class="marble-glow"><img src="cobalt.png" alt="کبالت" onerror="this.src='6.png'"></div>
+                    <div class="product-name">تیله کبالت</div>
+                    <div class="product-price">۴,۰۰۰ تومان</div>
+                    <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_cobalt" value="1" min="1"></div>
+                    <button type="button" class="action-btn" onclick="requestPurchase('cobalt.png', 4000, 'qty_cobalt', 'کبالت')">🪙  مجلل</button>
+                </div>
+                <!-- محصول ۴: طلایی سلطنتی -->
+                <div class="product-card">
+                    <div class="marble-glow"><img src="gold.png" alt="طلایی" onerror="this.src='6.png'"></div>
+                    <div class="product-name">طلایی سلطنتی</div>
+                    <div class="product-price">۱۵,۰۰۰ تومان</div>
+                    <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_gold" value="1" min="1"></div>
+                    <button type="button" class="action-btn" onclick="requestPurchase('gold.png', 15000, 'qty_gold', 'طلایی')">🪙  مجلل</button>
+                </div>
+                <!-- محصول ۵: بلور الماس -->
+                <div class="product-card">
+                    <div class="marble-glow"><img src="diamond.png" alt="الماس" onerror="this.src='6.png'"></div>
+                    <div class="product-name">بلور الماس</div>
+                    <div class="product-price">۲۵,۰۰۰ تومان</div>
+                    <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_diamond" value="1" min="1"></div>
+                    <button type="button" class="action-btn" onclick="requestPurchase('diamond.png', 25000, 'qty_diamond', 'الماس')">🪙  مجلل</button>
+                </div>
+                <!-- محصول ۶: عقیق سیاه -->
+                <div class="product-card">
+                    <div class="marble-glow"><img src="onyx.png" alt="عقیق" onerror="this.src='6.png'"></div>
+                    <div class="product-name">عقیق سیاه</div>
+                    <div class="product-price">۹,۰۰۰ تومان</div>
+                    <div class="qty-box"><span>تعداد:</span><input type="number" id="qty_onyx" value="1" min="1"></div>
+                    <button type="button" class="action-btn" onclick="requestPurchase('onyx.png', 9000, 'qty_onyx', 'عقیق')">🪙  مجلل</button>
+                </div>
+            </div>
+
+            <!-- کادر فاکتور و اطلاعات حساب ادمین -->
+            <div class="bank-info-box" id="bankInfoBox">
+                <div style="font-weight: 900; color: #b8860b; margin-bottom: 5px;">👑 صرافی مرکزی و هوشمند استادیوم</div>
+                <div>لطفاً مبلغ کل را به شماره کارت زیر کارت‌به‌کارت فرمایید:</div>
+                <strong style="color:#b8860b; font-size:16px; display:block; margin:6px 0; letter-spacing: 1px;">۶۰۳۷-۹۹۷۹-۱۲۳۴-۵۶۷۸</strong>
+                <div>سپس شناسه پیگیری یا شماره فیش تراکنش خود را ثبت کنید:</div>
+                <input type="text" id="receiptRefInput" placeholder="کد پیگیری یا شماره فیش بانکی" style="margin-top:10px;">
+                <button type="button" class="action-btn" style="padding:10px; font-size:12px;" onclick="submitReceipt()">🎯 ثبت و ارسال فیش به مدیریت</button>
+            </div>
+
+            <!-- کارتابل معامله شخص به شخص روشن -->
+            <div class="transfer-box" style="margin-top:25px; border-top:1px solid rgba(212,175,55,0.3); padding-top:20px;">
+                <label style="display:block; text-align:center; color:#b8860b; font-weight:900; font-size:13px; margin-bottom:12px;">🤝 کارتابل رسمی انتقال مالکیت به کد ملی دیگر</label>
+                <input type="text" pattern="[0-9]*" inputmode="numeric" maxlength="10" id="transferTargetIdInput" placeholder="کد ملی خریدار (۱۰ رقمی)">
+                <input type="number" id="transferAmountInput" placeholder="تعداد تیله برای انتقال">
+                <button type="button" class="action-btn btn-orange" onclick="executeMarbleTransfer()">💰 ثبت معامله و کسر دارایی</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- کارتابل مدیریت قفل‌شده ادمین -->
+    <div class="container admin-box" id="adminBoxPanel" style="display:none; width: 100%; max-width: 800px; background: rgba(255, 255, 255, 0.85); border: 2px solid #ff1744; border-radius: 28px; padding: 25px; margin-top: 20px;">
+        <h3>👑 میز کار و کارتابل تایید ادمین (مدیریت استادیوم)</h3>
+        <div id="adminRequestsContainer"></div>
+    </div>
+
+</body>
+</html>
