@@ -521,7 +521,51 @@ let localSocket = null; let isMyTurnOnline = true;
         function handleBackToMenu() { isReturningToMenu = true; canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "flex"; gearBtn.style.display = "flex"; const welcomeMsg = document.getElementById("welcomeFadingMessage"); if (welcomeMsg) { welcomeMsg.innerHTML = ""; welcomeMsg.style.opacity = "0"; } }
         function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
         function executeMarbleTransfer() { let targetId = document.getElementById("transferTargetIdInput").value.trim(); let amount = parseInt(document.getElementById("transferAmountInput").value.trim()); if (isQuickRandomMode) { showCustomPopup("در حالت شروع سریع امکان معامله وجود ندارد.", "⚠️", "متوجه شدم", true); return; } if (targetId === "" || targetId.length !== 10) { showCustomPopup("کد ملی خریدار باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح اطلاعات", true); return; } if (isNaN(amount) || amount <= 0) { showCustomPopup("تعداد تیله‌های فروشی باید بزرگتر از صفر باشد.", "⚠️", "اصلاح اطلاعات", true); return; } if (targetId === currentNationalId) { showCustomPopup("شما نمی‌توانید به کد ملی خودتان تیله بفروشید!", "⚠️", "اصلاح اطلاعات", true); return; } if (totalMarblesOwned < amount) { showCustomPopup("موجودی شما کافی نیست. قصد فروش تیله را دارید اما بانک شما کمتر است.", "⚠️", "اصلاح اطلاعات", true); return; } let targetMarbles = parseInt(localStorage.getItem(`marbles_${targetId}`)) || 10; totalMarblesOwned -= amount; targetMarbles += amount; localStorage.setItem("totalMarblesOwned", totalMarblesOwned); localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem(`marbles_${targetId}`, targetMarbles); updateWalletUI(); showCustomPopup(`🎉 معامله ثبت شد! تعداد ${amount} تیله کسر و به بانک کاربر با کد ملی (${targetId}) انتقال یافت.`, "✅", "تایید رسید دکان", false); document.getElementById("transferTargetIdInput").value = ""; document.getElementById("transferAmountInput").value = ""; }
-        document.getElementById("drawOrderBtn").onclick = function(e) { e.preventDefault(); e.stopPropagation(); try{initAudio();}catch(err){} if(!saveSubPlayersData()) return; playClickSound(1); let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); let startTimestamp = null; function animateWheel(timestamp) { if (!startTimestamp) startTimestamp = timestamp; let progress = timestamp - startTimestamp; let progressRatio = Math.min(progress / 2800, 1); let currentAngle = (1 - Math.pow(1 - progressRatio, 4)) * totalRotation; drawWheel(currentAngle); if (progress < 2800) { requestAnimationFrame(animateWheel); } else { let count = selectedPlayerCount; let sliceAngle = (Math.PI * 2) / count; let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count; let mainBadge = document.getElementById("mainPlayerBadge"); if (mainBadge) { mainBadge.innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`; } let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }]; for (let i = 1; i < count; i++) { let finalOrder = ((i - winningIndex + count) % count) + 1; let b = document.getElementById(`pBadge_${i}`); if(b) { b.innerText = `نوبت ${finalOrder}`; b.classList.add("assigned"); } tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder }); } tempPlayers.sort((a, b) => a.order - b.order); playerNames = tempPlayers.map(p => p.name); playerNationalIds = tempPlayers.map(p => p.id); currentPlayerIndex = 0; updateWalletUI(); showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`); } } requestAnimationFrame(animateWheel); };
+        document.getElementById("drawOrderBtn").onclick = function(e) { 
+            e.preventDefault(); e.stopPropagation(); 
+            try{initAudio();}catch(err){} 
+            if(!saveSubPlayersData()) return; 
+            playClickSound(1); 
+            let totalRotation = (Math.PI * 2 * 6) + (Math.random() * Math.PI * 2); 
+            let startTimestamp = null; 
+            
+            function animateWheel(timestamp) { 
+                if (!startTimestamp) startTimestamp = timestamp; 
+                let progress = timestamp - startTimestamp; 
+                let progressRatio = Math.min(progress / 2800, 1); 
+                let currentAngle = (1 - Math.pow(1 - progressRatio, 4)) * totalRotation; 
+                drawWheel(currentAngle); 
+                
+                if (progress < 2800) { 
+                    requestAnimationFrame(animateWheel); 
+                } else { 
+                    let count = selectedPlayerCount; 
+                    let sliceAngle = (Math.PI * 2) / count; 
+                    let winningIndex = (count - Math.floor((totalRotation % (Math.PI * 2)) / sliceAngle)) % count; 
+                    let mainBadge = document.getElementById("mainPlayerBadge"); 
+                    if (mainBadge) { 
+                        mainBadge.innerText = `نوبت ${((0 - winningIndex + count) % count) + 1}`; 
+                    } 
+                    let tempPlayers = [{ name: currentUsername || "بازیکن ۱", id: currentNationalId, order: ((0 - winningIndex + count) % count) + 1 }]; 
+                    for (let i = 1; i < count; i++) { 
+                        let finalOrder = ((i - winningIndex + count) % count) + 1; 
+                        let b = document.getElementById(`pBadge_${i}`); 
+                        if(b) { 
+                            b.innerText = `نوبت ${finalOrder}`; 
+                            b.classList.add("assigned"); 
+                        } 
+                        tempPlayers.push({ name: document.getElementById("subName_" + i)?.value || `بازیکن ${i + 1}`, id: document.getElementById("subId_" + i)?.value || "", order: finalOrder }); 
+                    } 
+                    tempPlayers.sort((a, b) => a.order - b.order); 
+                    playerNames = tempPlayers.map(p => p.name); 
+                    playerNationalIds = tempPlayers.map(p => p.id); 
+                    currentPlayerIndex = 0; 
+                    updateWalletUI(); 
+                    showGameToast(`🎉 قرعه‌کشی با موفقیت انجام شد!`); 
+                } 
+            } 
+            requestAnimationFrame(animateWheel); 
+        };
         gearBtn.onclick = openSettingsDrawerMenu; overlay.onclick = handleDrawerExit;
         closeDrawer.onclick = () => { if(!saveSubPlayersData()) return; handleDrawerExit(); gearBtn.style.display = "none"; launchGameDirectly(); };
         startBtn.onclick = () => { isQuickRandomMode = false; if (selectedPlayerCount > 1) { if(!saveSubPlayersData()) return; } gearBtn.style.display = "none"; launchGameDirectly(); }; exitBtn.onclick = handleFinalExit;
