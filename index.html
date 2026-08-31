@@ -448,7 +448,52 @@ let localSocket = null; let isMyTurnOnline = true;
         function drawDynamicBorder() { ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore(); }
         function loadLevel(lvl) { targets = []; let totalMarblesToPlace = selectedCountVal * selectedPlayerCount; let centerY = box.y + box.h / 2; let targetRadius = 14; let targetDiameter = targetRadius * 2; let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius; for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angle: 0, angleX: 0, angleY: 0, isOut: false }); } }
         function drawWheel(currentAngle = 0) { const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return; const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2; wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count; for(let i = 0; i < count; i++) { let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle; wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke(); let textAngle = startA + sliceAngle / 2; let normAngle = textAngle % (Math.PI * 2); if (normAngle < 0) normAngle += Math.PI * 2; wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(textAngle); if (normAngle > Math.PI / 2 && normAngle < (3 * Math.PI) / 2) { wCtx.translate(radius - 65, 0); wCtx.rotate(Math.PI); } else { wCtx.translate(radius - 65, 0); } wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 13px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle"; wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 12), 0, 0); wCtx.restore(); } wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke(); }
-        function updateNameInputs(count) { namesContainer.innerHTML = ""; playerOrders = []; const drawOrderBtn = document.getElementById("drawOrderBtn"); const wheelSection = document.getElementById("wheelSection"); let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱"; let mainRow = document.createElement("div"); mainRow.className = "player-row-item"; mainRow.innerHTML = `<div class="player-inputs"><input type="text" value="${currentValidName}" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div>`; namesContainer.appendChild(mainRow); playerOrders.push(1); for(let i = 1; i < count; i++) { playerOrders.push(i + 1); let row = document.createElement("div"); row.className = "player-row-item"; row.innerHTML = `<div class="player-inputs"><input type="number" id="subId_${i}" placeholder="کد ملی بازیکن ${i + 1}" oninput="checkSubPlayerIdAuto(${i})" style="width:40%;"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}" style="width:40%;"><div class="order-badge" id="pBadge_${i}" style="width:20%; font-size:11px;">نامشخص</div></div>`; namesContainer.appendChild(row); document.getElementById(`subName_${i}`).oninput = () => { let temp = [currentValidName]; for(let j=1; j<count; j++){ let val = document.getElementById(`subName_${j}`)?.value.trim(); temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); } playerNames = temp; drawWheel(0); }; } let tempInit = [currentValidName]; for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); } playerNames = tempInit; if (count > 1) { drawOrderBtn.style.display = "block"; wheelSection.style.display = "flex"; drawWheel(0); } else { drawOrderBtn.style.display = "none"; wheelSection.style.display = "none"; } }
+        function updateNameInputs(count) { 
+            namesContainer.innerHTML = ""; 
+            playerOrders = []; 
+            const drawOrderBtn = document.getElementById("drawOrderBtn"); 
+            const wheelSection = document.getElementById("wheelSection"); 
+            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱"; 
+            let mainRow = document.createElement("div"); 
+            mainRow.className = "player-row-item"; 
+            mainRow.innerHTML = `<div class="player-inputs"><input type="text" value="${currentValidName}" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div>`; 
+            namesContainer.appendChild(mainRow); 
+            playerOrders.push(1); 
+            
+            for(let i = 1; i < count; i++) { 
+                playerOrders.push(i + 1); 
+                let row = document.createElement("div"); 
+                row.className = "player-row-item"; 
+                row.innerHTML = `<div class="player-inputs"><input type="number" id="subId_${i}" placeholder="کد ملی بازیکن ${i + 1}" oninput="checkSubPlayerIdAuto(${i})" style="width:40%;"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}" style="width:40%;"><div class="order-badge" id="pBadge_${i}" style="width:20%; font-size:11px;">نامشخص</div></div>`; 
+                namesContainer.appendChild(row); 
+                
+                document.getElementById(`subName_${i}`).oninput = () => { 
+                    let temp = [currentValidName]; 
+                    for(let j=1; j<count; j++){ 
+                        let val = document.getElementById(`subName_${j}`)?.value.trim(); 
+                        temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); 
+                    } 
+                    playerNames = temp; 
+                    drawWheel(0); 
+                }; 
+            } 
+            
+            let tempInit = [currentValidName]; 
+            for(let j=1; j<count; j++){ 
+                tempInit.push(`بازیکن ${j+1}`); 
+            } 
+            playerNames = tempInit; 
+            
+            // 🎰 اصلاح نمایش فیزیکی بخش گردونه و دکمه قرعه‌کشی
+            if (count > 1) { 
+                drawOrderBtn.style.setProperty("display", "block", "important"); 
+                wheelSection.style.setProperty("display", "flex", "important"); 
+                setTimeout(() => { drawWheel(0); }, 50); 
+            } else { 
+                drawOrderBtn.style.display = "none"; 
+                wheelSection.style.display = "none"; 
+            } 
+        }
         function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; } box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100; }
         function gameLoop() {
