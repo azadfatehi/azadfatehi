@@ -291,7 +291,7 @@
         let currentNationalId = localStorage.getItem("currentNationalId") || "";
         let authMode = "login"; let gameLoopRunning = false; let isQuickRandomMode = false; let isReturningToMenu = false; 
         let playerNames = ["بازیکن ۱"]; let playerNationalIds = []; let currentPlayerIndex = 0;
- let isMyTurnOnline = true;
+let localSocket = null; let isMyTurnOnline = true;
         let isFirstShotOfTurn = true; let currentLevel = 1; let isAiming = false; let isMoving = false;
         let hitSuccessInTurn = false; let targetOutInTurn = false; let hasBonusShot = false; let isChainMode = false;
         let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
@@ -593,8 +593,6 @@ function openYourCustomShopForm() {
         showGameToast("⚠️ فرم فروشگاه با نام shop یافت نشد!");
     }
 }
-let localSocket = null;
-
 // ۱. راه‌اندازی استادیوم توسط میزبان (کسی که هات‌اسپات را روشن کرده است)
 function initiateRadarHost() {
     document.getElementById("p2pStatusText").innerHTML = "🟢 استادیوم محلی ساخته شد.<br><span style='color:#fff; font-size:12px;'>کافیست حریف دکمه «اتصال سریع» را در گوشی خود بزند.</span>";
