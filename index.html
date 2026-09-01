@@ -427,24 +427,32 @@ let localSocket = null; let isMyTurnOnline = true;
         function updateWeatherParticles() { weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } }); windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } }); }
         function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } if (selectedWeather === "windy" || selectedWeather === "rainy" || selectedWeather === "snowy") { windLines.forEach(w => { ctx.fillStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.fillRect(w.x, w.y, w.w, w.h); }); } ctx.restore(); }
         function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
-        function resetRound() {
+		        function resetRound() {
             player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; isMoving = false;
             let activeTargets = targets.filter(t => !t.isOut).length;
             if (activeTargets === 0) { playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 400); return; }
             let nX = canvas.width / 2; let nY = canvas.height - 100; player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0; player.angleX = 0; player.angleY = 0;
+            
             if (targetOutInTurn) {
-                playCheeringSound(); // 🔊 صدای هورای تماشاچیان در صورت خروج موفق تیله هدف
+                playCheeringSound(); // 🔊 صدای هورای تماشاچیان در صورت پرتاب موفق
                 hasBonusShot = true; showGameToast("🎯 شلیک عالی! هوراااا");
             } else {
-                playDisappointmentSound(); // 🔊 صدای آه و افسوس تماشاچیان در صورت عدم خروج یا پرتاب ناموفق
+                playDisappointmentSound(); // 🔊 صدای افسوس تماشاچیان در صورت خطا رفتن شلیک
                 showGameToast("😔 اوووف! نزدیک بود...");
-                if (selectedPlayerCount === 1 || isQuickRandomMode || conn) { hasBonusShot = false; isChainMode = false; } else {
-                    if (isChainMode || !targetOutInTurn) { isChainMode = false; currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; }
+                if (selectedPlayerCount === 1 || isQuickRandomMode || (typeof localSocket !== 'undefined' && localSocket)) { 
+                    hasBonusShot = false; isChainMode = false; 
+                } else {
+                    if (isChainMode || !targetOutInTurn) { 
+                        isChainMode = false; 
+                        currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; 
+                    }
                     hasBonusShot = false;
                 }
             }
-            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; if (!isQuickRandomMode && !conn) updateWalletUI();
+            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; 
+            if (!isQuickRandomMode && !(typeof localSocket !== 'undefined' && localSocket)) updateWalletUI();
         }
+
         function drawDynamicBorder() { ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore(); }
         function loadLevel(lvl) { targets = []; let totalMarblesToPlace = selectedCountVal * selectedPlayerCount; let centerY = box.y + box.h / 2; let targetRadius = 14; let targetDiameter = targetRadius * 2; let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius; for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angle: 0, angleX: 0, angleY: 0, isOut: false }); } }
         function drawWheel(currentAngle = 0) { const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return; const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2; wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count; for(let i = 0; i < count; i++) { let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle; wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke(); let textAngle = startA + sliceAngle / 2; let normAngle = textAngle % (Math.PI * 2); if (normAngle < 0) normAngle += Math.PI * 2; wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(textAngle); if (normAngle > Math.PI / 2 && normAngle < (3 * Math.PI) / 2) { wCtx.translate(radius - 65, 0); wCtx.rotate(Math.PI); } else { wCtx.translate(radius - 65, 0); } wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 13px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle"; wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 12), 0, 0); wCtx.restore(); } wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke(); }
@@ -496,7 +504,7 @@ let localSocket = null; let isMyTurnOnline = true;
         }
         function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; } box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100; }
-        }
+        
         function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
             gameLoopRunning = true;
