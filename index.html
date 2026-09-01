@@ -496,6 +496,7 @@ let localSocket = null; let isMyTurnOnline = true;
         }
         function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; } box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100; }
+        }
         function gameLoop() {
             if (canvas.style.display === "none") { gameLoopRunning = false; return; }
             gameLoopRunning = true;
@@ -515,7 +516,7 @@ let localSocket = null; let isMyTurnOnline = true;
                             if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) {
                                 hitAny = true;
                                 let hitSpeed = Math.sqrt(player.vx*player.vx + player.vy*player.vy) || 5.5;
-                                playClickSound(hitSpeed / 6);
+                                playClickSound(hitSpeed / 5);
                                 t.vx = Math.cos(Math.atan2(dy, dx)) * (hitSpeed * 1.35);
                                 t.vy = Math.sin(Math.atan2(dy, dx)) * (hitSpeed * 1.35);
                             }
@@ -554,6 +555,7 @@ let localSocket = null; let isMyTurnOnline = true;
             else { ctx.fillStyle = currentGround.fallbackColorPlayer || "#2196f3"; ctx.fill(); } ctx.restore();
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
+
         function generateMenuPreviews() { Object.keys(grounds).forEach(key => { let pCanvas = document.getElementById(`pre_${key}`); if (pCanvas) { let pCtx = pCanvas.getContext("2d"); pCanvas.width = 70; pCanvas.height = 70; let tempImg = new Image(); tempImg.src = grounds[key].src; tempImg.onload = function() { pCtx.drawImage(tempImg, 0, 0, 70, 70); }; tempImg.onerror = function() { pCtx.fillStyle = grounds[key].fallbackColor; pCtx.fillRect(0, 0, 70, 70); }; } }); }
         function preloadAssetsAndLaunch() { showGameToast("⏳ در حال تدارک اتمسفر استادیوم..."); imgBg.src = currentGround.src || 'grass.jpg'; imgPlayer.src = '6.png'; imgTarget.src = '1.png'; runGameInitialization(); }
         function runGameInitialization() { if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; } setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); resizeCanvas(); isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; hasBonusShot = false; isChainMode = false; loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI(); gameLoopRunning = true; requestAnimationFrame(gameLoop); }
@@ -680,6 +682,99 @@ let localSocket = null; let isMyTurnOnline = true;
             let pos = getEventPos(e); 
             dragEnd.x = pos.x; 
             dragEnd.y = pos.y; 
+        }
+        function handleEnd() { 
+            if (!isAiming) return; 
+            isAiming = false; 
+            player.vx = 0; player.vy = 0; 
+            let dx = dragStart.x - dragEnd.x; 
+            let dy = dragStart.y - dragEnd.y; 
+            let dragDist = Math.sqrt(dx * dx + dy * dy); 
+            
+            if (dragDist > 5) { 
+                player.startX = player.x; player.startY = player.y; 
+                let targetHit = null; 
+                let closestDist = Infinity; 
+                targetOutInTurn = false;
+                targets.forEach(t => { 
+                    if (t.isOut) return; 
+                    let A = dy; let B = -dx; 
+                    let C = dx * player.y - dy * player.x; 
+                    let lineDist = Math.abs(A * t.x + B * t.y + C) / Math.sqrt(A * A + B * B); 
+                    if (lineDist < (16 + t.r)) { 
+                        let dToTarget = Math.sqrt((t.x - player.x) ** 2 + (t.y - player.y) ** 2); 
+                        if (dToTarget < closestDist) { 
+                            closestDist = dToTarget; targetHit = t; 
+                        } 
+                    } 
+                });
+                if (targetHit && closestDist < 400) { 
+                    player.arcHeight = 0; 
+                    player.targetX = targetHit.x; player.targetY = targetHit.y; 
+                    player.vx = Math.cos(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); 
+                    player.vy = Math.sin(Math.atan2(targetHit.y - player.y, targetHit.x - player.x)) * (7 + dragDist * 0.15); 
+                    
+                    setTimeout(() => { 
+                        let hitSpeed = 7 + (dragDist * 0.15); 
+                        playClickSound(hitSpeed / 10); 
+                        let angle = Math.atan2(targetHit.y - player.startY, targetHit.x - player.startX); 
+                        let steps = 0; 
+                        let slideInterval = setInterval(() => { 
+                            targetHit.x += Math.cos(angle) * (hitSpeed * 1.35); 
+                            targetHit.y += Math.sin(angle) * (hitSpeed * 1.35); 
+                            hitSpeed *= 0.88; steps++; 
+                            if (targetHit.x < box.x || targetHit.x > box.x + box.w || targetHit.y < box.y || targetHit.y > box.y + box.h) { 
+                                targetHit.isOut = true; targetOutInTurn = true; 
+                                if (!isQuickRandomMode) { 
+                                    if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; } 
+                                    let id = playerNationalIds[currentPlayerIndex] || ""; 
+                                    if (id === currentNationalId) { totalMarblesOwned++; } else if (id !== "") { 
+                                        let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1); 
+                                    } 
+                                    updateWalletUI(); 
+                                } 
+                                if (targets.filter(targetItem => !targetItem.isOut).length === 0) { 
+                                    clearInterval(slideInterval); playStadiumGoalHornSound(); setTimeout(showFinalScoreboard, 100); return; 
+                                } 
+                            } 
+                            if (steps > 45 || hitSpeed < 0.2 || targetHit.isOut) { 
+                                clearInterval(slideInterval); setTimeout(resetRound, 300); 
+                            } 
+                        }, 16); 
+                    }, (closestDist / 5.5) * 15); 
+                } else { 
+                    let cX = player.x + dx * 6, cY = player.y + dy * 6; 
+                    player.targetX = Math.max(box.x+22, Math.min(box.x+box.w-22, cX)); 
+                    player.targetY = Math.max(box.y+22, Math.min(box.y+box.h-22, cY)); 
+                    player.vx = dx * 0.15; player.vy = dy * 0.15; 
+                    player.arcHeight = Math.min(dragDist * 0.5, 140); 
+                } 
+                
+                if (!isQuickRandomMode && !targetHit) { 
+                    if (player.targetX < box.x || player.targetX > box.x + box.w || player.targetY < box.y || player.targetY > box.y + box.h) { 
+                        let id = playerNationalIds[currentPlayerIndex] || ""; 
+                        if (id === currentNationalId && totalMarblesOwned > 0) { totalMarblesOwned--; } else if (id !== "") { 
+                            let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; 
+                            if(cSubM > 0) localStorage.setItem(`marbles_${id}`, cSubM - 1); 
+                        } 
+                        showGameToast("⚠️ جریمه خروج تیله خودی! ۱ تیله کسر شد."); 
+                        updateWalletUI(); 
+                    } 
+                } 
+                
+                if (document.getElementById("playerCountSelect").value === "online" && localSocket && localSocket.readyState === WebSocket.OPEN) {
+                    localSocket.send(JSON.stringify({
+                        type: 'SHOOT',
+                        x: player.x, y: player.y,
+                        targetX: player.targetX, targetY: player.targetY,
+                        vx: player.vx, vy: player.vy,
+                        arcHeight: player.arcHeight
+                    }));
+                    isMyTurnOnline = false; 
+                }
+                
+                player.progress = 0; player.inAir = true; isFirstShotOfTurn = false; 
+            } 
         }
 
         canvas.addEventListener("mousedown", handleStart); 
