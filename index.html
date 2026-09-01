@@ -802,6 +802,38 @@ let localSocket = null; let isMyTurnOnline = true;
             } 
             requestAnimationFrame(animateWheel); 
         };
+		        function saveSubPlayersData() {
+            if (isQuickRandomMode || (typeof localSocket !== 'undefined' && localSocket)) return true; 
+            let count = selectedPlayerCount;
+            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
+            let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
+            let tempNames = [currentValidName]; playerNationalIds = [currentValidId]; 
+            
+            for (let i = 1; i < count; i++) {
+                let subNameInput = document.getElementById(`subName_${i}`); 
+                let subIdInput = document.getElementById(`subId_${i}`);
+                let subName = subNameInput ? subNameInput.value.trim() : ""; 
+                let subId = subIdInput ? subIdInput.value.trim() : "";
+                
+                if (subId === "" || subName === "") { 
+                    showCustomPopup(`لطفاً اطلاعات بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true); 
+                    return false; 
+                }
+                if (subId.length !== 10) { 
+                    showCustomPopup(`کد ملی بازیکن شماره ${i + 1} باید ۱۰ رقم باشد.`, "⚠️", "اصلاح کد ملی", true); 
+                    return false; 
+                }
+                localStorage.setItem(`name_${subId}`, subName);
+                if (localStorage.getItem(`marbles_${subId}`) === null) { 
+                    localStorage.setItem(`marbles_${subId}`, 10); 
+                    showGameToast(`🎁 ۱۰ تیله هدیه به بانک ${subName} واریز شد!`); 
+                }
+                tempNames.push(subName); playerNationalIds.push(subId);
+            }
+            playerNames = tempNames; 
+            return true;
+        }
+
         function initiateRadarHost() {
             document.getElementById("p2pStatusText").innerHTML = "🟢 استادیوم محلی ساخته شد.<br><span style='color:#fff; font-size:12px;'>کافیست حریف دکمه «اتصال سریع» را در گوشی خود بزند.</span>";
             showGameToast("🏟️ منتظر ورود بازیکنان...");
