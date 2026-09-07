@@ -3,835 +3,172 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>استادیوم ملی تیله‌بازی</title>
+    <title>تیله‌بازی</title>
 
-    <!-- 🟦 تنظیمات PWA -->
+    <!-- Manifest برای نصب روی موبایل -->
     <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#000000">
 
-    <!-- 🟦 پشتیبانی از iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="apple-touch-icon" href="6.png">
+    <!-- آیکون برنامه -->
+    <link rel="apple-touch-icon" href="icon.png">
 
-    <!-- 🟦 ثبت سرویس‌ورکر -->
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .catch(err => console.log('Service Worker Error:', err));
-            });
+    <meta name="theme-color" content="#1a237e">
+
+    <style>
+        /* استایل‌های پایه */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
         }
-    </script>
-<style>
-    * {
-        box-sizing: border-box;
-        -webkit-tap-highlight-color: transparent;
-        user-select: none;
-        -webkit-user-select: none;
-    }
 
-    body, html {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        background-color: #111;
-        font-family: sans-serif;
-        direction: rtl;
-    }
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #111;
+            font-family: sans-serif;
+            direction: rtl;
+        }
 
-    /* 🔐 صفحه لاگین */
-    #loginScreen {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: radial-gradient(circle, #1a237e, #020716);
-        z-index: 100;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
+        /* صفحه لاگین */
+        #loginScreen {
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle, #1a237e, #020716);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+        }
 
-    .login-box {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(15px);
-        border: 2px solid rgba(255,255,255,0.1);
-        border-radius: 24px;
-        padding: 30px;
-        width: 100%;
-        max-width: 380px;
-        text-align: center;
-        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    }
+        #loginBox {
+            width: 90%;
+            max-width: 380px;
+            background: rgba(255,255,255,0.08);
+            padding: 25px;
+            border-radius: 18px;
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
 
-    .login-box h2 {
-        color: #fff;
-        font-size: 20px;
-        margin-bottom: 20px;
-        font-weight: bold;
-        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
-    }
+        #loginBox input {
+            width: 100%;
+            padding: 14px;
+            font-size: 20px;
+            border-radius: 12px;
+            border: none;
+            margin-bottom: 18px;
+            text-align: center;
+        }
 
-    .login-box input {
-        width: 100%;
-        padding: 14px;
-        margin: 8px 0;
-        border-radius: 12px;
-        border: 2px solid #3f51b5;
-        background: rgba(0,0,0,0.6);
-        color: white;
-        text-align: center;
-        font-size: 15px;
-        outline: none;
-        transition: border-color 0.3s;
-        user-select: text !important;
-    }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            margin-top: 10px;
+            border-radius: 12px;
+            font-size: 18px;
+            border: none;
+            cursor: pointer;
+        }
 
-    .login-box input:focus {
-        border-color: #00e676;
-    }
+        .btn-blue { background: #2962ff; color: #fff; }
+        .btn-green { background: #00c853; color: #fff; }
+        .btn-orange {
+            background: transparent;
+            border: 2px dashed #ff9100;
+            color: #ff9100;
+        }
 
-    .login-btn {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        border: none;
-        color: white;
-        font-weight: bold;
-        font-size: 15px;
-        cursor: pointer;
-        transition: transform 0.1s;
-        margin-top: 8px;
-    }
-
-    .login-btn:active {
-        transform: scale(0.95);
-    }
-
-    .quick-btn {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        border: 2px dashed #ff9800;
-        background: rgba(255, 152, 0, 0.1);
-        color: #ff9800;
-        font-weight: bold;
-        font-size: 14px;
-        cursor: pointer;
-        margin-top: 10px;
-    }
-
-    /* 🎮 دکمه شروع */
-    #startBtn {
-        width: 140px;
-        height: 140px;
-        border-radius: 50%;
-        background-image: url('6.png');
-        background-size: cover;
-        background-position: center;
-        border: 4px solid #fff;
-        color: #fff;
-        font-size: 26px;
-        font-weight: 900;
-        cursor: pointer;
-        box-shadow: 0 10px 25px rgba(0,0,0,0.65),
-                    inset -10px -10px 25px rgba(0,0,0,0.5),
-                    inset 10px 10px 25px rgba(255,255,255,0.4);
-    }
-
-    #startBtn:active {
-        transform: scale(0.95);
-    }
-
-    /* ⚙️ دکمه تنظیمات */
-    #gearBtn {
-        position: fixed;
-        top: 15px; left: 15px;
-        background: rgba(17, 17, 22, 0.95);
-        border: 2px solid rgba(255,255,255,0.45);
-        border-radius: 12px;
-        width: 48px; height: 48px;
-        font-size: 24px;
-        color: white;
-        cursor: pointer;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 140;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
-    }
-
-    /* 🎮 منوی شروع */
-    #setupMenu {
-        display: none;
-        width: 100%;
-        height: 100%;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-    }
-
-    /* 🧭 کشوی تنظیمات */
-    .drawer-overlay {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.7);
-        z-index: 145;
-        display: none;
-    }
-
-    .drawer {
-        position: fixed;
-        bottom: -100%;
-        left: 0;
-        width: 100%;
-        max-height: 85vh;
-        background: rgba(17,17,22,0.93);
-        padding: 20px;
-        z-index: 150;
-        transition: bottom 0.4s;
-        overflow-y: auto;
-        border-radius: 25px 25px 0 0;
-    }
-
-    .drawer.open {
-        bottom: 0;
-    }
-
-    /* 🏆 صفحه امتیازات */
-    #scoreboardScreen {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(2, 7, 22, 0.9);
-        z-index: 200;
-        display: none;
-        align-items: center;
-        justify-content: center;
-        padding: 20px;
-    }
-
-    .scoreboard-box {
-        background: rgba(255, 255, 255, 0.08);
-        backdrop-filter: blur(15px);
-        border: 2px solid rgba(255,255,255,0.1);
-        border-radius: 24px;
-        padding: 25px;
-        width: 100%;
-        max-width: 380px;
-        text-align: center;
-    }
-
-    /* 🎮 بوم بازی */
-    #canvas {
-        display: none;
-        touch-action: none;
-        background-color: #222;
-        width: 100vw;
-        height: 100vh;
-        position: absolute;
-        top: 0; left: 0;
-    }
-
-    /* 🔔 Toast پیام کوتاه */
-    .game-toast {
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: rgba(0,0,0,0.8);
-        color: #fff;
-        padding: 12px 20px;
-        border-radius: 12px;
-        font-size: 14px;
-        opacity: 0;
-        transition: opacity 0.4s;
-        z-index: 300;
-    }
-
-    .game-toast.show {
-        opacity: 1;
-    }
-
-    /* 🔔 پاپ‌آپ */
-    #gamePopup {
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0,0,0,0.75);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 250;
-    }
-
-    .popup-box {
-        background: rgba(255,255,255,0.1);
-        backdrop-filter: blur(12px);
-        border-radius: 20px;
-        padding: 25px;
-        width: 90%;
-        max-width: 360px;
-        text-align: center;
-        border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .popup-btn {
-        width: 100%;
-        padding: 12px;
-        border-radius: 12px;
-        border: none;
-        font-weight: bold;
-        margin-top: 10px;
-        cursor: pointer;
-    }
-
-    .popup-btn.success {
-        background: #00e676;
-        color: #fff;
-    }
-
-    .popup-btn.danger {
-        background: #ff1744;
-        color: #fff;
-    }
-</style>
+        /* صفحه بازی */
+        #canvas {
+            display: none;
+            width: 100%;
+            height: 100%;
+            background: #000;
+        }
+    </style>
 </head>
 <body>
 
-<!-- 🔐 صفحه لاگین -->
+<!-- صفحه لاگین -->
 <div id="loginScreen">
-    <div class="login-box">
-        <h2 id="authFormTitle">🏰 به میدان تیله‌بازی خوش آمدید</h2>
+    <div id="loginBox">
+        <h2 style="color:white; margin-bottom:20px;">به میدان تیله‌بازی خوش آمدید</h2>
 
-        <input type="number" id="identifierInput" placeholder="کد ملی (۱۰ رقمی)">
-        <input type="text" id="usernameInput" placeholder="نام و نام خانوادگی" style="display:none;">
+        <input id="playerName" placeholder="نام بازیکن">
 
-        <div style="margin-top:15px;">
-            <button class="login-btn" id="loginModeBtn" style="background:#2196f3;">ورود</button>
-            <button class="login-btn" id="regModeBtn" style="background:#4caf50;">ثبت‌نام</button>
-            <button class="login-btn" id="authSubmitBtn" style="background:#9c27b0; display:none;">تایید</button>
-
-            <button class="quick-btn" id="quickStartBtn">⚡ شروع سریع</button>
-        </div>
-    </div>
-</div>
-<!-- 🎮 منوی شروع -->
-<div id="setupMenu">
-    <button id="startBtn">شروع</button>
-</div>
-
-<!-- ⚙️ دکمه تنظیمات -->
-<button id="gearBtn">☰</button>
-
-<!-- 🎮 هدر بازی -->
-<div id="gameHeader" style="display:none;">
-    <button id="exitBtn" style="background:#ff1744; color:white; padding:10px; border-radius:10px; border:none;">
-        خروج
-    </button>
-
-    <button id="backToMenuBtn" style="background:#ff9800; color:white; padding:10px; border-radius:10px; border:none;">
-        برگشت
-    </button>
-
-    <div id="turnIndicator" style="color:white; font-weight:bold; margin-top:10px;">
-        نوبت: بازیکن ۱
+        <button class="btn btn-blue" onclick="login()">ورود</button>
+        <button class="btn btn-green" onclick="register()">ثبت‌نام</button>
+        <button class="btn btn-orange" onclick="quickStart()">شروع سریع ⚡</button>
     </div>
 </div>
 
-<!-- 🎮 بوم بازی -->
+<!-- بوم بازی -->
 <canvas id="canvas"></canvas>
-<!-- 🧭 لایه تاریک پشت کشوی تنظیمات -->
-<div class="drawer-overlay" id="overlay"></div>
-
-<!-- 🧭 کشوی تنظیمات -->
-<div class="drawer" id="settingsDrawer">
-
-    <h2 style="color:white; text-align:center; margin-bottom:20px;">
-        ⚙️ تنظیمات بازی
-    </h2>
-
-    <!-- 🌍 انتخاب زمین -->
-    <div style="margin-bottom:20px;">
-        <label style="color:white; font-weight:bold;">نوع زمین:</label>
-        <select id="groundSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
-            <option value="grass">چمن</option>
-            <option value="carpet">فرش</option>
-            <option value="asphalt">آسفالت</option>
-            <option value="cement">سیمان</option>
-            <option value="dirt">خاکی</option>
-        </select>
-    </div>
-
-    <!-- 🌤️ انتخاب آب‌وهوا -->
-    <div style="margin-bottom:20px;">
-        <label style="color:white; font-weight:bold;">آب‌وهوا:</label>
-        <select id="weatherSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
-            <option value="sunny">آفتابی</option>
-            <option value="windy">باد</option>
-            <option value="rainy">بارانی</option>
-            <option value="snowy">برفی</option>
-        </select>
-    </div>
-
-    <!-- 👥 تعداد بازیکن -->
-    <div style="margin-bottom:20px;">
-        <label style="color:white; font-weight:bold;">تعداد بازیکن:</label>
-        <select id="playerCountSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
-            <option value="1">۱ نفره</option>
-            <option value="2">۲ نفره</option>
-            <option value="3">۳ نفره</option>
-            <option value="4">۴ نفره</option>
-        </select>
-    </div>
-
-    <!-- 🔮 تعداد تیله‌های داخل جعبه -->
-    <div style="margin-bottom:20px;">
-        <label style="color:white; font-weight:bold;">تعداد تیله‌ها:</label>
-        <select id="marbleCountSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
-            <option value="3">۳ تیله</option>
-            <option value="5">۵ تیله</option>
-            <option value="7">۷ تیله</option>
-            <option value="9">۹ تیله</option>
-        </select>
-    </div>
-
-    <!-- 👤 نام بازیکنان -->
-    <div id="namesContainer" style="margin-bottom:20px;">
-        <!-- این بخش با اسکریپت بخش‌های بعدی پر می‌شود -->
-    </div>
-
-    <!-- 🎡 گردونه نوبت‌دهی -->
-    <div id="wheelSection" style="display:none; flex-direction:column; align-items:center; margin-bottom:20px;">
-        <canvas id="wheelCanvas" width="260" height="260"
-                style="background:#111; border-radius:50%; margin-bottom:15px;"></canvas>
-
-        <button id="drawOrderBtn"
-                style="background:#00e676; color:white; padding:12px; border:none; border-radius:12px; width:100%; font-weight:bold;">
-            🎡 قرعه‌کشی نوبت‌ها
-        </button>
-    </div>
-
-    <!-- ✔ دکمه بستن تنظیمات -->
-    <button id="closeDrawer"
-            style="background:#2196f3; color:white; padding:12px; border:none; border-radius:12px; width:100%; font-weight:bold;">
-        تایید و شروع بازی
-    </button>
-
-</div>
-<!-- 🔔 پاپ‌آپ پیام‌ها -->
-<div id="gamePopup">
-    <div class="popup-box">
-        <div id="popupIcon" style="font-size:40px; margin-bottom:10px;">🎉</div>
-        <div id="popupText" style="color:white; font-size:16px; margin-bottom:15px;">
-            پیام نمونه
-        </div>
-        <div id="popupActionButtons"></div>
-    </div>
-</div>
-
-<!-- 🔔 Toast پیام کوتاه -->
-<div id="gameToast" class="game-toast"></div>
-
-<!-- 🏆 صفحه امتیازات پایانی -->
-<div id="scoreboardScreen">
-    <div class="scoreboard-box">
-
-        <h2 style="color:white; margin-bottom:15px;">🏆 کارنامه مسابقه</h2>
-
-        <div style="color:white; margin-bottom:10px;">
-            مجموع تیله‌های شما:
-            <span id="totalMarblesCell" style="font-weight:bold;">0</span>
-        </div>
-
-        <div style="color:white; margin-bottom:20px;">
-            تیله‌های برده شده در این مسابقه:
-            <span id="wonMarblesCell" style="font-weight:bold;">0</span>
-        </div>
-
-        <h3 style="color:white; margin-bottom:10px;">📜 تاریخچه اخیر</h3>
-        <ul id="historyList" style="color:white; list-style:none; padding:0; margin:0 0 20px 0;">
-            <!-- با اسکریپت پر می‌شود -->
-        </ul>
-
-        <button id="finalExitBtn"
-                style="background:#ff1744; color:white; padding:12px; border:none; border-radius:12px; width:100%; font-weight:bold;">
-            خروج از بازی
-        </button>
-
-    </div>
-</div>
 <script>
 /* ---------------------------------------------------
-   🔊 سیستم صوتی بازی
+   🟦 سیستم لاگین و ثبت‌نام
 --------------------------------------------------- */
 
-let audioCtx = null;
-let ambientSource = null;
-let ambientFilter = null;
-let ambientGain = null;
+function login() {
+    let name = document.getElementById("playerName").value.trim();
 
-function initAudio() {
-    try {
-        if (!audioCtx) {
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        }
-        if (audioCtx.state === "suspended") {
-            audioCtx.resume();
-        }
-    } catch (error) {
-        console.log("سیستم صوتی در دسترس نیست.");
+    if (name.length < 3) {
+        alert("نام باید حداقل ۳ حرف باشد");
+        return;
     }
+
+    localStorage.setItem("playerName", name);
+    startGame();
 }
 
-/* 🎵 صدای خوش‌آمد */
-function playWelcomeMelodySound() {
-    try {
-        initAudio();
-        let now = audioCtx.currentTime;
-        const notes = [523.25, 659.25, 783.99];
+function register() {
+    let name = document.getElementById("playerName").value.trim();
 
-        notes.forEach((freq, index) => {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
+    if (name.length < 3) {
+        alert("نام باید حداقل ۳ حرف باشد");
+        return;
+    }
 
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(freq, now + index * 0.08);
-
-            gain.gain.setValueAtTime(0.18, now + index * 0.08);
-            gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.08 + 0.6);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.start(now + index * 0.08);
-            osc.stop(now + index * 0.08 + 0.65);
-        });
-    } catch(e){}
+    localStorage.setItem("playerName", name);
+    alert("ثبت‌نام با موفقیت انجام شد!");
+    startGame();
 }
 
-/* 🚀 صدای پرتاب */
-function playLaunchSound() {
-    try {
-        initAudio();
-        let now = audioCtx.currentTime;
-
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
-
-        osc.type = "triangle";
-        osc.frequency.setValueAtTime(150, now);
-        osc.frequency.exponentialRampToValueAtTime(450, now + 0.12);
-
-        gain.gain.setValueAtTime(0.3, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.15);
-    } catch(e){}
-}
-
-/* 🔵 صدای برخورد */
-function playClickSound(intensity = 0.5) {
-    try {
-        initAudio();
-        let now = audioCtx.currentTime;
-
-        let vol = Math.max(0.1, Math.min(intensity * 1.5, 1.2));
-
-        let osc = audioCtx.createOscillator();
-        let gain = audioCtx.createGain();
-
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(2400 + vol * 300, now);
-        osc.frequency.exponentialRampToValueAtTime(1900, now + 0.012);
-
-        gain.gain.setValueAtTime(vol * 0.4, now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.03);
-    } catch(e){}
-}
-
-/* 🎉 صدای تشویق */
-function playCheeringSound() {
-    try {
-        initAudio();
-        let now = audioCtx.currentTime;
-
-        for (let i = 0; i < 8; i++) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-
-            osc.type = "triangle";
-            osc.frequency.setValueAtTime(280 + i * 40, now);
-            osc.frequency.linearRampToValueAtTime(460 + i * 20, now + 1.2);
-
-            gain.gain.setValueAtTime(0.18, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.start(now);
-            osc.stop(now + 1.4);
-        }
-    } catch(e){}
-}
-
-/* 😔 صدای افسوس */
-function playDisappointmentSound() {
-    try {
-        initAudio();
-        let now = audioCtx.currentTime;
-
-        for (let i = 0; i < 6; i++) {
-            let osc = audioCtx.createOscillator();
-            let gain = audioCtx.createGain();
-
-            osc.type = "sine";
-            osc.frequency.setValueAtTime(190 + i * 12, now);
-            osc.frequency.linearRampToValueAtTime(100 + i * 4, now + 0.9);
-
-            gain.gain.setValueAtTime(0.25, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
-
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-
-            osc.start(now);
-            osc.stop(now + 0.95);
-        }
-    } catch(e){}
+function quickStart() {
+    let randomName = "بازیکن_" + Math.floor(Math.random() * 9000 + 1000);
+    localStorage.setItem("playerName", randomName);
+    startGame();
 }
 
 /* ---------------------------------------------------
-   🌤️ صدای محیطی (باد / باران / برف / آفتاب)
+   🟦 شروع بازی
 --------------------------------------------------- */
 
-function startAmbientSound(weather) {
-    try {
-        initAudio();
-        stopAmbientSound();
+function startGame() {
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("canvas").style.display = "block";
 
-        let bufferSize = audioCtx.sampleRate * 2;
-        let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-        let data = buffer.getChannelData(0);
-
-        for (let i = 0; i < bufferSize; i++) {
-            data[i] = Math.random() * 2 - 1;
-        }
-
-        ambientSource = audioCtx.createBufferSource();
-        ambientSource.buffer = buffer;
-        ambientSource.loop = true;
-
-        ambientFilter = audioCtx.createBiquadFilter();
-        ambientGain = audioCtx.createGain();
-
-        if (weather === "sunny") {
-            ambientFilter.type = "lowpass";
-            ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime);
-            ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-        } else if (weather === "windy") {
-            ambientFilter.type = "bandpass";
-            ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime);
-            ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime);
-            ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime);
-        } else {
-            ambientFilter.type = "lowpass";
-            ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime);
-            ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime);
-        }
-
-        ambientSource.connect(ambientFilter);
-        ambientFilter.connect(ambientGain);
-        ambientGain.connect(audioCtx.destination);
-
-        ambientSource.start(0);
-    } catch(e){}
-}
-
-function stopAmbientSound() {
-    try {
-        if (ambientSource) {
-            ambientSource.stop();
-            ambientSource.disconnect();
-            ambientSource = null;
-        }
-    } catch(e){}
-}
-</script>
-<script>
-/* ---------------------------------------------------
-   🌤️ سیستم آب‌وهوا و ذرات
---------------------------------------------------- */
-
-let weatherParticles = [];
-let windLines = [];
-
-function initWeatherParticles() {
-    weatherParticles = [];
-
-    for (let i = 0; i < 120; i++) {
-        weatherParticles.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            speed: 2 + Math.random() * 3,
-            size: 2 + Math.random() * 3
-        });
-    }
-}
-
-function initWindLines() {
-    windLines = [];
-
-    for (let i = 0; i < 40; i++) {
-        windLines.push({
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-            len: 20 + Math.random() * 40,
-            speed: 2 + Math.random() * 3
-        });
-    }
-}
-
-function updateWeatherParticles() {
-    if (selectedWeather === "rainy") {
-        weatherParticles.forEach(p => {
-            p.y += p.speed * 2.5;
-            p.x += windX * 0.5;
-
-            if (p.y > canvas.height) {
-                p.y = -10;
-                p.x = Math.random() * canvas.width;
-            }
-        });
-    } else if (selectedWeather === "snowy") {
-        weatherParticles.forEach(p => {
-            p.y += p.speed * 0.8;
-            p.x += Math.sin(p.y * 0.02) * 1.2;
-
-            if (p.y > canvas.height) {
-                p.y = -10;
-                p.x = Math.random() * canvas.width;
-            }
-        });
-    } else if (selectedWeather === "windy") {
-        windLines.forEach(w => {
-            w.x += w.speed * 2.5;
-
-            if (w.x > canvas.width) {
-                w.x = -w.len;
-                w.y = Math.random() * canvas.height;
-            }
-        });
-    }
-}
-
-function drawWeather() {
-    ctx.save();
-
-    if (selectedWeather === "rainy") {
-        ctx.strokeStyle = "rgba(180,180,255,0.7)";
-        ctx.lineWidth = 2;
-
-        weatherParticles.forEach(p => {
-            ctx.beginPath();
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p.x + windX * 4, p.y + 12);
-            ctx.stroke();
-        });
-
-    } else if (selectedWeather === "snowy") {
-        ctx.fillStyle = "rgba(255,255,255,0.9)";
-        weatherParticles.forEach(p => {
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
-        });
-
-    } else if (selectedWeather === "windy") {
-        ctx.strokeStyle = "rgba(255,255,255,0.25)";
-        ctx.lineWidth = 3;
-
-        windLines.forEach(w => {
-            ctx.beginPath();
-            ctx.moveTo(w.x, w.y);
-            ctx.lineTo(w.x + w.len, w.y);
-            ctx.stroke();
-        });
-    }
-
-    ctx.restore();
+    initGame();
 }
 
 /* ---------------------------------------------------
-   🌍 زمین‌ها و اصطکاک
+   🟦 بارگذاری تصاویر بازی
 --------------------------------------------------- */
 
-let grounds = {
-    grass: {
-        src: "grass.jpg",
-        friction: 0.92,
-        fallbackColor: "#2e7d32"
-    },
-    carpet: {
-        src: "carpet.jpg",
-        friction: 0.88,
-        fallbackColor: "#6d4c41"
-    },
-    asphalt: {
-        src: "asphalt.jpg",
-        friction: 0.95,
-        fallbackColor: "#424242"
-    },
-    cement: {
-        src: "cement.jpg",
-        friction: 0.93,
-        fallbackColor: "#9e9e9e"
-    },
-    dirt: {
-        src: "dirt.jpg",
-        friction: 0.90,
-        fallbackColor: "#795548"
-    }
-};
-
-let currentGround = grounds.grass;
-
-/* ---------------------------------------------------
-   🖼️ بارگذاری تصاویر
---------------------------------------------------- */
+let imgPlayer = new Image();
+imgPlayer.src = "1.png";
 
 let imgBg = new Image();
-let imgPlayer = new Image();
-let imgTarget = new Image();
+imgBg.src = "grass.jpg";
 
-imgPlayer.src = "6.png";
-imgTarget.src = "1.png";
-
-function updateGroundImage() {
-    currentGround = grounds[selectedGroundVal] || grounds.grass;
-    imgBg.src = currentGround.src;
-}
-</script>
-<script>
 /* ---------------------------------------------------
-   🎮 متغیرهای اصلی بازی
+   🟦 متغیرهای اولیه بازی
 --------------------------------------------------- */
 
 let canvas = document.getElementById("canvas");
@@ -845,74 +182,82 @@ canvas.height = H;
 
 let marbles = [];
 let currentPlayerIndex = 0;
-let isShooting = false;
 let gameLoopRunning = false;
-
-let selectedGroundVal = "grass";
-let selectedWeather = "sunny";
-let windX = 0;
-
-let playerNames = [];
-let playerScores = [];
-let totalMarbles = 0;
-let wonMarbles = 0;
+let isShooting = false;
 
 /* ---------------------------------------------------
-   🎯 ساخت تیله‌ها
+   🟦 ساخت تیله‌ها
 --------------------------------------------------- */
 
-function createMarbles(count) {
+function initGame() {
     marbles = [];
 
-    for (let i = 0; i < count; i++) {
-        marbles.push({
-            x: W * 0.5 + (i * 20),
-            y: H * 0.5,
-            vx: 0,
-            vy: 0,
-            radius: 22,
-            owner: i % playerNames.length
-        });
+    let playerName = localStorage.getItem("playerName") || "بازیکن";
+
+    // ساخت یک تیله برای بازیکن
+    marbles.push({
+        x: W * 0.5,
+        y: H * 0.5,
+        vx: 0,
+        vy: 0,
+        radius: 22,
+        owner: playerName
+    });
+
+    gameLoopRunning = true;
+    gameLoop();
+}
+</script>
+<script>
+/* ---------------------------------------------------
+   🟦 فیزیک حرکت تیله‌ها
+--------------------------------------------------- */
+
+function updatePhysics() {
+    for (let m of marbles) {
+
+        // حرکت
+        m.x += m.vx;
+        m.y += m.vy;
+
+        // اصطکاک زمین
+        m.vx *= 0.96;
+        m.vy *= 0.96;
+
+        // توقف کامل
+        if (Math.abs(m.vx) < 0.05) m.vx = 0;
+        if (Math.abs(m.vy) < 0.05) m.vy = 0;
+
+        // برخورد با دیوارها
+        if (m.x < m.radius) {
+            m.x = m.radius;
+            m.vx *= -0.7;
+        }
+        if (m.x > W - m.radius) {
+            m.x = W - m.radius;
+            m.vx *= -0.7;
+        }
+        if (m.y < m.radius) {
+            m.y = m.radius;
+            m.vy *= -0.7;
+        }
+        if (m.y > H - m.radius) {
+            m.y = H - m.radius;
+            m.vy *= -0.7;
+        }
     }
+
+    handleCollisions();
 }
 
 /* ---------------------------------------------------
-   🚀 شلیک تیله
---------------------------------------------------- */
-
-canvas.addEventListener("touchstart", e => {
-    if (!gameLoopRunning || isShooting) return;
-
-    let t = e.touches[0];
-    let rect = canvas.getBoundingClientRect();
-    let tx = t.clientX - rect.left;
-    let ty = t.clientY - rect.top;
-
-    let m = marbles[currentPlayerIndex];
-
-    let dx = tx - m.x;
-    let dy = ty - m.y;
-
-    let dist = Math.sqrt(dx * dx + dy * dy);
-    if (dist < 20) return;
-
-    let power = Math.min(dist / 6, 22);
-
-    m.vx = dx / dist * power;
-    m.vy = dy / dist * power;
-
-    playLaunchSound();
-
-    isShooting = true;
-});
-
-/* ---------------------------------------------------
-   🔵 برخورد تیله‌ها
+   🟦 برخورد تیله‌ها با هم
 --------------------------------------------------- */
 
 function handleCollisions() {
     for (let i = 0; i < marbles.length; i++) {
         for (let j = i + 1; j < marbles.length; j++) {
+
             let a = marbles[i];
             let b = marbles[j];
 
@@ -921,170 +266,86 @@ function handleCollisions() {
             let dist = Math.sqrt(dx * dx + dy * dy);
 
             if (dist < a.radius + b.radius) {
-                let nx = dx / dist;
-                let ny = dy / dist;
 
-                let p = a.vx * nx + a.vy * ny - b.vx * nx - b.vy * ny;
+                // برخورد
+                let angle = Math.atan2(dy, dx);
+                let force = 0.5;
 
-                a.vx -= p * nx;
-                a.vy -= p * ny;
-                b.vx += p * nx;
-                b.vy += p * ny;
+                a.vx -= Math.cos(angle) * force;
+                a.vy -= Math.sin(angle) * force;
 
-                playClickSound(0.6);
+                b.vx += Math.cos(angle) * force;
+                b.vy += Math.sin(angle) * force;
             }
         }
     }
 }
 
 /* ---------------------------------------------------
-   🌍 اصطکاک زمین + آب‌وهوا
+   🟦 کنترل شلیک با لمس
 --------------------------------------------------- */
 
-function applyPhysics() {
-    let friction = currentGround.friction;
+let touchStartX = 0;
+let touchStartY = 0;
 
-    marbles.forEach(m => {
-        m.vx *= friction;
-        m.vy *= friction;
+canvas.addEventListener("touchstart", e => {
+    let t = e.touches[0];
+    touchStartX = t.clientX;
+    touchStartY = t.clientY;
+});
 
-        if (selectedWeather === "windy") {
-            m.vx += windX * 0.04;
-        }
+canvas.addEventListener("touchend", e => {
+    let t = e.changedTouches[0];
+    let dx = touchStartX - t.clientX;
+    let dy = touchStartY - t.clientY;
 
-        m.x += m.vx;
-        m.y += m.vy;
+    let power = Math.min(40, Math.sqrt(dx * dx + dy * dy) / 3);
 
-        if (m.x < m.radius) {
-            m.x = m.radius;
-            m.vx *= -0.5;
-        }
-        if (m.x > W - m.radius) {
-            m.x = W - m.radius;
-            m.vx *= -0.5;
-        }
-        if (m.y < m.radius) {
-            m.y = m.radius;
-            m.vy *= -0.5;
-        }
-        if (m.y > H - m.radius) {
-            m.y = H - m.radius;
-            m.vy *= -0.5;
-        }
-    });
-}
+    let m = marbles[0]; // تیله بازیکن
+
+    m.vx = dx * 0.15;
+    m.vy = dy * 0.15;
+});
 
 /* ---------------------------------------------------
-   🎯 پایان حرکت تیله
---------------------------------------------------- */
-
-function checkStop() {
-    let moving = marbles.some(m => Math.abs(m.vx) > 0.2 || Math.abs(m.vy) > 0.2);
-
-    if (!moving && isShooting) {
-        isShooting = false;
-        nextTurn();
-    }
-}
-
-/* ---------------------------------------------------
-   🔄 نوبت‌دهی
---------------------------------------------------- */
-
-function nextTurn() {
-    currentPlayerIndex++;
-
-    if (currentPlayerIndex >= marbles.length) {
-        endRound();
-        return;
-    }
-
-    document.getElementById("turnIndicator").innerText =
-        "نوبت: " + playerNames[marbles[currentPlayerIndex].owner];
-}
-
-/* ---------------------------------------------------
-   🏁 پایان راند
---------------------------------------------------- */
-
-function endRound() {
-    playCheeringSound();
-
-    wonMarbles = Math.floor(Math.random() * 3) + 1;
-    totalMarbles += wonMarbles;
-
-    updateScoreboard();
-
-    document.getElementById("scoreboardScreen").style.display = "flex";
-
-    gameLoopRunning = false;
-}
-
-/* ---------------------------------------------------
-   🏆 بروزرسانی امتیازات
---------------------------------------------------- */
-
-function updateScoreboard() {
-    document.getElementById("totalMarblesCell").innerText = totalMarbles;
-    document.getElementById("wonMarblesCell").innerText = wonMarbles;
-
-    let list = document.getElementById("historyList");
-    let li = document.createElement("li");
-    li.innerText = "برد " + wonMarbles + " تیله";
-    list.appendChild(li);
-}
-
-/* ---------------------------------------------------
-   🎮 حلقه اصلی بازی
+   🟦 حلقه اصلی بازی
 --------------------------------------------------- */
 
 function gameLoop() {
     if (!gameLoopRunning) return;
 
-    ctx.clearRect(0, 0, W, H);
-
-    if (imgBg.complete) {
-        ctx.drawImage(imgBg, 0, 0, W, H);
-    } else {
-        ctx.fillStyle = currentGround.fallbackColor;
-        ctx.fillRect(0, 0, W, H);
-    }
-
-    updateWeatherParticles();
-    drawWeather();
-
-    applyPhysics();
-    handleCollisions();
-    checkStop();
-
-    marbles.forEach(m => {
-        ctx.drawImage(imgPlayer, m.x - m.radius, m.y - m.radius, m.radius * 2, m.radius * 2);
-    });
+    updatePhysics();
+    drawGame();
 
     requestAnimationFrame(gameLoop);
 }
 
 /* ---------------------------------------------------
-   🎮 شروع بازی
+   🟦 رسم بازی
 --------------------------------------------------- */
 
-function startGame() {
-    canvas.style.display = "block";
-    document.getElementById("setupMenu").style.display = "none";
-    document.getElementById("gameHeader").style.display = "block";
+function drawGame() {
+    ctx.clearRect(0, 0, W, H);
 
-    currentPlayerIndex = 0;
+    // پس‌زمینه
+    ctx.drawImage(imgBg, 0, 0, W, H);
 
-    updateGroundImage();
-    initWeatherParticles();
-    initWindLines();
-
-    startAmbientSound(selectedWeather);
-
-    gameLoopRunning = true;
-    gameLoop();
+    // تیله‌ها
+    for (let m of marbles) {
+        ctx.drawImage(imgPlayer, m.x - m.radius, m.y - m.radius, m.radius * 2, m.radius * 2);
+    }
 }
 </script>
+<!-- ---------------------------------------------------
+     🟦 ثبت سرویس‌ورکر برای اجرای آفلاین + نصب روی موبایل
+--------------------------------------------------- -->
+<script>
+if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js")
+        .then(() => console.log("Service Worker ثبت شد"))
+        .catch(err => console.log("خطا در ثبت SW:", err));
+}
 </script>
+
 </body>
 </html>
