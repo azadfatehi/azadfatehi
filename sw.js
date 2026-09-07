@@ -1,25 +1,42 @@
-const CACHE_NAME = 'marbles-stadium-v2';
-const ASSETS = [
-  'index.html',
-  'shop.html', // 🏪 اضافه شدن صفحه فروشگاه برای دسترسی آفلاین
-  '6.png',
-  '1.png',
-  'grass.jpg',
-  'carpet.jpg',
-  'asphalt.jpg',
-  'cement.jpg',
-  'dirt.jpg',
-  'menu_bg.jpg'
+// نام کش
+const cacheName = "tille-game-v1";
+
+// فایل‌هایی که باید آفلاین ذخیره شوند
+const assets = [
+  "./",
+  "./index.html",
+  "./manifest.json",
+  "./icon.png",
+  "./1.png",
+  "./grass.jpg",
+  "./sw.js"
 ];
 
-self.addEventListener('install', (e) => {
+// نصب سرویس‌ورکر و کش کردن فایل‌ها
+self.addEventListener("install", e => {
   e.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
+    caches.open(cacheName).then(cache => {
+      return cache.addAll(assets);
+    })
   );
 });
 
-self.addEventListener('fetch', (e) => {
+// فعال‌سازی و پاک کردن کش‌های قدیمی
+self.addEventListener("activate", e => {
+  e.waitUntil(
+    caches.keys().then(keys => {
+      return Promise.all(
+        keys.filter(k => k !== cacheName).map(k => caches.delete(k))
+      );
+    })
+  );
+});
+
+// واکشی فایل‌ها از کش یا اینترنت
+self.addEventListener("fetch", e => {
   e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
+    caches.match(e.request).then(res => {
+      return res || fetch(e.request);
+    })
   );
 });
