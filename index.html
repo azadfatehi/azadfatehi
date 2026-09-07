@@ -2,572 +2,1089 @@
 <html lang="fa">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-select=no, viewport-fit=cover">
-    <title>استادیوم ملی تیله‌بازی PWA</title>
-    <style>
-        /* 🪐 اصول پایه طراحی واکنش‌گرا و مدرن استادیوم */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; user-select: none; -webkit-user-select: none; }
-        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; background-color: #111; font-family: sans-serif; }
-        /* 🔐 استایل مدرن شیشه‌ای صفحه احراز هویت اولیه */
-        #loginScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #1a237e, #020716); z-index: 100; display: flex; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
-        .login-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 30px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        .login-box h2 { color: #fff; font-size: 20px; margin-bottom: 20px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .login-box input { width: 100%; padding: 14px; margin: 8px 0; border-radius: 12px; border: 2px solid #3f51b5; background: rgba(0,0,0,0.6); color: white; text-align: center; font-size: 15px; outline: none; transition: border-color 0.3s; user-select: text !important; -webkit-user-select: text !important; }
-        .login-box input:focus { border-color: #00e676; }
-        .login-box input::placeholder { color: #888; }
-        .login-btn { width: 100%; padding: 12px; border-radius: 12px; border: none; color: white; font-weight: bold; font-size: 15px; cursor: pointer; transition: transform 0.1s; }
-        .login-btn:active { transform: scale(0.95); }
-        .quick-btn { width: 100%; padding: 12px; border-radius: 12px; border: 2px dashed #ff9800; background: rgba(255, 152, 0, 0.1); color: #ff9800; font-weight: bold; font-size: 14px; cursor: pointer; margin-top: 5px; }
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
-        /* ☰ منوی اصلی و کلید همبرگری مدرن تنظیمات */
-        #setupMenu { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; z-index: 20; }
-        #gearBtn { position: fixed; top: 15px; left: 15px; background: rgba(17, 17, 22, 0.95); border: 2px solid rgba(255,255,255,0.45); border-radius: 12px; width: 48px; height: 48px; font-size: 24px; color: white; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 140; box-shadow: 0 4px 12px rgba(0,0,0,0.5); transition: transform 0.15s; touch-action: manipulation; }
-        #startBtn { position: relative !important; width: 140px !important; height: 140px !important; border-radius: 50% !important; background-image: url('6.png') !important; background-size: cover !important; background-position: center !important; background-repeat: no-repeat !important; border: 4px solid #ffffff !important; color: #ffffff !important; font-size: 26px !important; font-weight: 900 !important; cursor: pointer !important; z-index: 25 !important; display: flex !important; align-items: center !important; justify-content: center !important; box-shadow: 0 10px 25px rgba(0,0,0,0.65), inset -10px -10px 25px rgba(0,0,0,0.5), inset 10px 10px 25px rgba(255,255,255,0.4) !important; text-shadow: 0 2px 6px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.8) !important; font-family: sans-serif !important; transition: transform 0.1s, box-shadow 0.2s !important; }
-        #startBtn:active { transform: scale(0.95) !important; box-shadow: 0 5px 15px rgba(0,0,0,0.5) !important; }
-        #startBtn:active, #gearBtn:active { transform: scale(0.95); }
-        /* ⚙️ کشوی لغزنده تنظیمات پیشرفته استادیوم (Drawer) */
-        .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 145; display: none; }
-        .drawer { position: fixed; bottom: -100%; left: 0; width: 100%; max-height: 85vh; background-image: linear-gradient(rgba(17, 17, 22, 0.93), rgba(17, 17, 22, 0.93)), url('menu_bg.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; padding: 20px; z-index: 150; transition: bottom 0.4s cubic-bezier(0.1, 1, 0.1, 1); overflow-y: auto; direction: rtl; display: flex; flex-direction: column; align-items: center; border-radius: 25px 25px 0 0; }
-        .drawer.open { bottom: 0; }
-        .drawer-close-btn { background: #2196f3; border: none; color: white; padding: 14px 28px; width: 100%; max-width: 320px; border-radius: 20px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 20px; }
-        .menu-row { margin: 15px 0; text-align: center; width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .menu-row label { display: block; font-size: 16px; margin-bottom: 10px; font-weight: bold; color: #ffeb3b; text-shadow: 0 2px 4px rgba(0,0,0,0.8); }
-        .count-column-select { display: flex; justify-content: center; gap: 8px; width: 100%; max-width: 340px; flex-wrap: wrap; }
-        .count-button-item { flex: 1; min-width: 75px; padding: 10px 5px; font-size: 12px; font-weight: bold; background: rgba(37,37,37,0.85); border: 2px solid #444; border-radius: 12px; color: white; cursor: pointer; text-align: center; }
-        .count-button-item.active { background: #4caf50; border-color: #fff; box-shadow: 0 0 12px #4caf50; }
-        .scroll-container { display: flex; justify-content: flex-start; overflow-x: auto; gap: 12px; padding: 10px 5px; width: 100%; max-width: 360px; -webkit-overflow-scrolling: touch; }
-        .scroll-item { flex: 0 0 70px; border: 3px solid #555; border-radius: 12px; overflow: hidden; cursor: pointer; aspect-ratio: 1; background: rgba(0,0,0,0.4); position: relative; }
-        .scroll-item canvas { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none !important; }
-        .scroll-item.active { border-color: #4caf50; box-shadow: 0 0 15px #4caf50; }
-        .custom-select { width: 100%; max-width: 260px; padding: 12px; font-size: 15px; font-weight: bold; background: rgba(37,37,37,0.9); border: 2px solid #555; border-radius: 12px; color: white; text-align: center; outline: none; cursor: pointer; }
-        .name-input-container { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 340px; margin-top: 5px; }
-        .player-row-item { display: flex; flex-direction: column; gap: 5px; width: 100%; background: rgba(255,255,255,0.03); border: 1px solid #333; padding: 8px; border-radius: 14px; }
-        .player-inputs { display: flex; gap: 6px; width: 100%; align-items: center; }
-        .player-inputs input { flex: 1; padding: 10px; font-size: 13px; background: rgba(26,26,26,0.9); border: 2px solid #444; border-radius: 10px; color: white; text-align: center; outline: none; }
-        .order-badge { width: 65px; padding: 10px 0; font-size: 12px; font-weight: bold; background: #333; border: 2px solid #555; border-radius: 10px; color: #aaa; text-align: center; }
-        .order-badge.assigned { background: #ff9800; border-color: #fff; color: #000; box-shadow: 0 0 8px #ff9800; }
-        
-        /* 🏆 استایل شیشه‌ای و مدرن جدول امتیازات پایانی کاملاً هماهنگ با تم استادیوم */
-        #scoreboardScreen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(2, 7, 22, 0.9); z-index: 200; display: none; align-items: center; justify-content: center; padding: 20px; direction: rtl; }
-        .scoreboard-box { background: rgba(255, 255, 255, 0.08); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 2px solid rgba(255,255,255,0.1); border-radius: 24px; padding: 25px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        .scoreboard-box h2 { color: #fff; font-size: 20px; margin-bottom: 20px; font-weight: bold; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
-        .score-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin-bottom: 20px; text-align: right; }
-        .score-table tr { background: rgba(0, 0, 0, 0.4); }
-        .score-table td { padding: 12px; color: #eee; font-size: 14px; }
-        .score-table tr td:first-child { border-radius: 0 12px 12px 0; }
-        .score-table tr td:last-child { border-radius: 12px 0 0 12px; text-align: center; font-weight: bold; }
-        .score-value-total { color: #00e676 !important; }
-        .score-value-won { color: #00b0ff !important; }
-        .history-list { margin: 0; padding-right: 15px; font-size: 12px; color: #bbb; text-align: right; list-style-type: square; }
-        .history-list li { margin-bottom: 4px; }
-        .score-btn-container { display: flex; gap: 12px; margin-top: 15px; }
-        .score-btn-restart { background: #00e676; color: #020716; }
-        .score-btn-exit { background: #ff1744; color: white; }
+    <title>استادیوم ملی تیله‌بازی</title>
 
-        #canvas { display: none; touch-action: none; image-rendering: crisp-edges; background-color: #222; width: 100vw; height: 100vh; position: absolute; top: 0; left: 0; }
-        #gameHeader { display: none; width: 92vw; max-width: 500px; justify-content: space-between; align-items: center; position: fixed; top: 15px; right: 15px; z-index: 130; direction: rtl; gap: 10px; }
-        #turnIndicator { color: #ffffff !important; font-size: 14px; font-weight: bold; background: rgba(0, 0, 0, 0.65); padding: 8px 16px; border-radius: 12px; border: 1px solid rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); -webkit-backdrop-filter: blur(5px); box-shadow: 0 4px 10px rgba(0,0,0,0.4); text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-        #exitBtn { background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 18px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.65); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 400; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .custom-popup-box { background: rgba(26,26,36,0.96); border: 2px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 25px; width: 100%; max-width: 360px; text-align: center; direction: rtl; box-shadow: 0 25px 60px rgba(0,0,0,0.85); }
-        .popup-icon { font-size: 45px; margin-bottom: 12px; display: inline-block; }
-        .popup-text { font-size: 14px; line-height: 1.6; color: #fff; margin-bottom: 15px; }
-        .final-actions { display: flex; gap: 10px; margin-top: 15px; width: 100%; }
-        .popup-btn { flex: 1; padding: 12px; border-radius: 12px; border: none; font-size: 14px; font-weight: bold; cursor: pointer; color: white; text-align: center; }
-        .popup-btn.success { background: linear-gradient(90deg, #4caf50, #81c784); }
-        .popup-btn.danger { background: linear-gradient(90deg, #ff5722, #ff8a65); }
-        .game-toast { position: fixed; bottom: 25px; background: rgba(0,0,0,0.85); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 14px; font-weight: bold; border: 1px solid rgba(255,255,255,0.15); z-index: 500; pointer-events: none; transition: opacity 0.3s ease, transform 0.3s ease; opacity: 0; transform: translateY(10px); direction: rtl; }
-        .game-toast.show { opacity: 1; transform: translateY(0); }
-        .enter-shop-btn { width: 100%; background: linear-gradient(135deg, #ff9800, #f57c00); color: #000; border: none; padding: 14px; border-radius: 14px; font-weight: bold; font-size: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 10px; transition: transform 0.1s; }
-        .shop-modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); display: none; align-items: center; justify-content: center; z-index: 350 !important; padding: 10px; pointer-events: auto !important; }
-        .shop-modal-box { background: rgba(20, 24, 33, 0.98); border: 2px solid rgba(255, 235, 59, 0.2); border-radius: 24px; padding: 15px; width: 100%; max-width: 380px; max-height: 92vh; overflow-y: auto; direction: rtl; box-shadow: 0 25px 50px rgba(0,0,0,0.7); position: relative; z-index: 360 !important; }
-        .shop-modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px; }
-        .shop-close-btn { background: #e53935; color: white; border: none; border-radius: 10px; padding: 6px 14px; font-size: 12px; font-weight: bold; cursor: pointer; }
-        .shop-products-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 15px; width: 100%; }
-        .product-card { background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 16px; padding: 12px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; box-sizing: border-box; width: 100%; }
-        .product-marble-wrapper { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; background: rgba(255,255,255,0.05); box-shadow: inset -3px -3px 8px rgba(0,0,0,0.6), 0 3px 6px rgba(0,0,0,0.3); padding: 0; margin-bottom: 4px; }
-        .product-marble-preview { width: 100% !important; height: 100% !important; object-fit: cover !important; border-radius: 50% !important; display: block !important; }
-    </style>
+    <!-- 🟦 تنظیمات PWA -->
     <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+
+    <!-- 🟦 پشتیبانی از iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" href="6.png">
+
+    <!-- 🟦 ثبت سرویس‌ورکر -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW Error:', err));
+                navigator.serviceWorker.register('./sw.js')
+                    .catch(err => console.log('Service Worker Error:', err));
             });
         }
     </script>
+<style>
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+    }
+
+    body, html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #111;
+        font-family: sans-serif;
+        direction: rtl;
+    }
+
+    /* 🔐 صفحه لاگین */
+    #loginScreen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: radial-gradient(circle, #1a237e, #020716);
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .login-box {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        border: 2px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 30px;
+        width: 100%;
+        max-width: 380px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .login-box h2 {
+        color: #fff;
+        font-size: 20px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .login-box input {
+        width: 100%;
+        padding: 14px;
+        margin: 8px 0;
+        border-radius: 12px;
+        border: 2px solid #3f51b5;
+        background: rgba(0,0,0,0.6);
+        color: white;
+        text-align: center;
+        font-size: 15px;
+        outline: none;
+        transition: border-color 0.3s;
+        user-select: text !important;
+    }
+
+    .login-box input:focus {
+        border-color: #00e676;
+    }
+
+    .login-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        color: white;
+        font-weight: bold;
+        font-size: 15px;
+        cursor: pointer;
+        transition: transform 0.1s;
+        margin-top: 8px;
+    }
+
+    .login-btn:active {
+        transform: scale(0.95);
+    }
+
+    .quick-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: 2px dashed #ff9800;
+        background: rgba(255, 152, 0, 0.1);
+        color: #ff9800;
+        font-weight: bold;
+        font-size: 14px;
+        cursor: pointer;
+        margin-top: 10px;
+    }
+
+    /* 🎮 دکمه شروع */
+    #startBtn {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background-image: url('6.png');
+        background-size: cover;
+        background-position: center;
+        border: 4px solid #fff;
+        color: #fff;
+        font-size: 26px;
+        font-weight: 900;
+        cursor: pointer;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.65),
+                    inset -10px -10px 25px rgba(0,0,0,0.5),
+                    inset 10px 10px 25px rgba(255,255,255,0.4);
+    }
+
+    #startBtn:active {
+        transform: scale(0.95);
+    }
+
+    /* ⚙️ دکمه تنظیمات */
+    #gearBtn {
+        position: fixed;
+        top: 15px; left: 15px;
+        background: rgba(17, 17, 22, 0.95);
+        border: 2px solid rgba(255,255,255,0.45);
+        border-radius: 12px;
+        width: 48px; height: 48px;
+        font-size: 24px;
+        color: white;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 140;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    /* 🎮 منوی شروع */
+    #setupMenu {
+        display: none;
+        width: 100%;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+
+    /* 🧭 کشوی تنظیمات */
+    .drawer-overlay {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.7);
+        z-index: 145;
+        display: none;
+    }
+
+    .drawer {
+        position: fixed;
+        bottom: -100%;
+        left: 0;
+        width: 100%;
+        max-height: 85vh;
+        background: rgba(17,17,22,0.93);
+        padding: 20px;
+        z-index: 150;
+        transition: bottom 0.4s;
+        overflow-y: auto;
+        border-radius: 25px 25px 0 0;
+    }
+
+    .drawer.open {
+        bottom: 0;
+    }
+
+    /* 🏆 صفحه امتیازات */
+    #scoreboardScreen {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(2, 7, 22, 0.9);
+        z-index: 200;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
+
+    .scoreboard-box {
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(15px);
+        border: 2px solid rgba(255,255,255,0.1);
+        border-radius: 24px;
+        padding: 25px;
+        width: 100%;
+        max-width: 380px;
+        text-align: center;
+    }
+
+    /* 🎮 بوم بازی */
+    #canvas {
+        display: none;
+        touch-action: none;
+        background-color: #222;
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        top: 0; left: 0;
+    }
+
+    /* 🔔 Toast پیام کوتاه */
+    .game-toast {
+        position: fixed;
+        bottom: 30px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(0,0,0,0.8);
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 12px;
+        font-size: 14px;
+        opacity: 0;
+        transition: opacity 0.4s;
+        z-index: 300;
+    }
+
+    .game-toast.show {
+        opacity: 1;
+    }
+
+    /* 🔔 پاپ‌آپ */
+    #gamePopup {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0,0,0,0.75);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 250;
+    }
+
+    .popup-box {
+        background: rgba(255,255,255,0.1);
+        backdrop-filter: blur(12px);
+        border-radius: 20px;
+        padding: 25px;
+        width: 90%;
+        max-width: 360px;
+        text-align: center;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .popup-btn {
+        width: 100%;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        font-weight: bold;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+
+    .popup-btn.success {
+        background: #00e676;
+        color: #fff;
+    }
+
+    .popup-btn.danger {
+        background: #ff1744;
+        color: #fff;
+    }
+</style>
 </head>
 <body>
-    <!-- 🏆 لایه شیشه‌ای و مدرن جدول امتیازات پایانی استادیوم -->
-    <div id="scoreboardScreen">
-        <div class="scoreboard-box">
-            <h2>🏆 جدول امتیازات پایانی</h2>
-            <table class="score-table">
-                <tr>
-                    <td>🔮 کل تیله‌های موجود در بانک:</td>
-                    <td id="totalMarblesCell" class="score-value-total">0 تیله</td>
-                </tr>
-                <tr>
-                    <td>📈 تیله‌های برده شده در این بازی:</td>
-                    <td id="wonMarblesCell" class="score-value-won">0 تیله</td>
-                </tr>
-                <tr>
-                    <td style="vertical-align: top;">📜 تاریخچه بازی‌های شما:</td>
-                    <td>
-                        <ul id="historyList" class="history-list"></ul>
-                    </td>
-                </tr>
-            </table>
-            <div class="score-btn-container">
-                <button onclick="restartGameFromScoreboard()" class="login-btn score-btn-restart">بازی مجدد 🎮</button>
-                <button onclick="exitToMainMenu()" class="login-btn score-btn-exit">خروج 🚪</button>
-            </div>
+
+<!-- 🔐 صفحه لاگین -->
+<div id="loginScreen">
+    <div class="login-box">
+        <h2 id="authFormTitle">🏰 به میدان تیله‌بازی خوش آمدید</h2>
+
+        <input type="number" id="identifierInput" placeholder="کد ملی (۱۰ رقمی)">
+        <input type="text" id="usernameInput" placeholder="نام و نام خانوادگی" style="display:none;">
+
+        <div style="margin-top:15px;">
+            <button class="login-btn" id="loginModeBtn" style="background:#2196f3;">ورود</button>
+            <button class="login-btn" id="regModeBtn" style="background:#4caf50;">ثبت‌نام</button>
+            <button class="login-btn" id="authSubmitBtn" style="background:#9c27b0; display:none;">تایید</button>
+
+            <button class="quick-btn" id="quickStartBtn">⚡ شروع سریع</button>
         </div>
     </div>
+</div>
+<!-- 🎮 منوی شروع -->
+<div id="setupMenu">
+    <button id="startBtn">شروع</button>
+</div>
 
-    <!-- 🔐 صفحه احراز هویت اولیه بازیکنان و دکمه شروع رندم -->
-    <div id="loginScreen" style="display: flex;">
-        <div class="login-box">
-            <h2 id="authFormTitle">🏟️ به میدان تیله‌بازی خوش آمدید</h2>
-            <input type="number" id="identifierInput" placeholder="کد ملی (۱۰ رقمی)">
-            <input type="text" id="usernameInput" placeholder="نام و نام خانوادگی (فارسی)" style="display: none;">
-            <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px; width: 100%;">
-                <div style="display: flex; gap: 8px; width: 100%;">
-                    <button class="login-btn" id="loginModeBtn" style="background: #2196f3; flex: 1;" onclick="try{initAudio();}catch(e){} processSmartAuth('login')">ورود به حساب</button>
-                    <button class="login-btn" id="regModeBtn" style="background: #4caf50; flex: 1;" onclick="try{initAudio();}catch(e){} switchAuthModeToRegister()">ثبت نام جدید</button>
-                </div>
-                <button class="login-btn" id="authSubmitBtn" style="background: #9c27b0; font-size: 16px; display: none;" onclick="try{initAudio();}catch(e){} processSmartAuth('register')">تایید و ایجاد حساب</button>
-                <button class="quick-btn" id="quickStartBtn" onclick="try{initAudio();}catch(e){} processQuickRandomAuth()">⚡ شروع سریع (رندم بدون حساب)</button>
-            </div>
-        </div>
+<!-- ⚙️ دکمه تنظیمات -->
+<button id="gearBtn">☰</button>
+
+<!-- 🎮 هدر بازی -->
+<div id="gameHeader" style="display:none;">
+    <button id="exitBtn" style="background:#ff1744; color:white; padding:10px; border-radius:10px; border:none;">
+        خروج
+    </button>
+
+    <button id="backToMenuBtn" style="background:#ff9800; color:white; padding:10px; border-radius:10px; border:none;">
+        برگشت
+    </button>
+
+    <div id="turnIndicator" style="color:white; font-weight:bold; margin-top:10px;">
+        نوبت: بازیکن ۱
     </div>
-    <!-- 🏟️ منوی اصلی و دکمه دایره‌ای شروع استادیوم -->
-    <div id="setupMenu" style="display: none; flex-direction: column; align-items: center; justify-content: center; gap: 20px; background-image: url('menu_bg.jpg') !important; background-size: cover; background-position: center;">
-        <div id="menuWelcomeHeader" style="position: absolute; top: 35px; width: 90%; max-width: 450px; text-align: center; direction: rtl; z-index: 30; pointer-events: none;">
-            <div style="font-size: 15px; color: #00e676; font-weight: bold; background: rgba(0,0,0,0.5); padding: 5px 15px; border-radius: 20px; display: inline-block; border: 1px solid rgba(0,230,118,0.2); box-shadow: 0 4px 15px rgba(0,0,0,0.4); margin-bottom: 12px;">
-                👤 بازیکن فعال: <span id="menuPlayerName" style="color: #fff; text-shadow: 0 0 5px #00e676;">-</span>
-            </div>
-            <div id="welcomeFadingMessage" class="animate-welcome" style="font-size: 22px; color: #ffeb3b; font-weight: 900; letter-spacing: 0.5px; transition: opacity 0.8s; opacity: 0; line-height: 1.5;"></div>
-        </div>
-        <button id="startBtn">شروع</button>
+</div>
+
+<!-- 🎮 بوم بازی -->
+<canvas id="canvas"></canvas>
+<!-- 🧭 لایه تاریک پشت کشوی تنظیمات -->
+<div class="drawer-overlay" id="overlay"></div>
+
+<!-- 🧭 کشوی تنظیمات -->
+<div class="drawer" id="settingsDrawer">
+
+    <h2 style="color:white; text-align:center; margin-bottom:20px;">
+        ⚙️ تنظیمات بازی
+    </h2>
+
+    <!-- 🌍 انتخاب زمین -->
+    <div style="margin-bottom:20px;">
+        <label style="color:white; font-weight:bold;">نوع زمین:</label>
+        <select id="groundSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
+            <option value="grass">چمن</option>
+            <option value="carpet">فرش</option>
+            <option value="asphalt">آسفالت</option>
+            <option value="cement">سیمان</option>
+            <option value="dirt">خاکی</option>
+        </select>
     </div>
-    
-    <button id="gearBtn" style="display: none;">☰</button>
-    
-    <!-- ⚠️ کادر پاپ‌آپ اخطار و پیام‌های سیستم -->
-    <div class="custom-popup-overlay" id="gamePopup">
-        <div class="custom-popup-box">
-            <span class="popup-icon" id="popupIcon">🎉</span>
-            <div class="popup-text" id="popupText">متن پیام در اینجا قرار می‌گیرد.</div>
-            <table class="final-table" id="finalScoreTable" style="display: none; width: 100%; border-collapse: separate; border-spacing: 0; font-size: 13px; color: #fff; border-radius: 16px; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 20px rgba(0,0,0,0.4);">
-                <thead>
-                    <tr>
-                        <th style="background: linear-gradient(180deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05)); color: #ffb74d; font-weight: bold; padding: 12px 8px; border-bottom: 2px solid rgba(255, 152, 0, 0.3); font-size: 12px;">بازیکن</th>
-                        <th style="background: linear-gradient(180deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05)); color: #ffb74d; font-weight: bold; padding: 12px 8px; border-bottom: 2px solid rgba(255, 152, 0, 0.3); font-size: 12px;">تعداد برد</th>
-                        <th style="background: linear-gradient(180deg, rgba(255, 152, 0, 0.2), rgba(255, 152, 0, 0.05)); color: #ffb74d; font-weight: bold; padding: 12px 8px; border-bottom: 2px solid rgba(255, 152, 0, 0.3); font-size: 12px;">بانک کل (تیله)</th>
-                    </tr>
-                </thead>
-                <tbody id="finalTableBody"></tbody>
-            </table>
-            <div class="final-actions" id="popupActionButtons">
-                <button class="popup-btn success" id="popupBtn" onclick="closeCustomPopup()">تایید و ادامه</button>
-            </div>
-        </div>
+
+    <!-- 🌤️ انتخاب آب‌وهوا -->
+    <div style="margin-bottom:20px;">
+        <label style="color:white; font-weight:bold;">آب‌وهوا:</label>
+        <select id="weatherSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
+            <option value="sunny">آفتابی</option>
+            <option value="windy">باد</option>
+            <option value="rainy">بارانی</option>
+            <option value="snowy">برفی</option>
+        </select>
     </div>
-    <div class="drawer-overlay" id="overlay"></div>
-    <div class="drawer" id="settingsDrawer">
-        <div style="display: flex; justify-content: space-between; align-items: center; width: 100%; max-width: 360px; margin-top: 5px; margin-bottom: 20px; padding: 0 5px; direction: rtl;">
-            <h3 id="drawerDynamicTitle" style="color: #ffeb3b; font-size: 15px; font-weight: bold;">⚙️ تنظیمات استادیوم</h3>
-            <button style="background: #e53935; color: white; border: none; border-radius: 12px; padding: 8px 16px; font-size: 13px; font-weight: bold; cursor: pointer;" onclick="handleFinalExit()">خروج</button>
-        </div>
-        <div style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <div class="menu-row">
-                <label>کجا میخوای بازی کنیم?</label>
-                <div class="scroll-container" id="groundGrid">
-                    <div class="scroll-item active" data-val="grass"><canvas id="pre_grass"></canvas></div>
-                    <div class="scroll-item" data-val="carpet"><canvas id="pre_carpet"></canvas></div>
-                    <div class="scroll-item" data-val="asphalt"><canvas id="pre_asphalt"></canvas></div>
-                    <div class="scroll-item" data-val="cement"><canvas id="pre_cement"></canvas></div>
-                    <div class="scroll-item" data-val="dirt"><canvas id="pre_dirt"></canvas></div>
-                </div>
-            </div>
-            <div class="menu-row">
-                <label>در چه هوایی بازی می چسبه؟</label>
-                <div class="count-column-select" id="weatherGrid">
-                    <div class="count-button-item active" data-val="sunny">☀️ آفتابی</div>
-                    <div class="count-button-item" data-val="windy">💨 باد شدید</div>
-                    <div class="count-button-item" data-val="rainy">🌧️ بارانی</div>
-                    <div class="count-button-item" data-val="snowy">❄️ برفی</div>
-                </div>
-            </div>
-            <div class="menu-row">
-                <label>دوست داری چند نفره باشیم؟</label>
-                <select class="custom-select" id="playerCountSelect">
-                    <option value="1" selected>۱ نفره (انفرادی تنهایی)</option>
-                    <option value="2">۲ نفره (آفلاین نوبتی)</option>
-                    <option value="3">۳ نفره (آفلاین نوبتی)</option>
-                    <option value="4">۴ نفره (آفلاین نوبتی)</option>
-                    <option value="online">📡 اتصال به گوشی‌های دیگر (رادار بی‌سیم)</option>
-                </select>
-            </div>
-            <div id="p2pConnectionBox" style="display: none; width: 100%; max-width: 340px; background: rgba(33, 150, 243, 0.1); border: 1px dashed #2196f3; padding: 12px; border-radius: 14px; margin-top: 10px; text-align: center;">
-                <div id="p2pStatusText" style="color: #2196f3; font-size: 13px; font-weight: bold; margin-bottom: 8px;">وضعیت رادار: خاموش</div>
-                <div style="display: flex; flex-direction: column; gap: 8px; width: 100%;">
-                    <button type="button" style="background: #2196f3; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer;" onclick="initiateRadarHost()">🏟️ ایجاد استادیوم (من میزبانم)</button>
-                    <button type="button" style="background: #4caf50; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: bold; cursor: pointer;" onclick="autoDiscoverAndConnect()">⚡ جستجو و اتصال سریع به حریف</button>
-                </div>
-            </div>
-            <div class="name-input-container" id="namesContainer" style="margin-top: 15px; margin-bottom: 5px; width:100%; max-width:340px;">
-                <div class="player-row-item"><div class="player-inputs"><input type="text" id="pInput0" value="بازیکن ۱" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div></div>
-            </div>
-            <button class="lucky-wheel-btn" id="drawOrderBtn" style="display: none; width: 100%; max-width: 260px; padding: 12px; background: linear-gradient(135deg, #673ab7, #512da8); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px;">🎰 ببینیم نوبت اول کیه ؟</button>
-            <div class="wheel-container" id="wheelSection" style="position: relative; width: 240px; height: 240px; margin-top: 15px; display: none; justify-content: center; align-items: center;">
-                <div class="wheel-pointer" style="position: absolute; top: -10px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 12px solid transparent; border-right: 12px solid transparent; border-top: 20px solid #ff9800; z-index: 10;"></div>
-                <canvas id="wheelCanvas" width="240" height="240" style="width: 100%; height: 100%;"></canvas>
-            </div>
-            <div style="width: 100%; max-width: 340px; background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01)); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px; padding: 18px; margin-top: 20px; direction: rtl; text-align: right; box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);">
-                <a href="shop.html" target="_blank" class="enter-shop-btn" style="text-decoration: none; display: block; text-align: center;">🏪 ورود به فروشگاه مرکزی استادیوم</a>
-            </div>
-            <div class="menu-row" style="margin-top: 20px;">
-                <label>با چند تا تیله بریم بازی؟</label>
-                <select class="custom-select" id="marbleCountSelect">
-                    <option value="2">۲ تیله</option><option value="3">۳ تیله</option><option value="4">۴ تیله</option>
-                    <option value="5" selected>۵ تیله</option><option value="6">۶ تیله</option><option value="7">۷ تیله</option>
-                    <option value="8">۸ تیله</option><option value="9">۹ تیله</option><option value="10">۱۰ تیله</option>
-                </select>
-            </div>
-            <button class="drawer-close-btn" id="closeDrawer">همه چی عالی شد! بریم؟</button>
-        </div>
+
+    <!-- 👥 تعداد بازیکن -->
+    <div style="margin-bottom:20px;">
+        <label style="color:white; font-weight:bold;">تعداد بازیکن:</label>
+        <select id="playerCountSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
+            <option value="1">۱ نفره</option>
+            <option value="2">۲ نفره</option>
+            <option value="3">۳ نفره</option>
+            <option value="4">۴ نفره</option>
+        </select>
     </div>
-    <div id="gameHeader">
-        <div style="display: flex; gap: 8px;">
-            <button id="exitBtn">خروج</button>
-            <button id="backToMenuBtn" style="background: #ff9800; color: black; border: none; border-radius: 12px; padding: 8px 14px; font-size: 14px; font-weight: bold; cursor: pointer; box-shadow: 0 3px 8px rgba(0,0,0,0.3);">برگشت به منو</button>
-        </div>
-        <div id="turnIndicator">نوبت: بازیکن ۱</div>
+
+    <!-- 🔮 تعداد تیله‌های داخل جعبه -->
+    <div style="margin-bottom:20px;">
+        <label style="color:white; font-weight:bold;">تعداد تیله‌ها:</label>
+        <select id="marbleCountSelect" style="width:100%; padding:10px; border-radius:10px; margin-top:8px;">
+            <option value="3">۳ تیله</option>
+            <option value="5">۵ تیله</option>
+            <option value="7">۷ تیله</option>
+            <option value="9">۹ تیله</option>
+        </select>
     </div>
-    <canvas id="canvas"></canvas>
-    <script>
-        const canvas = document.getElementById("canvas"); const ctx = canvas.getContext("2d"); const setupMenu = document.getElementById("setupMenu");
-        const startBtn = document.getElementById("startBtn"); const gearBtn = document.getElementById("gearBtn"); const settingsDrawer = document.getElementById("settingsDrawer");
-        const overlay = document.getElementById("overlay"); const closeDrawer = document.getElementById("closeDrawer"); const gameHeader = document.getElementById("gameHeader");
-        const exitBtn = document.getElementById("exitBtn"); const namesContainer = document.getElementById("namesContainer"); const turnIndicator = document.getElementById("turnIndicator");
-        let totalMarblesOwned = parseInt(localStorage.getItem("totalMarblesOwned")) || 10; let currentUsername = localStorage.getItem("currentUsername") || "";
-        let currentNationalId = localStorage.getItem("currentNationalId") || ""; let authMode = "login"; let gameLoopRunning = false; let isQuickRandomMode = false; let isReturningToMenu = false;
-        let playerNames = ["بازیکن ۱"]; let playerNationalIds = []; let currentPlayerIndex = 0; let localSocket = null; let isMyTurnOnline = true;
-        let isFirstShotOfTurn = true; let currentLevel = 1; let isAiming = false; let isMoving = false; let hitSuccessInTurn = false; let targetOutInTurn = false; let hasBonusShot = false; let isChainMode = false;
-        let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 }; let windX = 0; let windY = 0; let selectedWeather = "sunny"; let weatherParticles = []; let windLines = [];
-        let box = { x: 40, y: 60, w: 320, h: 220 }; let player = { x: 200, y: 480, startX: 200, startY: 480, targetX: 200, targetY: 480, baseR: 22, r: 22, vx: 0, vy: 0, angle: 0, angleX: 0, angleY: 0, z: 0, progress: 0, arcHeight: 0, inAir: false };
-        let targets = []; let selectedPlayerCount = 1; let playerScores = []; let playerOrders = [];
-        function showCustomPopup(text, icon, btnText, isError, callback) {
-            const popup = document.getElementById("gamePopup"); const pText = document.getElementById("popupText"); const pIcon = document.getElementById("popupIcon");
-            const pTable = document.getElementById("finalScoreTable"); const pAction = document.getElementById("popupActionButtons");
-            if(!popup) return; if(pTable) pTable.style.display = "none"; if(pText) pText.innerText = text; if(pIcon) pIcon.innerText = icon || "🎉";
-            if(pAction) { pAction.innerHTML = ""; if (btnText !== "") { const btn = document.createElement("button"); btn.className = isError ? "popup-btn danger" : "popup-btn success"; btn.innerText = btnText || "تایید"; btn.onclick = function() { popup.style.display = "none"; if(typeof callback === "function") callback(); }; pAction.appendChild(btn); } }
-            popup.style.display = "flex";
+
+    <!-- 👤 نام بازیکنان -->
+    <div id="namesContainer" style="margin-bottom:20px;">
+        <!-- این بخش با اسکریپت بخش‌های بعدی پر می‌شود -->
+    </div>
+
+    <!-- 🎡 گردونه نوبت‌دهی -->
+    <div id="wheelSection" style="display:none; flex-direction:column; align-items:center; margin-bottom:20px;">
+        <canvas id="wheelCanvas" width="260" height="260"
+                style="background:#111; border-radius:50%; margin-bottom:15px;"></canvas>
+
+        <button id="drawOrderBtn"
+                style="background:#00e676; color:white; padding:12px; border:none; border-radius:12px; width:100%; font-weight:bold;">
+            🎡 قرعه‌کشی نوبت‌ها
+        </button>
+    </div>
+
+    <!-- ✔ دکمه بستن تنظیمات -->
+    <button id="closeDrawer"
+            style="background:#2196f3; color:white; padding:12px; border:none; border-radius:12px; width:100%; font-weight:bold;">
+        تایید و شروع بازی
+    </button>
+
+</div>
+<!-- 🔔 پاپ‌آپ پیام‌ها -->
+<div id="gamePopup">
+    <div class="popup-box">
+        <div id="popupIcon" style="font-size:40px; margin-bottom:10px;">🎉</div>
+        <div id="popupText" style="color:white; font-size:16px; margin-bottom:15px;">
+            پیام نمونه
+        </div>
+        <div id="popupActionButtons"></div>
+    </div>
+</div>
+
+<!-- 🔔 Toast پیام کوتاه -->
+<div id="gameToast" class="game-toast"></div>
+
+<!-- 🏆 صفحه امتیازات پایانی -->
+<div id="scoreboardScreen">
+    <div class="scoreboard-box">
+
+        <h2 style="color:white; margin-bottom:15px;">🏆 کارنامه مسابقه</h2>
+
+        <div style="color:white; margin-bottom:10px;">
+            مجموع تیله‌های شما:
+            <span id="totalMarblesCell" style="font-weight:bold;">0</span>
+        </div>
+
+        <div style="color:white; margin-bottom:20px;">
+            تیله‌های برده شده در این مسابقه:
+            <span id="wonMarblesCell" style="font-weight:bold;">0</span>
+        </div>
+
+        <h3 style="color:white; margin-bottom:10px;">📜 تاریخچه اخیر</h3>
+        <ul id="historyList" style="color:white; list-style:none; padding:0; margin:0 0 20px 0;">
+            <!-- با اسکریپت پر می‌شود -->
+        </ul>
+
+        <button id="finalExitBtn"
+                style="background:#ff1744; color:white; padding:12px; border:none; border-radius:12px; width:100%; font-weight:bold;">
+            خروج از بازی
+        </button>
+
+    </div>
+</div>
+<script>
+/* ---------------------------------------------------
+   🔊 سیستم صوتی بازی
+--------------------------------------------------- */
+
+let audioCtx = null;
+let ambientSource = null;
+let ambientFilter = null;
+let ambientGain = null;
+
+function initAudio() {
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         }
-        function closeCustomPopup() { const popup = document.getElementById("gamePopup"); if(popup) popup.style.display = "none"; }
-        const grounds = {
-            grass:   { friction: 0.93, wind: 0.08, src: 'grass.jpg',   fallbackColor: '#2e7d32' },
-            carpet:  { friction: 0.91, wind: 0.02, src: 'carpet.jpg',  fallbackColor: '#b71c1c' },
-            asphalt: { friction: 0.94, wind: 0.05, src: 'asphalt.jpg', fallbackColor: '#424242' },
-            cement:  { friction: 0.95, wind: 0.04, src: 'cement.jpg',  fallbackColor: '#9e9e9e' },
-            dirt:    { friction: 0.92, wind: 0.15, src: 'dirt.jpg',    fallbackColor: '#8d6e63' }
-        };
-        let currentGround = grounds.grass; let imgBg = new Image(); let imgPlayer = new Image(); let imgTarget = new Image();
-        let selectedGroundVal = "grass"; let selectedCountVal = 5; let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
-        function updateWalletUI() {
-            let activeName = isQuickRandomMode ? "بازیکن مهمان" : (currentUsername || "بازیکن ۱");
-            if (!isQuickRandomMode && currentNationalId !== "") { localStorage.setItem(`marbles_${currentNationalId}`, totalMarblesOwned); localStorage.setItem("totalMarblesOwned", totalMarblesOwned); }
-            if (document.getElementById("menuPlayerName")) document.getElementById("menuPlayerName").innerText = activeName;
-            const welcomeMsg = document.getElementById("welcomeFadingMessage");
-            if (welcomeMsg && !isReturningToMenu && (welcomeMsg.innerHTML === "" || !welcomeMsg.innerHTML.includes(activeName))) {
-                if (typeof playWelcomeMelodySound === 'function') playWelcomeMelodySound();
-                welcomeMsg.style.opacity = "1"; welcomeMsg.innerHTML = isQuickRandomMode ? "⚡ حالت مهمان فعال شد<br><span style='font-size:14px; color:#ff9800;'>امروز روزِ برده، شلیک کن!</span>" : `✨ خوش آمدی ${activeName} جان<br><span style='font-size:14px; color:#00e676;'>بریم استادیوم رو فتح کنیم! 🏟️</span>`;
-                setTimeout(() => { welcomeMsg.style.opacity = "0"; }, 3500);
+        if (audioCtx.state === "suspended") {
+            audioCtx.resume();
+        }
+    } catch (error) {
+        console.log("سیستم صوتی در دسترس نیست.");
+    }
+}
+
+/* 🎵 صدای خوش‌آمد */
+function playWelcomeMelodySound() {
+    try {
+        initAudio();
+        let now = audioCtx.currentTime;
+        const notes = [523.25, 659.25, 783.99];
+
+        notes.forEach((freq, index) => {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(freq, now + index * 0.08);
+
+            gain.gain.setValueAtTime(0.18, now + index * 0.08);
+            gain.gain.exponentialRampToValueAtTime(0.0001, now + index * 0.08 + 0.6);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now + index * 0.08);
+            osc.stop(now + index * 0.08 + 0.65);
+        });
+    } catch(e){}
+}
+
+/* 🚀 صدای پرتاب */
+function playLaunchSound() {
+    try {
+        initAudio();
+        let now = audioCtx.currentTime;
+
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(150, now);
+        osc.frequency.exponentialRampToValueAtTime(450, now + 0.12);
+
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.15);
+    } catch(e){}
+}
+
+/* 🔵 صدای برخورد */
+function playClickSound(intensity = 0.5) {
+    try {
+        initAudio();
+        let now = audioCtx.currentTime;
+
+        let vol = Math.max(0.1, Math.min(intensity * 1.5, 1.2));
+
+        let osc = audioCtx.createOscillator();
+        let gain = audioCtx.createGain();
+
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(2400 + vol * 300, now);
+        osc.frequency.exponentialRampToValueAtTime(1900, now + 0.012);
+
+        gain.gain.setValueAtTime(vol * 0.4, now);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.03);
+    } catch(e){}
+}
+
+/* 🎉 صدای تشویق */
+function playCheeringSound() {
+    try {
+        initAudio();
+        let now = audioCtx.currentTime;
+
+        for (let i = 0; i < 8; i++) {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+
+            osc.type = "triangle";
+            osc.frequency.setValueAtTime(280 + i * 40, now);
+            osc.frequency.linearRampToValueAtTime(460 + i * 20, now + 1.2);
+
+            gain.gain.setValueAtTime(0.18, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 1.4);
+        }
+    } catch(e){}
+}
+
+/* 😔 صدای افسوس */
+function playDisappointmentSound() {
+    try {
+        initAudio();
+        let now = audioCtx.currentTime;
+
+        for (let i = 0; i < 6; i++) {
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+
+            osc.type = "sine";
+            osc.frequency.setValueAtTime(190 + i * 12, now);
+            osc.frequency.linearRampToValueAtTime(100 + i * 4, now + 0.9);
+
+            gain.gain.setValueAtTime(0.25, now);
+            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start(now);
+            osc.stop(now + 0.95);
+        }
+    } catch(e){}
+}
+
+/* ---------------------------------------------------
+   🌤️ صدای محیطی (باد / باران / برف / آفتاب)
+--------------------------------------------------- */
+
+function startAmbientSound(weather) {
+    try {
+        initAudio();
+        stopAmbientSound();
+
+        let bufferSize = audioCtx.sampleRate * 2;
+        let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+        let data = buffer.getChannelData(0);
+
+        for (let i = 0; i < bufferSize; i++) {
+            data[i] = Math.random() * 2 - 1;
+        }
+
+        ambientSource = audioCtx.createBufferSource();
+        ambientSource.buffer = buffer;
+        ambientSource.loop = true;
+
+        ambientFilter = audioCtx.createBiquadFilter();
+        ambientGain = audioCtx.createGain();
+
+        if (weather === "sunny") {
+            ambientFilter.type = "lowpass";
+            ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime);
+            ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+        } else if (weather === "windy") {
+            ambientFilter.type = "bandpass";
+            ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime);
+            ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime);
+            ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime);
+        } else {
+            ambientFilter.type = "lowpass";
+            ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime);
+            ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime);
+        }
+
+        ambientSource.connect(ambientFilter);
+        ambientFilter.connect(ambientGain);
+        ambientGain.connect(audioCtx.destination);
+
+        ambientSource.start(0);
+    } catch(e){}
+}
+
+function stopAmbientSound() {
+    try {
+        if (ambientSource) {
+            ambientSource.stop();
+            ambientSource.disconnect();
+            ambientSource = null;
+        }
+    } catch(e){}
+}
+</script>
+<script>
+/* ---------------------------------------------------
+   🌤️ سیستم آب‌وهوا و ذرات
+--------------------------------------------------- */
+
+let weatherParticles = [];
+let windLines = [];
+
+function initWeatherParticles() {
+    weatherParticles = [];
+
+    for (let i = 0; i < 120; i++) {
+        weatherParticles.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            speed: 2 + Math.random() * 3,
+            size: 2 + Math.random() * 3
+        });
+    }
+}
+
+function initWindLines() {
+    windLines = [];
+
+    for (let i = 0; i < 40; i++) {
+        windLines.push({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            len: 20 + Math.random() * 40,
+            speed: 2 + Math.random() * 3
+        });
+    }
+}
+
+function updateWeatherParticles() {
+    if (selectedWeather === "rainy") {
+        weatherParticles.forEach(p => {
+            p.y += p.speed * 2.5;
+            p.x += windX * 0.5;
+
+            if (p.y > canvas.height) {
+                p.y = -10;
+                p.x = Math.random() * canvas.width;
             }
-            if (document.getElementById("drawerDynamicTitle")) document.getElementById("drawerDynamicTitle").innerText = `${activeName} جان بریم برا بازی جذاب تر!`;
-            if (turnIndicator && playerNames && playerNames[currentPlayerIndex]) {
-                let id = playerNationalIds ? (playerNationalIds[currentPlayerIndex] || "") : "";
-                let pMarbles = id === currentNationalId ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0);
-                turnIndicator.innerHTML = `🏁 نوبت: <span style="color:#ffeb3b;">${playerNames[currentPlayerIndex]}</span> (💰 بانک: <span style="color:#00e676; font-weight:900;">${pMarbles}</span> تیله)`;
+        });
+    } else if (selectedWeather === "snowy") {
+        weatherParticles.forEach(p => {
+            p.y += p.speed * 0.8;
+            p.x += Math.sin(p.y * 0.02) * 1.2;
+
+            if (p.y > canvas.height) {
+                p.y = -10;
+                p.x = Math.random() * canvas.width;
             }
-        }
-        function switchAuthModeToRegister() { authMode = "register"; let uField = document.getElementById("usernameInput"); let sBtn = document.getElementById("authSubmitBtn"); let fTitle = document.getElementById("authFormTitle"); if (uField) uField.style.display = "block"; if (sBtn) sBtn.style.display = "block"; if (fTitle) fTitle.innerText = "📝 عضویت بازیکن جدید"; }
+        });
+    } else if (selectedWeather === "windy") {
+        windLines.forEach(w => {
+            w.x += w.speed * 2.5;
 
-        function processSmartAuth(actionType) {
-            let uName = document.getElementById("usernameInput").value.trim(); let uId = document.getElementById("identifierInput").value.trim();
-            if (uId === "") { showCustomPopup("لطفاً ابتدا کد ملی خود را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
-            if (uId.length !== 10) { showCustomPopup("کد ملی وارد شده باید دقیقاً ۱۰ رقم باشد.", "⚠️", "اصلاح کد ملی", true); return; }
-            let savedName = localStorage.getItem(`name_${uId}`); isQuickRandomMode = false; isReturningToMenu = false;
-            if (actionType === 'login') {
-                if (savedName === null) { showCustomPopup("این کد ملی یافت نشد! سیستم به حالت ثبت‌نام منتقل شد. نام خود را وارد کنید.", "⚠️", "ثبت‌نام جدید", true); switchAuthModeToRegister(); return; }
-                currentUsername = savedName; currentNationalId = uId; totalMarblesOwned = parseInt(localStorage.getItem(`marbles_${uId}`)) || 10;
-                showCustomPopup(`خوش آمدید قهرمان، ${currentUsername}! اطلاعات شما تایید شد.`, "⚡", "", false); setTimeout(() => { closeCustomPopup(); enterGameDirectly(); }, 400);
-            } else if (actionType === 'register') {
-                if (savedName !== null) { showCustomPopup("این کد ملی قبلاً ثبت شده است! در حال ورود به حساب...", "🔒", "متوجه شدم"); currentUsername = savedName; currentNationalId = uId; enterGameDirectly(); return; }
-                if (uName === "") { showCustomPopup("لطفاً نام فارسی خود را برای ثبت‌نام وارد کنید.", "⚠️", "متوجه شدم", true); return; }
-                localStorage.setItem(`name_${uId}`, uName); currentUsername = uName; currentNationalId = uId;
-                localStorage.setItem("currentUsername", currentUsername); localStorage.setItem("currentNationalId", currentNationalId);
-                totalMarblesOwned = 10; localStorage.setItem(`marbles_${uId}`, 10);
-                showCustomPopup(`🎉 قهرمان جدید، ${currentUsername} خوش آمدید! پروفایل ساخته و ۱۰ تیله رایگان هدیه شد!`, "🎁", "بزن بریم", false, function() { enterGameDirectly(); });
+            if (w.x > canvas.width) {
+                w.x = -w.len;
+                w.y = Math.random() * canvas.height;
             }
-        }
+        });
+    }
+}
 
-        function enterGameDirectly() { document.getElementById("loginScreen").style.display = "none"; setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex"; playerNames = [currentUsername]; playerNationalIds = [currentNationalId]; updateWalletUI(); }
+function drawWeather() {
+    ctx.save();
 
-        function processQuickRandomAuth() {
-            isQuickRandomMode = true; isReturningToMenu = false; document.getElementById("loginScreen").style.display = "none"; setupMenu.style.display = "flex"; if (gearBtn) gearBtn.style.display = "flex";
-            const groundKeys = Object.keys(grounds); const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)]; selectedGroundVal = randomGround; currentGround = grounds[randomGround];
-            selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
-            if(selectedWeather === 'sunny') { windX = 0; windY = 0; } else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; }
-            selectedCountVal = Math.floor(Math.random() * 9) + 2; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = []; updateWalletUI();
-        }
+    if (selectedWeather === "rainy") {
+        ctx.strokeStyle = "rgba(180,180,255,0.7)";
+        ctx.lineWidth = 2;
 
-        function checkSubPlayerIdAuto(index) {
-            let idInput = document.getElementById(`subId_${index}`); let nameInput = document.getElementById(`subName_${index}`); if (!idInput || !nameInput) return; let uId = idInput.value.trim();
-            if (uId.length === 10) {
-                let savedName = localStorage.getItem(`name_${uId}`);
-                if (savedName !== null) {
-                    nameInput.value = savedName; nameInput.disabled = true; nameInput.style.backgroundColor = "rgba(76, 175, 80, 0.15)"; nameInput.style.borderColor = "#4caf50"; showGameToast(`👤 بازیکن ${savedName} شناسایی و قفل شد.`);
-                    let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱"; let temp = [currentValidName];
-                    for(let j = 1; j < selectedPlayerCount; j++) { let val = document.getElementById(`subName_${j}`)?.value.trim(); temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); }
-                    playerNames = temp; drawWheel(0);
-                } else { nameInput.disabled = false; nameInput.style.backgroundColor = "rgba(26,26,26,0.9)"; nameInput.style.borderColor = "#444"; }
-            } else { if (nameInput.disabled) { nameInput.disabled = false; nameInput.value = ""; nameInput.style.backgroundColor = "rgba(26,26,26,0.9)"; nameInput.style.borderColor = "#444"; } }
-        }
-        function saveSubPlayersData() {
-            if (isQuickRandomMode || localSocket) return true; 
-            let count = selectedPlayerCount;
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱";
-            let currentValidId = currentNationalId || localStorage.getItem("currentNationalId") || "";
-            let tempNames = [currentValidName]; playerNationalIds = [currentValidId]; 
-            for (let i = 1; i < count; i++) {
-                let subNameInput = document.getElementById(`subName_${i}`); let subIdInput = document.getElementById(`subId_${i}`);
-                let subName = subNameInput ? subNameInput.value.trim() : ""; let subId = subIdInput ? subIdInput.value.trim() : "";
-                if (subId === "" || subName === "") { showCustomPopup(`لطفاً اطلاعات بازیکن شماره ${i + 1} را به طور کامل وارد کنید.`, "⚠️", "اصلاح اطلاعات", true); return false; }
-                if (subId.length !== 10) { showCustomPopup(`کد ملی بازیکن شماره ${i + 1} باید ۱۰ رقم باشد.`, "⚠️", "اصلاح کد ملی", true); return false; }
-                localStorage.setItem(`name_${subId}`, subName);
-                if (localStorage.getItem(`marbles_${subId}`) === null) { localStorage.setItem(`marbles_${subId}`, 10); showGameToast(`🎁 ۱۰ تیله هدیه خوش‌آمدهای به بانک ${subName} واریز شد!`); }
-                tempNames.push(subName); playerNationalIds.push(subId);
-            }
-            playerNames = tempNames; return true;
-        }
-
-        function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) { console.log("سیستم صوتی موقتاً در دسترس نیست."); } }
-        function playWelcomeMelodySound() { try { initAudio(); let now = audioCtx.currentTime; const notes = [523.25, 659.25, 783.99]; notes.forEach((freq, index) => { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(freq, now + (index * 0.08)); gain.gain.setValueAtTime(0.18, now + (index * 0.08)); gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.6); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.65); }); } catch(e) {} }
-        
-        function playLaunchSound() { try { initAudio(); let now = audioCtx.currentTime; let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "triangle"; osc.frequency.setValueAtTime(150, now); osc.frequency.exponentialRampToValueAtTime(450, now + 0.12); gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.15); } catch(e){} }
-        function playClickSound(intensity = 0.5) { try { initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity * 1.5, 1.2)); let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(2400 + (vol * 300), now); osc.frequency.exponentialRampToValueAtTime(1900, now + 0.012); gain.gain.setValueAtTime(vol * 0.4, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.03); } catch(e) {} }
-        function playCheeringSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<8; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "triangle"; osc.frequency.setValueAtTime(280 + (i * 40), now); osc.frequency.linearRampToValueAtTime(460 + (i * 20), now + 1.2); gain.gain.setValueAtTime(0.18, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.4); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.4); } } catch(e){} }
-        function playDisappointmentSound() { try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<6; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(190 + (i * 12), now); osc.frequency.linearRampToValueAtTime(100 + (i * 4), now + 0.9); gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 0.95); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.95); } } catch(e){} }
-        function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
-        function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
-        function playWeatherPreviewSound(type) { startAmbientSound(type); }
-        function initWeatherParticles() { weatherParticles = []; let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80); let wW = window.innerWidth || canvas.width || 400; let wH = window.innerHeight || canvas.height || 600; for(let i=0; i<count; i++) { weatherParticles.push({ x: Math.random() * wW, y: Math.random() * wH, v: selectedWeather === "rainy" ? (Math.random() * 5 + 6) : (Math.random() * 1.5 + 1), r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.5) : (Math.random() * 2 + 2), opacity: Math.random() * 0.5 + 0.3 }); } }
-        function initWindLines() { windLines = []; if (selectedWeather === "sunny") return; let count = selectedWeather === "windy" ? 25 : 10; let wW = canvas.width || window.innerWidth || 400; let wH = canvas.height || window.innerHeight || 600; for (let i = 0; i < count; i++) { windLines.push({ x: Math.random() * wW, y: Math.random() * wH, w: Math.random() * 80 + 40, h: Math.random() * 1.5 + 0.5, v: Math.random() * 4 + 3, opacity: Math.random() * 0.2 + 0.05 }); } }
-        function updateWeatherParticles() { weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 12; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } }); windLines.forEach(w => { w.x += w.v + windX * 20; w.y += windY * 5; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } }); }
-        function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 120, p.y + 15); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } if (selectedWeather === "windy" || selectedWeather === "rainy" || selectedWeather === "snowy") { windLines.forEach(w => { ctx.fillStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.fillRect(w.x, w.y, w.w, w.h); }); } ctx.restore(); }
-        function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
-        
-        function resetRound() {
-            isMoving = false; player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
-            let activeTargets = targets.filter(t => !t.isOut).length;
-            if (activeTargets === 0) { setTimeout(showFinalScoreboard, 200); return; }
-            let nX = canvas.width / 2; let nY = canvas.height - 100; player.x = nX; player.y = nY; player.startX = nX; player.startY = nY; player.targetX = nX; player.targetY = nY; player.angle = 0; player.angleX = 0; player.angleY = 0;
-            if (targetOutInTurn) { try { playCheeringSound(); } catch(e){} hasBonusShot = true; showGameToast("🎯 شلیک عالی! هوراااا"); } 
-            else { try { playDisappointmentSound(); } catch(e){} showGameToast("😔 اوووف! نزدیک بود...");
-                if (selectedPlayerCount === 1 || isQuickRandomMode || localSocket) { hasBonusShot = false; isChainMode = false; } 
-                else { if (isChainMode || !targetOutInTurn) { isChainMode = false; currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount; } hasBonusShot = false; }
-            }
-            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; if (!isQuickRandomMode && !localSocket) updateWalletUI();
-        }
-        function drawDynamicBorder() { ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.55)"; ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.fillStyle = "rgba(0, 0, 0, 0.12)"; ctx.fillRect(box.x, box.y, box.w, box.h); ctx.restore(); }
-        function loadLevel(lvl) { 
-            targets = []; let count = selectedCountVal || 5; let totalMarblesToPlace = count * selectedPlayerCount; let centerY = box.y + box.h / 2; let targetRadius = 14; let targetDiameter = targetRadius * 2; let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (box.x + box.w / 2) - (totalWidth / 2) + targetRadius; 
-            for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angle: 0, angleX: 0, angleY: 0, isOut: false }); } 
-        }
-        function drawWheel(currentAngle = 0) { const wCanvas = document.getElementById("wheelCanvas"); if (!wCanvas) return; const wCtx = wCanvas.getContext("2d"); const count = selectedPlayerCount; const radius = wCanvas.width / 2; wCtx.clearRect(0, 0, wCanvas.width, wCanvas.height); const colors = ["#e53935", "#1e88e5", "#43a047", "#fdd835", "#9c27b0", "#ff5722"]; const sliceAngle = (Math.PI * 2) / count; for(let i = 0; i < count; i++) { let startA = currentAngle + (i * sliceAngle) - (Math.PI * 1.5); let endA = startA + sliceAngle; wCtx.fillStyle = colors[i % colors.length]; wCtx.beginPath(); wCtx.moveTo(radius, radius); wCtx.arc(radius, radius, radius - 6, startA, endA); wCtx.fill(); wCtx.strokeStyle = "#fff"; wCtx.lineWidth = 2; wCtx.stroke(); let textAngle = startA + sliceAngle / 2; let normAngle = textAngle % (Math.PI * 2); if (normAngle < 0) normAngle += Math.PI * 2; wCtx.save(); wCtx.translate(radius, radius); wCtx.rotate(textAngle); if (normAngle > Math.PI / 2 && normAngle < (3 * Math.PI) / 2) { wCtx.translate(radius - 65, 0); wCtx.rotate(Math.PI); } else { wCtx.translate(radius - 65, 0); } wCtx.fillStyle = (i % colors.length === 3) ? "#000" : "#fff"; wCtx.font = "bold 13px sans-serif"; wCtx.textAlign = "center"; wCtx.textBaseline = "middle"; wCtx.fillText((playerNames[i] || `بازیکن ${i + 1}`).substring(0, 12), 0, 0); wCtx.restore(); } wCtx.beginPath(); wCtx.fillStyle = "#fff"; wCtx.arc(radius, radius, 14, 0, Math.PI * 2); wCtx.fill(); wCtx.stroke(); }
-        function updateNameInputs(count) { 
-            namesContainer.innerHTML = ""; playerOrders = []; const drawOrderBtn = document.getElementById("drawOrderBtn"); const wheelSection = document.getElementById("wheelSection"); 
-            let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "بازیکن ۱"; let mainRow = document.createElement("div"); mainRow.className = "player-row-item"; 
-            mainRow.innerHTML = `<div class="player-inputs"><input type="text" value="${currentValidName}" disabled><div class="order-badge assigned" id="mainPlayerBadge">نوبت ۱</div></div>`; 
-            namesContainer.appendChild(mainRow); playerOrders.push(1); 
-            for(let i = 1; i < count; i++) { 
-                playerOrders.push(i + 1); let row = document.createElement("div"); row.className = "player-row-item"; 
-                row.innerHTML = `<div class="player-inputs"><input type="number" id="subId_${i}" placeholder="کد ملی بازیکن ${i + 1}" oninput="checkSubPlayerIdAuto(${i})" style="width:40%;"><input type="text" id="subName_${i}" placeholder="نام بازیکن ${i + 1}" style="width:40%;"><div class="order-badge" id="pBadge_${i}" style="width:20%; font-size:11px;">نامشخص</div></div>`; 
-                namesContainer.appendChild(row); 
-                document.getElementById(`subName_${i}`).oninput = () => { let temp = [currentValidName]; for(let j=1; j<count; j++){ let val = document.getElementById(`subName_${j}`)?.value.trim(); temp.push(val !== "" && val ? val : `بازیکن ${j+1}`); } playerNames = temp; drawWheel(0); }; 
-            } 
-            let tempInit = [currentValidName]; for(let j=1; j<count; j++){ tempInit.push(`بازیکن ${j+1}`); } playerNames = tempInit; 
-            if (count > 1) { drawOrderBtn.style.setProperty("display", "block", "important"); wheelSection.style.setProperty("display", "flex", "important"); setTimeout(() => { drawWheel(0); }, 50); } 
-            else { drawOrderBtn.style.display = "none"; wheelSection.style.display = "none"; } 
-        }
-        function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; if (canvas.width < 600) { box.w = canvas.width * 0.85; box.h = canvas.height * 0.25; box.y = 80; } else { box.w = 420; box.h = 260; box.y = 100; } box.x = (canvas.width - box.w) / 2; player.x = canvas.width / 2; player.y = canvas.height - 100; }
-        function gameLoop() {
-            if (canvas.style.display === "none") { gameLoopRunning = false; return; }
-            gameLoopRunning = true;
-            if (player.inAir) {
-                player.progress += 0.03; player.x = player.startX + (player.targetX - player.startX) * player.progress + windX * player.progress * 15; player.y = player.startY + (player.targetY - player.startY) * player.progress + windY * player.progress * 15; player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; player.r = player.baseR + player.z * 0.35; player.angleX += player.vx * 0.05; player.angleY += player.vy * 0.05; player.angle += 0.15;
-                if (player.progress >= 1) {
-                    player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; playClickSound(0.5); let hitAny = false;
-                    targets.forEach(t => { if (!t.isOut) { let dx = t.x - player.x, dy = t.y - player.y; if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) { hitAny = true; let hitSpeed = Math.sqrt(player.vx*player.vx + player.vy*player.vy) || 5.5; playClickSound(hitSpeed / 5); t.vx = Math.cos(Math.atan2(dy, dx)) * (hitSpeed * 1.35); t.vy = Math.sin(Math.atan2(dy, dx)) * (hitSpeed * 1.35); } } });
-                    if (!hitAny) { setTimeout(resetRound, 300); }
-                }
-            }
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if (imgBg.complete && imgBg.naturalWidth !== 0) {
-                ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height);
-            } else {
-                ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height);
-            }
-            drawDynamicBorder();
-            
-            targets.forEach(t => {
-                if (!t.isOut) {
-                    t.x += t.vx; t.y += t.vy; t.vx *= currentGround.friction; t.vy *= currentGround.friction;
-                    t.angleX += t.vx * 0.05; t.angleY += t.vy * 0.05; t.angle += (Math.abs(t.vx) + Math.abs(t.vy)) * 0.02;
-                    if (t.x < box.x || t.x > box.x + box.w || t.y < box.y || t.y > box.y + box.h) {
-                        t.isOut = true; targetOutInTurn = true;
-                        if (!isQuickRandomMode) {
-                            if(playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
-                            let id = playerNationalIds[currentPlayerIndex] || "";
-                            if (id === currentNationalId) { totalMarblesOwned++; } else if (id !== "") {
-                                let cSubM = parseInt(localStorage.getItem(`marbles_${id}`)) || 0; localStorage.setItem(`marbles_${id}`, cSubM + 1);
-                            }
-                            updateWalletUI();
-                        }
-                        if (targets.filter(targetItem => !targetItem.isOut).length === 0) { setTimeout(showFinalScoreboard, 200); }
-                    }
-                }
-            });
-
-            targets.forEach(t => {
-                if (!t.isOut) {
-                    ctx.save(); ctx.translate(t.x, t.y); ctx.rotate(t.angle); ctx.beginPath(); ctx.arc(0, 0, t.r, 0, Math.PI * 2); ctx.clip();
-                    if (imgTarget.complete && imgTarget.naturalWidth !== 0) ctx.drawImage(imgTarget, -t.r, -t.r, t.r * 2, t.r * 2);
-                    else { ctx.fillStyle = "#ff5722"; ctx.fill(); } ctx.restore();
-                }
-            });
-
-            ctx.save(); ctx.translate(player.x, player.y - player.z); ctx.rotate(player.angle); ctx.beginPath(); ctx.arc(0, 0, player.r, 0, Math.PI * 2); ctx.clip();
-            if (imgPlayer.complete && imgPlayer.naturalWidth !== 0) ctx.drawImage(imgPlayer, -player.r, -player.r, player.r * 2, player.r * 2);
-            else { ctx.fillStyle = "#2196f3"; ctx.fill(); } ctx.restore();
-            
-            updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
-        }
-
-        function preloadAssetsAndLaunch() { 
-            showGameToast("⏳ در حال تدارک اتمسفر استادیوم..."); 
-            // 🗺️ اضافه شدن نقطه و اسلش برای سازگاری کامل با هاست گیت‌هاب پیجیز
-            imgBg.src = currentGround.src ? './' + currentGround.src : './grass.jpg'; 
-            imgPlayer.src = './6.png'; 
-            imgTarget.src = './1.png'; 
-            runGameInitialization(); 
-        }
-        function runGameInitialization() { if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; } setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); resizeCanvas(); isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false; hasBonusShot = false; isChainMode = false; loadLevel(1); initWeatherParticles(); initWindLines(); updateWalletUI(); gameLoopRunning = true; requestAnimationFrame(gameLoop); }
-        function launchGameDirectly() { if (isQuickRandomMode) { preloadAssetsAndLaunch(); return; } for (let i = 0; i < selectedPlayerCount; i++) { let id = playerNationalIds[i] || ""; let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`marbles_${id}`)) || 0); if (pMarbles < selectedCountVal) { showCustomPopup(`❌ موجودی تیله کافی نیست`, `🏪`, `متوجه شدم`, true); return; } if (id === currentNationalId) { totalMarblesOwned -= selectedCountVal; localStorage.setItem(`marbles_${id}`, totalMarblesOwned); localStorage.setItem("totalMarblesOwned", totalMarblesOwned); } else if (id !== "") { localStorage.setItem(`marbles_${id}`, pMarbles - selectedCountVal); } } preloadAssetsAndLaunch(); }
-        
-        function showFinalScoreboard() {
-            gameLoopRunning = false; if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none";
-            let id = currentNationalId || "guest"; let marblesWonThisRound = playerScores[currentPlayerIndex] || 0;
-            if (!isQuickRandomMode && id !== "guest") { localStorage.setItem(`marbles_${id}`, totalMarblesOwned); localStorage.setItem("totalMarblesOwned", totalMarblesOwned); }
-            updateWalletUI(); let historyKey = `history_${id}`; let playerHistory = JSON.parse(localStorage.getItem(historyKey)) || [];
-            playerHistory.push(`🏆 برد ${marblesWonThisRound} تیله در تاریخ ${new Date().toLocaleDateString('fa-IR')}`); localStorage.setItem(historyKey, JSON.stringify(playerHistory));
-            document.getElementById("totalMarblesCell").innerText = totalMarblesOwned + " تیله"; document.getElementById("wonMarblesCell").innerText = marblesWonThisRound + " تیله";
-            let historyListUi = document.getElementById("historyList"); if (historyListUi) { historyListUi.innerHTML = ""; playerHistory.slice(-3).reverse().forEach(item => { let li = document.createElement("li"); li.innerText = item; historyListUi.appendChild(li); }); }
-            document.getElementById("scoreboardScreen").style.display = "flex"; showGameToast("🎉 کارنامه مسابقه صادر شد!");
-        }
-        function restartGameFromScoreboard() { document.getElementById("scoreboardScreen").style.display = "none"; launchGameDirectly(); }
-        function exitToMainMenu() { document.getElementById("scoreboardScreen").style.display = "none"; handleFinalExit(); }
-        function openYourCustomShopForm() { const customShop = document.getElementById("shop"); if (customShop) { customShop.style.display = "flex"; const closeBtn = customShop.querySelector(".shop-close-btn") || customShop.querySelector("button[onclick*='close']"); if (closeBtn) { closeBtn.onclick = function() { customShop.style.display = "none"; }; } } else { showGameToast("⚠️ فرم فروشگاه با نام shop یافت نشد!"); } }
-
-        // 🎮 رویدادهای اتصال دکمه‌های منو و تنظیمات به توابع بازی
-        window.addEventListener("DOMContentLoaded", () => {
-            const actStartBtn = document.getElementById("startBtn");
-            const actGearBtn = document.getElementById("gearBtn");
-            const actDrawer = document.getElementById("settingsDrawer");
-            const actOverlay = document.getElementById("overlay");
-            const actCloseDrawer = document.getElementById("closeDrawer");
-
-            if (actStartBtn) {
-                actStartBtn.addEventListener("click", () => {
-                    try { initAudio(); } catch(e){}
-                    isQuickRandomMode = true; isReturningToMenu = false;
-                    if(document.getElementById("loginScreen")) document.getElementById("loginScreen").style.display = "none";
-                    const groundKeys = Object.keys(grounds); const randomGround = groundKeys[Math.floor(Math.random() * groundKeys.length)];
-                    selectedGroundVal = randomGround; currentGround = grounds[randomGround];
-                    selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
-                    if(selectedWeather === 'sunny') { windX = 0; windY = 0; } else if(selectedWeather === 'windy') { windX = 0.08; windY = 0.02; } else if(selectedWeather === 'rainy') { windX = 0.03; windY = 0.05; } else { windX = 0.01; windY = 0.02; }
-                    selectedCountVal = Math.floor(Math.random() * 9) + 2; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن"]; playerNationalIds = [""]; playerScores = [];
-                    preloadAssetsAndLaunch();
-                });
-            }
-            if (actGearBtn && actDrawer && actOverlay) {
-                actGearBtn.addEventListener("click", () => {
-                    try { initAudio(); } catch(e){}
-                    actDrawer.classList.add("open"); actOverlay.style.display = "block"; generateMenuPreviews();
-                });
-            }
-            if (actCloseDrawer && actDrawer && actOverlay) {
-                actCloseDrawer.addEventListener("click", () => {
-                    if (saveSubPlayersData()) { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; isQuickRandomMode = false; preloadAssetsAndLaunch(); }
-                });
-            }
-            if (actOverlay && actDrawer) { actOverlay.addEventListener("click", () => { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; }); }
-
-            // 🗺️ اتصال منوی انتخاب زمین
-            document.getElementById("groundGrid")?.addEventListener("click", (e) => {
-                let item = e.target.closest(".scroll-item");
-                if (item) {
-                    document.querySelectorAll("#groundGrid .scroll-item").forEach(el => el.classList.remove("active"));
-                    item.classList.add("active"); selectedGroundVal = item.getAttribute("data-val"); currentGround = grounds[selectedGroundVal];
-                }
-            });
-
-            // 🌤️ اتصال منوی انتخاب آب و هوا
-            document.getElementById("weatherGrid")?.addEventListener("click", (e) => {
-                let item = e.target.closest(".count-button-item");
-                if (item) {
-                    document.querySelectorAll("#weatherGrid .count-button-item").forEach(el => el.classList.remove("active"));
-                    item.classList.add("active"); selectedWeather = item.getAttribute("data-val"); if (typeof playWeatherPreviewSound === 'function') playWeatherPreviewSound(selectedWeather);
-                }
-            });
-
-            // 🚪 فعال‌سازی دکمه‌های خروج و برگشت هدر بازی
-            document.getElementById("backToMenuBtn")?.addEventListener("click", () => {
-                isReturningToMenu = true; gameLoopRunning = false; if (typeof stopAmbientSound === "function") stopAmbientSound();
-                if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none";
-                if(setupMenu) setupMenu.style.display = "flex"; if(document.getElementById("gearBtn")) document.getElementById("gearBtn").style.display = "flex";
-                updateWalletUI();
-            });
-            document.getElementById("exitBtn")?.addEventListener("click", () => { handleFinalExit(); });
-
-            updateNameInputs(1); generateMenuPreviews(); updateWalletUI();
+        weatherParticles.forEach(p => {
+            ctx.beginPath();
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p.x + windX * 4, p.y + 12);
+            ctx.stroke();
         });
 
-        // 🎯 رویدادهای لمس و ماوس روی بوم بازی برای نشانه‌گیری و شلیک مستقیم
-        canvas.addEventListener("pointerdown", (e) => {
-            if (isMoving || player.inAir || !gameLoopRunning) return; let pos = getEventPos(e); let dx = pos.x - player.x, dy = pos.y - player.y;
-            if (Math.sqrt(dx * dx + dy * dy) < player.r * 2) { isAiming = true; dragStart = pos; dragEnd = pos; }
-        });
-        canvas.addEventListener("pointermove", (e) => { if (isAiming) dragEnd = getEventPos(e); });
-        canvas.addEventListener("pointerup", (e) => {
-            if (!isAiming) return; isAiming = false; let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; let dragDist = Math.sqrt(dx * dx + dy * dy);
-            if (dragDist > 10) {
-                try { playLaunchSound(); } catch(err){}
-                player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12;
-                player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120);
-                player.progress = 0; player.inAir = true; isMoving = true; isFirstShotOfTurn = false;
-            } else { isMoving = false; player.inAir = false; }
+    } else if (selectedWeather === "snowy") {
+        ctx.fillStyle = "rgba(255,255,255,0.9)";
+        weatherParticles.forEach(p => {
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
         });
 
-        window.addEventListener("resize", () => { if (gameLoopRunning) resizeCanvas(); });
-        function handleFinalExit() { stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; setupMenu.style.display = "none"; gearBtn.style.display = "none"; if (typeof settingsDrawer !== 'undefined' && settingsDrawer) settingsDrawer.classList.remove("open"); if (typeof overlay !== 'undefined' && overlay) overlay.style.display = "none"; document.getElementById("loginScreen").style.display = "flex"; gameLoopRunning = false; }
-    </script>
+    } else if (selectedWeather === "windy") {
+        ctx.strokeStyle = "rgba(255,255,255,0.25)";
+        ctx.lineWidth = 3;
+
+        windLines.forEach(w => {
+            ctx.beginPath();
+            ctx.moveTo(w.x, w.y);
+            ctx.lineTo(w.x + w.len, w.y);
+            ctx.stroke();
+        });
+    }
+
+    ctx.restore();
+}
+
+/* ---------------------------------------------------
+   🌍 زمین‌ها و اصطکاک
+--------------------------------------------------- */
+
+let grounds = {
+    grass: {
+        src: "grass.jpg",
+        friction: 0.92,
+        fallbackColor: "#2e7d32"
+    },
+    carpet: {
+        src: "carpet.jpg",
+        friction: 0.88,
+        fallbackColor: "#6d4c41"
+    },
+    asphalt: {
+        src: "asphalt.jpg",
+        friction: 0.95,
+        fallbackColor: "#424242"
+    },
+    cement: {
+        src: "cement.jpg",
+        friction: 0.93,
+        fallbackColor: "#9e9e9e"
+    },
+    dirt: {
+        src: "dirt.jpg",
+        friction: 0.90,
+        fallbackColor: "#795548"
+    }
+};
+
+let currentGround = grounds.grass;
+
+/* ---------------------------------------------------
+   🖼️ بارگذاری تصاویر
+--------------------------------------------------- */
+
+let imgBg = new Image();
+let imgPlayer = new Image();
+let imgTarget = new Image();
+
+imgPlayer.src = "6.png";
+imgTarget.src = "1.png";
+
+function updateGroundImage() {
+    currentGround = grounds[selectedGroundVal] || grounds.grass;
+    imgBg.src = currentGround.src;
+}
+</script>
+<script>
+/* ---------------------------------------------------
+   🎮 متغیرهای اصلی بازی
+--------------------------------------------------- */
+
+let canvas = document.getElementById("canvas");
+let ctx = canvas.getContext("2d");
+
+let W = window.innerWidth;
+let H = window.innerHeight;
+
+canvas.width = W;
+canvas.height = H;
+
+let marbles = [];
+let currentPlayerIndex = 0;
+let isShooting = false;
+let gameLoopRunning = false;
+
+let selectedGroundVal = "grass";
+let selectedWeather = "sunny";
+let windX = 0;
+
+let playerNames = [];
+let playerScores = [];
+let totalMarbles = 0;
+let wonMarbles = 0;
+
+/* ---------------------------------------------------
+   🎯 ساخت تیله‌ها
+--------------------------------------------------- */
+
+function createMarbles(count) {
+    marbles = [];
+
+    for (let i = 0; i < count; i++) {
+        marbles.push({
+            x: W * 0.5 + (i * 20),
+            y: H * 0.5,
+            vx: 0,
+            vy: 0,
+            radius: 22,
+            owner: i % playerNames.length
+        });
+    }
+}
+
+/* ---------------------------------------------------
+   🚀 شلیک تیله
+--------------------------------------------------- */
+
+canvas.addEventListener("touchstart", e => {
+    if (!gameLoopRunning || isShooting) return;
+
+    let t = e.touches[0];
+    let rect = canvas.getBoundingClientRect();
+    let tx = t.clientX - rect.left;
+    let ty = t.clientY - rect.top;
+
+    let m = marbles[currentPlayerIndex];
+
+    let dx = tx - m.x;
+    let dy = ty - m.y;
+
+    let dist = Math.sqrt(dx * dx + dy * dy);
+    if (dist < 20) return;
+
+    let power = Math.min(dist / 6, 22);
+
+    m.vx = dx / dist * power;
+    m.vy = dy / dist * power;
+
+    playLaunchSound();
+
+    isShooting = true;
+});
+
+/* ---------------------------------------------------
+   🔵 برخورد تیله‌ها
+--------------------------------------------------- */
+
+function handleCollisions() {
+    for (let i = 0; i < marbles.length; i++) {
+        for (let j = i + 1; j < marbles.length; j++) {
+            let a = marbles[i];
+            let b = marbles[j];
+
+            let dx = b.x - a.x;
+            let dy = b.y - a.y;
+            let dist = Math.sqrt(dx * dx + dy * dy);
+
+            if (dist < a.radius + b.radius) {
+                let nx = dx / dist;
+                let ny = dy / dist;
+
+                let p = a.vx * nx + a.vy * ny - b.vx * nx - b.vy * ny;
+
+                a.vx -= p * nx;
+                a.vy -= p * ny;
+                b.vx += p * nx;
+                b.vy += p * ny;
+
+                playClickSound(0.6);
+            }
+        }
+    }
+}
+
+/* ---------------------------------------------------
+   🌍 اصطکاک زمین + آب‌وهوا
+--------------------------------------------------- */
+
+function applyPhysics() {
+    let friction = currentGround.friction;
+
+    marbles.forEach(m => {
+        m.vx *= friction;
+        m.vy *= friction;
+
+        if (selectedWeather === "windy") {
+            m.vx += windX * 0.04;
+        }
+
+        m.x += m.vx;
+        m.y += m.vy;
+
+        if (m.x < m.radius) {
+            m.x = m.radius;
+            m.vx *= -0.5;
+        }
+        if (m.x > W - m.radius) {
+            m.x = W - m.radius;
+            m.vx *= -0.5;
+        }
+        if (m.y < m.radius) {
+            m.y = m.radius;
+            m.vy *= -0.5;
+        }
+        if (m.y > H - m.radius) {
+            m.y = H - m.radius;
+            m.vy *= -0.5;
+        }
+    });
+}
+
+/* ---------------------------------------------------
+   🎯 پایان حرکت تیله
+--------------------------------------------------- */
+
+function checkStop() {
+    let moving = marbles.some(m => Math.abs(m.vx) > 0.2 || Math.abs(m.vy) > 0.2);
+
+    if (!moving && isShooting) {
+        isShooting = false;
+        nextTurn();
+    }
+}
+
+/* ---------------------------------------------------
+   🔄 نوبت‌دهی
+--------------------------------------------------- */
+
+function nextTurn() {
+    currentPlayerIndex++;
+
+    if (currentPlayerIndex >= marbles.length) {
+        endRound();
+        return;
+    }
+
+    document.getElementById("turnIndicator").innerText =
+        "نوبت: " + playerNames[marbles[currentPlayerIndex].owner];
+}
+
+/* ---------------------------------------------------
+   🏁 پایان راند
+--------------------------------------------------- */
+
+function endRound() {
+    playCheeringSound();
+
+    wonMarbles = Math.floor(Math.random() * 3) + 1;
+    totalMarbles += wonMarbles;
+
+    updateScoreboard();
+
+    document.getElementById("scoreboardScreen").style.display = "flex";
+
+    gameLoopRunning = false;
+}
+
+/* ---------------------------------------------------
+   🏆 بروزرسانی امتیازات
+--------------------------------------------------- */
+
+function updateScoreboard() {
+    document.getElementById("totalMarblesCell").innerText = totalMarbles;
+    document.getElementById("wonMarblesCell").innerText = wonMarbles;
+
+    let list = document.getElementById("historyList");
+    let li = document.createElement("li");
+    li.innerText = "برد " + wonMarbles + " تیله";
+    list.appendChild(li);
+}
+
+/* ---------------------------------------------------
+   🎮 حلقه اصلی بازی
+--------------------------------------------------- */
+
+function gameLoop() {
+    if (!gameLoopRunning) return;
+
+    ctx.clearRect(0, 0, W, H);
+
+    if (imgBg.complete) {
+        ctx.drawImage(imgBg, 0, 0, W, H);
+    } else {
+        ctx.fillStyle = currentGround.fallbackColor;
+        ctx.fillRect(0, 0, W, H);
+    }
+
+    updateWeatherParticles();
+    drawWeather();
+
+    applyPhysics();
+    handleCollisions();
+    checkStop();
+
+    marbles.forEach(m => {
+        ctx.drawImage(imgPlayer, m.x - m.radius, m.y - m.radius, m.radius * 2, m.radius * 2);
+    });
+
+    requestAnimationFrame(gameLoop);
+}
+
+/* ---------------------------------------------------
+   🎮 شروع بازی
+--------------------------------------------------- */
+
+function startGame() {
+    canvas.style.display = "block";
+    document.getElementById("setupMenu").style.display = "none";
+    document.getElementById("gameHeader").style.display = "block";
+
+    currentPlayerIndex = 0;
+
+    updateGroundImage();
+    initWeatherParticles();
+    initWindLines();
+
+    startAmbientSound(selectedWeather);
+
+    gameLoopRunning = true;
+    gameLoop();
+}
+</script>
+</script>
 </body>
 </html>
