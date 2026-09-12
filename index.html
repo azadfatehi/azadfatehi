@@ -92,7 +92,28 @@
             box-shadow: 0 0 30px rgba(0, 176, 255, 0.2), 0 20px 50px rgba(0,0,0,0.9), inset 0 1px 2px rgba(255,255,255,0.1);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        .stadium-drawer.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1) !important; }
+        /* 🔧 بازطراحی انقلابی منوی همبرگری لاگین به صورت کارت شیشه‌ای گیمینگ */
+        #loginMenuDrawer.stadium-drawer { 
+            position: fixed; 
+            top: 50%; left: 50%; 
+            transform: translate(-50%, -50%) scale(0.9); 
+            width: 90%; max-width: 360px; 
+            max-height: 80vh; 
+            background: linear-gradient(rgba(10, 10, 26, 0.92), rgba(5, 5, 15, 0.96));
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 2px solid #00b0ff; 
+            border-radius: 24px; 
+            z-index: 200; 
+            padding: 24px; 
+            overflow-y: auto; 
+            opacity: 0; pointer-events: none;
+            box-shadow: 0 0 30px rgba(0, 176, 255, 0.25), 0 20px 60px rgba(0,0,0,0.85);
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #loginMenuDrawer.stadium-drawer.open { 
+            opacity: 1; pointer-events: auto; 
+            transform: translate(-50%, -50%) scale(1) !important; 
+        }
         
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 150; display: none; backdrop-filter: blur(4px); }
         .grid-preview { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0 15px 0; margin-bottom: 15px; scroll-snap-type: x mandatory; }
@@ -175,14 +196,17 @@
     </div>
     <!-- 🔧 کشوی همبرگری پشتیبان صفحه لاگین (گزینه‌های درباره ما و فراموشی) -->
     <div class="drawer-overlay" id="loginOverlay" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';"></div>
+    <!-- 🔧 کشوی همبرگری ارتقا یافته و جذاب پشتیبان صفحه لاگین بدون دکمه پاکسازی حافظه -->
+    <div class="drawer-overlay" id="loginOverlay" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';"></div>
     <div class="stadium-drawer" id="loginMenuDrawer">
-        <div class="stadium-title" style="font-size:16px;">⚙️ منوی پشتیبانی میدان</div>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:10px; text-align:right;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none'; switchAuthModeToForgot();">🔑 فراموشی و بازیابی رمز حساب</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:10px; text-align:right;" onclick="showCustomPopup('📬 پل ارتباطی با استادیوم: support@marblestadium.ir', '📞', 'تایید', false)">📞 تماس با ما</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:10px; text-align:right;" onclick="showCustomPopup('شبیه‌ساز مسابقات اصیل تیله‌بازی نسخه ارتقا یافته استادیوم ملی', '🎮', 'تایید', false)">ℹ️ درباره ما</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:15px; text-align:right;" onclick="showCustomPopup('ممنون از حمایت شما! درگاه‌های حمایتی به زودی فعال می‌شوند.', '💖', 'تایید', false)">☕ کمک به برنامه‌نویس</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:10px; border-color:#ff5252; color:#ff5252;" onclick="if(confirm('آیا از حذف کامل کل بانک تیله‌ها مطمئنید؟')){localStorage.clear(); window.location.reload();}">🧹 پاکسازی کامل کل حافظه بازی</button>
-        <button class="stadium-btn primary" style="width:100%;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';">بستن منو</button>
+        <div class="stadium-title" style="font-size:16px; color: #ffeb3b; text-shadow: 0 0 10px rgba(255,235,59,0.3);">⚙️ پشتیبانی و راهنمای استادیوم</div>
+        
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right; border-color: rgba(0,176,255,0.3);" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none'; switchAuthModeToForgot();">🔑 فراموشی و بازیابی رمز حساب</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('📬 پل ارتباطی با استادیوم ملی تیله‌بازی: support@marblestadium.ir', '📞', 'تایید و برگشت', false)">📞 تماس با تیم پشتیبانی</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('شبیه‌ساز مسابقات اصیل تیله‌بازی نسخه ارتقا یافته استادیوم ملی ۱۴۰۵ با فیزیک واقعی چمن و سیمان', '🎮', 'تایید و برگشت', false)">ℹ️ درباره میدان استادیوم</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:20px; text-align:right; border-color: rgba(255,23,68,0.2);" onclick="showCustomPopup('ممنون از حمایت ارزشمند شما بازیکن گرامی! درگاه‌های حمایتی به زودی فعال می‌شوند.', '💖', 'تایید و برگشت', false)">☕ حمایت از توسعه‌دهنده</button>
+        
+        <button class="stadium-btn primary" style="width:100%; border-radius: 14px; font-weight: 900;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';">بستن پنجره راهنما</button>
     </div>
 
     <!-- 🏟️ منوی اصلی تدارکات و راه‌اندازی با دکمه همبرگری تراز شده بالا -->
@@ -1039,6 +1063,28 @@
             document.getElementById("exitBtn")?.addEventListener("click", () => { handleFinalExit(); });
             updateNameInputs(1); generateMenuPreviews(); updateWalletUI();
         });
+		        // 🔌 تزریق اتصال زنده و قطعی برای باز کردن قفل دکمه‌های صفحه ورود روی گیت‌هاب پیجز
+        window.addEventListener("DOMContentLoaded", () => {
+            const loginBtn = document.querySelector("#loginScreen .stadium-btn.primary");
+            const guestBtn = document.getElementById("quickStartBtn");
+            
+            if (loginBtn) {
+                loginBtn.removeAttribute("onclick"); // حذف دستور قدیمی برای جلوگیری از تداخل
+                loginBtn.addEventListener("click", () => {
+                    try { initAudio(); } catch(e){}
+                    processSmartAuth('login');
+                });
+            }
+            
+            if (guestBtn) {
+                guestBtn.removeAttribute("onclick");
+                guestBtn.addEventListener("click", () => {
+                    try { initAudio(); } catch(e){}
+                    processQuickRandomAuth();
+                });
+            }
+        });
+
     </script>
 </body>
 </html>
