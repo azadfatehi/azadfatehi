@@ -8,52 +8,23 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: sans-serif; }
         body, html { width: 100%; height: 100%; overflow: hidden; background: #0a0a16; direction: rtl; }
-        /* 🖼️ اصلاح قطعی و تراز کردن تصویر پس‌زمینه زنده منوی ورود */
+        
+        /* 🖼️ تنظیم قطعی پس‌زمینه زنده منوی ورود به عکس اختصاصی استادیوم */
         #loginScreen { 
-            position: absolute; 
-            width: 100%; 
-            height: 100%; 
-            top: 0; 
-            left: 0; 
-            display: flex; 
-            flex-direction: column; 
-            justify-content: center; 
-            align-items: center; 
-            z-index: 100; 
-            background: url('menu_bg.jpg') center center / cover no-repeat !important; 
-            padding: 20px; 
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
+            display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; 
+            background: url('menu_bg.jpg') center center / cover no-repeat !important; padding: 20px; 
         }
         
-        /* 🔧 تنظیم پس‌زمینه منوی همبرگری پیشرفته به عکس استادیوم همراه با افکت شیشه‌ای لوکس */
-        .stadium-drawer { 
-            position: fixed; 
-            top: 50%; 
-            left: 50%; 
-            transform: translate(-50%, -50%) scale(0.9); 
-            width: 92%; 
-            max-width: 390px; 
-            max-height: 85vh; 
-            background: linear-gradient(rgba(14, 14, 38, 0.88), rgba(6, 6, 21, 0.93)), url('menu_bg.jpg') center center / cover no-repeat !important;
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px);
-            border: 2px solid #00b0ff; 
-            border-radius: 24px; 
-            z-index: 200; 
-            padding: 24px; 
-            overflow-y: auto; 
-            opacity: 0; 
-            pointer-events: none;
-            box-shadow: 0 0 30px rgba(0, 176, 255, 0.2), 0 20px 50px rgba(0,0,0,0.9);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        #setupMenu { 
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
+            display: none; flex-direction: column; justify-content: flex-start; align-items: center; 
+            z-index: 100; background: radial-gradient(circle at center, #1a1a3a 0%, #050510 100%); padding-top: 30px; 
         }
-        .stadium-drawer.open { 
-            opacity: 1; 
-            pointer-events: auto; 
-            transform: translate(-50%, -50%) scale(1) !important; 
-        }
-        .stadium-card { background: rgba(20, 20, 45, 0.65); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 32px; padding: 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.1); animation: cardFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        
+        .stadium-card { background: rgba(20, 20, 45, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 2px solid #00b0ff; border-radius: 32px; padding: 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6); animation: cardFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
         @keyframes cardFade { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
-        .stadium-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 25px; text-shadow: 0 0 15px rgba(255,255,255,0.3); display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .stadium-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 25px; text-shadow: 0 0 15px rgba(0,176,255,0.4); display: flex; align-items: center; justify-content: center; gap: 10px; }
         .stadium-input { width: 100%; padding: 16px; background: rgba(5, 5, 15, 0.8); border: 2px solid rgba(255, 255, 255, 0.1); border-radius: 16px; color: #fff; font-size: 15px; font-weight: bold; text-align: center; margin-bottom: 14px; outline: none; transition: all 0.3s; }
         .stadium-input:focus { border-color: #00e676; box-shadow: 0 0 15px rgba(0,230,118,0.25); background: #05050f; }
         .btn-group { display: flex; gap: 12px; width: 100%; margin-bottom: 15px; }
@@ -64,56 +35,34 @@
         .stadium-btn:active { transform: scale(0.97); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
         .quick-btn { width: 100%; padding: 15px; background: linear-gradient(135deg, #ff9100, #ff6d00); color: #fff; border: none; border-radius: 16px; font-size: 14px; font-weight: 900; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 6px 20px rgba(255,109,0,0.3); transition: all 0.2s; }
         .quick-btn:active { transform: scale(0.97); }
-        .link-text { font-size: 12px; color: #b0bec5; cursor: pointer; margin-top: 15px; text-decoration: underline; transition: color 0.2s; display: inline-block; }
-        .link-text:hover { color: #fff; }
-        #setupMenu { display: none; }
-        .profile-bar { display: flex; align-items: center; justify-content: space-between; width: 100%; max-width: 360px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); padding: 12px 16px; border-radius: 20px; margin-bottom: 20px; color: #fff; font-size: 13px; font-weight: bold; }
-        .circle-start-btn { width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, #00e676, #00b0ff); border: 6px solid rgba(255,255,255,0.15); color: #fff; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; box-shadow: 0 15px 40px rgba(0,230,118,0.35), inset 0 4px 10px rgba(255,255,255,0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); margin-bottom: 25px; position: relative; }
+        
+        /* 🏟️ نوار وضعیت بالایی هدر منوی اصلی متوازن و تراز وسط */
+        .profile-bar { 
+            display: flex !important; align-items: center !important; justify-content: center !important; 
+            gap: 24px !important; width: 100%; max-width: 360px; 
+            background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.06); 
+            padding: 12px 20px; border-radius: 20px; margin-bottom: 20px; color: #fff; font-size: 13px; font-weight: bold; 
+        }
+        
+        /* 🎯 دکمه شروع دایره‌ای بزرگ جذاب شما کاملاً متمرکز در وسط صفحه */
+        .circle-start-btn { width: 130px; height: 130px; border-radius: 50%; background: linear-gradient(135deg, #00e676, #00b0ff); border: 6px solid rgba(255,255,255,0.15); color: #fff; font-size: 20px; font-weight: 900; cursor: pointer; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 4px; box-shadow: 0 15px 40px rgba(0,230,118,0.35), inset 0 4px 10px rgba(255,255,255,0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative; margin: 0 auto; z-index: 5; }
         .circle-start-btn:active { transform: scale(0.92); box-shadow: 0 5px 15px rgba(0,230,118,0.2); }
         .circle-start-btn::after { content: ''; position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 2px dashed rgba(0,230,118,0.4); animation: spinRotate 12s linear infinite; }
         @keyframes spinRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .stadium-select { width: 100%; padding: 14px; background: rgba(5,5,15,0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 14px; font-weight: bold; margin-bottom: 12px; outline: none; text-align: center; }
         
-        /* 🏟️ بازطراحی انقلابی منوی تنظیمات به سبک پاپ‌آپ‌های لوکس بازی‌های کنسولی */
+        /* 🔧 منوی همبرگری لاگین و تنظیمات به صورت کارت شیشه‌ای گیمینگ تراز وسط با تصویر پس‌زمینه */
         .stadium-drawer { 
-            position: fixed; 
-            top: 50%; left: 50%; 
+            position: fixed; top: 50%; left: 50%; 
             transform: translate(-50%, -50%) scale(0.9); 
-            width: 92%; max-width: 390px; 
-            max-height: 85vh; 
-            background: linear-gradient(145deg, #0e0e26 0%, #060615 100%), url('menu_bg.jpg') center center/cover;
+            width: 92%; max-width: 390px; max-height: 85vh; 
+            background: linear-gradient(rgba(14, 14, 38, 0.88), rgba(6, 6, 21, 0.93)), url('menu_bg.jpg') center center / cover no-repeat !important;
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
-            border: 2px solid #00b0ff;
-            border-radius: 24px; 
-            z-index: 200; 
-            padding: 24px; 
-            overflow-y: auto; 
-            opacity: 0; pointer-events: none;
-            box-shadow: 0 0 30px rgba(0, 176, 255, 0.2), 0 20px 50px rgba(0,0,0,0.9), inset 0 1px 2px rgba(255,255,255,0.1);
-            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-        /* 🔧 بازطراحی انقلابی منوی همبرگری لاگین به صورت کارت شیشه‌ای گیمینگ */
-        #loginMenuDrawer.stadium-drawer { 
-            position: fixed; 
-            top: 50%; left: 50%; 
-            transform: translate(-50%, -50%) scale(0.9); 
-            width: 90%; max-width: 360px; 
-            max-height: 80vh; 
-            background: linear-gradient(rgba(10, 10, 26, 0.92), rgba(5, 5, 15, 0.96));
-            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-            border: 2px solid #00b0ff; 
-            border-radius: 24px; 
-            z-index: 200; 
-            padding: 24px; 
-            overflow-y: auto; 
-            opacity: 0; pointer-events: none;
+            border: 2px solid #00b0ff; border-radius: 24px; z-index: 200; padding: 24px; overflow-y: auto; opacity: 0; pointer-events: none;
             box-shadow: 0 0 30px rgba(0, 176, 255, 0.25), 0 20px 60px rgba(0,0,0,0.85);
             transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-        #loginMenuDrawer.stadium-drawer.open { 
-            opacity: 1; pointer-events: auto; 
-            transform: translate(-50%, -50%) scale(1) !important; 
-        }
+        .stadium-drawer.open { opacity: 1; pointer-events: auto; transform: translate(-50%, -50%) scale(1) !important; }
         
         .drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 150; display: none; backdrop-filter: blur(4px); }
         .grid-preview { display: flex; gap: 12px; overflow-x: auto; padding: 5px 0 15px 0; margin-bottom: 15px; scroll-snap-type: x mandatory; }
@@ -124,22 +73,18 @@
         .count-button-item { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; text-align: center; color: #fff; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .count-button-item.active { background: rgba(0,176,255,0.15); border-color: #00b0ff; box-shadow: 0 0 10px rgba(0,176,255,0.3); }
         #gameHeader { position: absolute; top: 0; left: 0; width: 100%; padding: 12px 16px; display: none; justify-content: space-between; align-items: center; z-index: 50; background: linear-gradient(to bottom, rgba(10,10,22,0.85) 0%, rgba(10,10,22,0) 100%); }
-        /* 🕹️ بازطراحی لوکس دکمه‌های ناوبری هدر بالای میدان بازی */
-        #exitBtn, #backToMenuBtn { 
-            background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); 
-            color: #ff5252; 
-            border: 1px solid rgba(255,82,82,0.4); 
-            border-radius: 10px; 
-            padding: 6px 14px; 
-            font-size: 13px; 
-            font-weight: 900; 
-            cursor: pointer;
-            transition: all 0.2s;
-            text-shadow: 0 0 5px rgba(255,82,82,0.3);
+        /* 📊 تراز کردن کامل کارنامه نهایی در مرکز صفحه و حذف تداخل‌های پس‌زمینه */
+        #scoreboardScreen { 
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
+            display: none; flex-direction: column; justify-content: center; align-items: center; 
+            z-index: 150; background: url('menu_bg.jpg') center center / cover no-repeat !important; padding: 20px; 
         }
+        #scoreboardScreen .stadium-card { width: 100%; max-width: 380px; margin: 0 auto; background: rgba(14, 14, 38, 0.9); border: 2px solid #ffeb3b; box-shadow: 0 0 35px rgba(255, 235, 59, 0.2), 0 20px 50px rgba(0,0,0,0.9); }
+
+        /* 🕹️ بازطراحی لوکس دکمه‌های ناوبری هدر بالای میدان بازی */
+        #exitBtn, #backToMenuBtn { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); color: #ff5252; border: 1px solid rgba(255,82,82,0.4); border-radius: 10px; padding: 6px 14px; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.2s; text-shadow: 0 0 5px rgba(255,82,82,0.3); }
         #backToMenuBtn { color: #00b0ff; border-color: rgba(0,176,255,0.4); text-shadow: 0 0 5px rgba(0,176,255,0.3); }
         #exitBtn:active, #backToMenuBtn:active { transform: scale(0.92); background: rgba(255,255,255,0.15); }
-
         #turnIndicator { color: #fff; font-size: 13px; font-weight: 900; background: rgba(0,0,0,0.4); padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; background: #141423; }
         .gear-corner-btn { position: absolute; top: 16px; left: 16px; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); display: none; justify-content: center; align-items: center; cursor: pointer; color: #fff; font-size: 20px; z-index: 110; }
@@ -150,27 +95,21 @@
         .popup-text { color: #fff; font-size: 14px; font-weight: bold; line-height: 1.6; margin-bottom: 20px; }
         .popup-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; }
         .popup-btn.success { background: #00e676; color: #fff; }
-        .popup-btn.danger { background: #ff5252; color: #fff; }
         
         .game-toast { position: fixed; top: 75px; left: 50%; transform: translateX(-50%) translateY(-20px); background: rgba(0, 230, 118, 0.95); color: #fff; padding: 10px 20px; border-radius: 14px; font-size: 13px; font-weight: bold; z-index: 400; opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2); box-shadow: 0 8px 25px rgba(0,230,118,0.3); pointer-events: none; }
         .game-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-        
         .player-row-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 12px; margin-bottom: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
         .player-inputs { display: flex; gap: 8px; align-items: center; }
         .player-inputs input { flex: 1; padding: 10px; background: rgba(5,5,15,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; font-size: 13px; text-align: center; outline: none; }
         .order-badge { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
         .order-badge.assigned { background: rgba(0,230,118,0.15); border-color: #00e676; color: #00e676; }
-        .wheel-container { display: flex; flex-direction: column; align-items: center; margin: 15px 0; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); }
-        .wheel-canvas-box { position: relative; width: 140px; height: 140px; margin-bottom: 12px; }
-        .wheel-pointer-top { position: absolute; top: -8px; left: 50%; transform: translateX(-50%); width: 0; height: 0; border-left: 10px solid transparent; border-right: 10px solid transparent; border-top: 16px solid #ff1744; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); z-index: 10; }
-        #wheelCanvas { width: 140px; height: 140px; transform: rotate(0deg); transition: transform 0.1s linear; }
     </style>
 </head>
 <body>
 
-    <!-- 🏟️ صفحه اصلی لاگین و احراز هویت با منوی پشتیبان اختصاصی -->
+    <!-- 🏟️ صفحه اصلی مدیریت و احراز هویت بازیکنان استادیوم -->
     <div id="loginScreen">
-        <!-- ⚙️ منوی همبرگری مستقل بالای صفحه ورود -->
+        <!-- ⚙️ منوی همبرگری گوشه بالا سمت چپ صفحه لاگین -->
         <div id="loginGearBtn" class="gear-corner-btn" style="display: flex; top: 20px; left: 20px;" onclick="document.getElementById('loginMenuDrawer').classList.add('open'); document.getElementById('loginOverlay').style.display='block';">☰</div>
         
         <div class="stadium-card">
@@ -178,53 +117,55 @@
             
             <input type="text" id="usernameInput" class="stadium-input" style="display:none;">
             <input type="number" id="birthYearInput" class="stadium-input" style="display:none;">
-            <input type="password" id="passwordInput" class="stadium-input" placeholder="رمز عبور ۴ رقمی حساب" oninput="checkUserExistenceAuto(this.value)">
+            <input type="password" id="passwordInput" class="stadium-input" placeholder="رمز عبور ۴ رقمی حساب" oninput="autoCheckLoginAndEnter(this.value)">
             
             <div id="revealedPasswordBox" style="display:none; background:rgba(255,235,59,0.1); border:1px dashed #ffeb3b; padding:12px; border-radius:12px; color:#fff; margin-bottom:14px; font-weight:bold; font-size:13px;"></div>
             
             <div class="btn-group" id="authActionButtons">
                 <button class="stadium-btn secondary" id="navRegisterBtn" onclick="switchAuthModeToRegister()">ثبت نام جدید</button>
-                <button class="stadium-btn primary" onclick="processSmartAuth('login')">ورود به حساب</button>
+                <button class="stadium-btn primary" id="manualLoginBtn">ورود به حساب</button>
             </div>
             
             <button class="stadium-btn success" id="authSubmitBtn" style="display:none; width:100%; margin-bottom:12px;" onclick="processSmartAuth(authMode)">تایید و ثبت نام</button>
             <button class="stadium-btn success" id="forgotSubmitBtn" style="display:none; width:100%; margin-bottom:12px;" onclick="processSmartAuth('forgot')">بازیابی مشخصات</button>
             <button class="stadium-btn secondary" id="cancelAuthModeBtn" style="display:none; width:100%; margin-bottom:12px;" onclick="resetAuthFormView()">انصراف</button>
             
-            <button class="quick-btn" id="quickStartBtn" onclick="processQuickRandomAuth()">⚡ شروع سریع (بازیکن مهمان)</button>
+            <button class="quick-btn" id="quickStartBtn">⚡ شروع سریع (بازیکن مهمان)</button>
         </div>
     </div>
-    <!-- 🔧 کشوی همبرگری پشتیبان صفحه لاگین (گزینه‌های درباره ما و فراموشی) -->
-    <div class="drawer-overlay" id="loginOverlay" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';"></div>
-    <!-- 🔧 کشوی همبرگری ارتقا یافته و جذاب پشتیبان صفحه لاگین بدون دکمه پاکسازی حافظه -->
+
+    <!-- 🔧 کشوی همبرگری پشتیبان صفحه لاگین بدون دکمه پاکسازی حافظه -->
     <div class="drawer-overlay" id="loginOverlay" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';"></div>
     <div class="stadium-drawer" id="loginMenuDrawer">
         <div class="stadium-title" style="font-size:16px; color: #ffeb3b; text-shadow: 0 0 10px rgba(255,235,59,0.3);">⚙️ پشتیبانی و راهنمای استادیوم</div>
-        
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right; border-color: rgba(0,176,255,0.3);" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none'; switchAuthModeToForgot();">🔑 فراموشی و بازیابی رمز حساب</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none'; switchAuthModeToForgot();">🔑 فراموشی و بازیابی رمز حساب</button>
         <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('📬 پل ارتباطی با استادیوم ملی تیله‌بازی: support@marblestadium.ir', '📞', 'تایید و برگشت', false)">📞 تماس با تیم پشتیبانی</button>
         <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('شبیه‌ساز مسابقات اصیل تیله‌بازی نسخه ارتقا یافته استادیوم ملی ۱۴۰۵ با فیزیک واقعی چمن و سیمان', '🎮', 'تایید و برگشت', false)">ℹ️ درباره میدان استادیوم</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:20px; text-align:right; border-color: rgba(255,23,68,0.2);" onclick="showCustomPopup('ممنون از حمایت ارزشمند شما بازیکن گرامی! درگاه‌های حمایتی به زودی فعال می‌شوند.', '💖', 'تایید و برگشت', false)">☕ حمایت از توسعه‌دهنده</button>
-        
-        <button class="stadium-btn primary" style="width:100%; border-radius: 14px; font-weight: 900;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';">بستن پنجره راهنما</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:20px; text-align:right;" onclick="showCustomPopup('ممنون از حمایت شما بازیکن گرامی! درگاه‌های حمایتی به زودی فعال می‌شوند.', '💖', 'تایید و برگشت', false)">☕ حمایت از توسعه‌دهنده</button>
+        <button class="stadium-btn primary" style="width:100%;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';">بستن پنجره راهنما</button>
     </div>
-
-    <!-- 🏟️ منوی اصلی تدارکات و راه‌اندازی با دکمه همبرگری تراز شده بالا -->
+    <!-- 🏟️ بازسازی کامل منوی اصلی تدارکات و راه‌اندازی استادیوم مسابقه -->
     <div id="setupMenu">
+        
+        <!-- 📱 نوار تراز شده و باریک وضعیت بالایی (هدر بازی) -->
         <div class="profile-bar">
-            <!-- ☰ دکمه منوی همبرگری مینی‌مال جدید در بار بالایی به جای کادر عریض قبلی -->
-            <div id="gearBtn" style="cursor: pointer; font-size: 22px; padding: 0 5px; display: flex; align-items: center; color: #00b0ff;" title="تنظیمات پیشرفته استادیوم">☰</div>
-            <span id="welcomeUserName">👤 بازیکن: مهمان</span>
-            <span id="walletValueUi" style="color:#00e676;">💰 بانک: ۱۰ تیله</span>
+            <!-- 👤 نام بازیکن در سمت راست -->
+            <span id="welcomeUserName">👤 بازیکن: رضا</span>
+            <!-- 💰 بانک در وسط -->
+            <span id="walletValueUi" style="color:#00e676;">💰 بانک: ۶ تیله</span>
+            <!-- ☰ منوی همبرگری در سمت چپ -->
+            <div id="gearBtn" title="تنظیمات پیشرفته استادیوم">☰</div>
         </div>
         
-        <!-- 🎯 دکمه شروع دایره‌ای بزرگ و جذاب شما بدون کوچکترین تغییر -->
+        <!-- 🎯 دکمه شروع دایره‌ای بزرگ جذاب شما کاملاً متمرکز در وسط صفحه -->
         <div class="circle-start-btn" id="startBtn" style="margin-top: 40px;">
-            <span style="font-size:26px;">🎯</span>
-            <span>شروع</span>
+            <span>🎯</span>
+            <span style="font-weight: 900;">شروع</span>
             <span style="font-size:10px; opacity:0.8;">کل مسابقه</span>
         </div>
+        
     </div>
+
     <!-- 🔧 کشوی اختصاصی تنظیمات اتمسفر زمین و تعداد نفرات مسابقه -->
     <div class="drawer-overlay" id="overlay"></div>
     <div class="stadium-drawer" id="settingsDrawer">
@@ -246,7 +187,6 @@
             <div class="count-button-item" data-val="rainy">🌧️ بارانی</div>
             <div class="count-button-item" data-val="snowy">❄️ برفی</div>
         </div>
-
         <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۳. تعداد اعضای رسمی مسابقه:</div>
         <select class="stadium-select" id="playerCountSelect" onchange="handlePlayerCountChange(this.value)">
             <option value="1">👤 انفرادی (تک‌نفره با رکورد)</option>
@@ -254,7 +194,8 @@
             <option value="3">👨‍👦‍👦 سه نفره (دوره‌ای استادیوم)</option>
             <option value="4">👨‍👨‍👦‍👦 چهار نفره (کلاسیک تیمی)</option>
         </select>
-        <!-- 🎰 سیستم قرعه‌کشی و چرخ نوبت‌دهی خودکار (نمایش فقط پس از تکمیل اطلاعات) -->
+
+        <!-- 🎰 سیستم قرعه‌کشی نوبت‌دهی (نمایش خودکار فقط پس از تکمیل اسامی) -->
         <div class="wheel-container" id="wheelSection" style="display:none;">
             <div style="color:#ffeb3b; font-size:12px; font-weight:bold; margin-bottom:10px;">🎰 قرعه‌کشی رسمی نوبت شروع مسابقه</div>
             <div class="wheel-canvas-box">
@@ -278,9 +219,9 @@
         <button class="stadium-btn success" id="closeDrawer" style="width:100%; font-size:15px; font-weight:900; margin-top:15px; border-radius:16px;">🔥 همه چی عالی شد! بریم میدان</button>
     </div>
 
-    <!-- 📊 جدول نهایی و کارنامه رسمی مسابقات استادیوم -->
+    <!-- 📊 جدول کارنامه نهایی مسابقات تراز وسط و شیک -->
     <div id="scoreboardScreen" style="display:none;">
-        <div class="stadium-card" style="max-width:380px;">
+        <div class="stadium-card">
             <div class="stadium-title" style="color:#ffeb3b;">🏆 کارنامه نهایی مسابقات استادیوم</div>
             <div style="overflow-x:auto; margin-bottom:20px;">
                 <table style="width:100%; color:#fff; border-collapse:collapse; font-size:13px; text-align:center;">
@@ -329,7 +270,7 @@
         let selectedPlayerCount = 1; let currentPlayerIndex = 0; let currentWheelAngle = 0;
         let gameLoopRunning = false; let isMoving = false; let isAiming = false; let isWheelSpinning = false;
         let isReturningToMenu = false; let hasBonusShot = false; let isFirstShotOfTurn = true;
-        let hitSuccessInTurn = false; let targetOutInTurn = false;
+        let hitSuccessInTurn = false; let targetOutInTurn = false; let isQuickRandomMode = false;
         let playerNames = ["حسن"]; let playerNationalIds = [""]; let playerScores = []; let playerOrders = [];
         let weatherParticles = []; let windLines = []; let bagAnimations = [];
         let windX = 0; let windY = 0; let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
@@ -355,7 +296,7 @@
         };
         let currentGround = grounds.grass;
 
-        // 📥 تابع باز کردن کادر پاپ‌آپ اختصاصی و شکیل استادیوم با پیام دلخواه
+        // 📥 تابع باز کردن کادر پاپ‌آ‌پ اختصاصی و شکیل استادیوم با پیام دلخواه
         let popupCallback = null;
         function showCustomPopup(text, icon = "🎉", btnText = "تایید و ادامه", isDanger = false, callback = null) {
             const popup = document.getElementById("gamePopup");
@@ -426,7 +367,7 @@
             authMode = "forgot";
             document.getElementById("loginMenuDrawer").classList.remove("open");
             document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("authFormTitle").innerText = "🔑 یادآوری مشخصات حساب شما";
+            document.getElementById("authFormTitle").innerText = "🔑 بازیابی مشخصات حساب شما";
             document.getElementById("usernameInput").style.display = "block";
             document.getElementById("usernameInput").placeholder = "نام ثبت شده شما";
             document.getElementById("birthYearInput").style.display = "block";
@@ -456,7 +397,7 @@
                 currentUsername = savedName; currentNationalId = uPass;
                 totalMarblesOwned = parseInt(localStorage.getItem(`pmarbles_${uPass}`)) || 10;
                 localStorage.setItem("currentUsername", currentUsername); localStorage.setItem("currentNationalId", currentNationalId); localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
-                enterGameDirectly(); resetAuthFormView();
+                autoCheckLoginAndEnter(uPass); resetAuthFormView();
             } else if (actionType === 'register') {
                 if (uName === "") { showCustomPopup("لطفاً نام خود را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
                 if (uPass === "" || uPass.length !== 4) { showCustomPopup("رمز عبور باید ۴ رقم باشد.", "⚠️", "اصلاح رمز", true); return; }
@@ -468,7 +409,7 @@
                 localStorage.setItem(`pmarbles_${uPass}`, "10");
                 currentUsername = uName; currentNationalId = uPass; totalMarblesOwned = 10;
                 localStorage.setItem("currentUsername", currentUsername); localStorage.setItem("currentNationalId", currentNationalId); localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
-                showCustomPopup("🎉 پروفایل ساخته شد و ۱۰ تیله هدیه گرفتید!", "🎁", "بزن بریم", false, function() { enterGameDirectly(); resetAuthFormView(); });
+                showCustomPopup("🎉 پروفایل ساخته شد و ۱۰ تیله هدیه گرفتید!", "🎁", "بزن بریم", false, function() { autoCheckLoginAndEnter(uPass); resetAuthFormView(); });
             } else if (actionType === 'forgot') {
                 if (uName === "") { showCustomPopup("لطفاً نام ثبت شده را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
                 if (uBirth === "" || uBirth.length !== 4) { showCustomPopup("سال تولد را وارد کنید.", "⚠️", "متوجه شدم", true); return; }
@@ -568,7 +509,7 @@
         function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 100, p.y + 12); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } if (selectedWeather === "windy" || selectedWeather === "rainy" || selectedWeather === "snowy") { windLines.forEach(w => { ctx.fillStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.fillRect(w.x, w.y, w.w, w.h); }); } ctx.restore(); }
         function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
         
-        // 🖌️ تابع جدید و بدون نقص رسم مستطیل کادر گچی قلمرو وسط زمین
+        // 🖌️ تابع رسمی رسم مستطیل کادر گچی قلمرو وسط زمین
         function drawStadiumPenRect() {
             ctx.save(); let cX = canvas.width / 2; let cY = canvas.height / 2 - 80;
             let rW = (selectedCountVal * 14 * selectedPlayerCount) + 140; let rH = 170; 
@@ -632,7 +573,7 @@
             prizeBag.pulseTimer = 12;
         }
 
-        function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches[0].clientX; cY = e.touches[0].clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches[0].clientX; cY = e.changedTouches[0].clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
+        function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches.clientX; cY = e.touches.clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches.clientX; cY = e.changedTouches.clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; box.w = canvas.width; box.h = canvas.height; }
         
         function gameLoop() {
@@ -783,30 +724,51 @@
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
 
-        // 📊 تابع صدور رسمی کارنامه نهایی و محاسبه سود/زیان بانک تیله بازیکنان
+        // 📊 تابع صدور رسمی کارنامه نهایی و کسر/واریز دقیق تیله‌های بانک بازیکنان
         function showFinalScoreboard() {
-            gameLoopRunning = false; if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none";
+            gameLoopRunning = false; 
+            if(canvas) canvas.style.display = "none"; 
+            if(gameHeader) gameHeader.style.display = "none";
+            if(setupMenu) setupMenu.style.display = "none"; 
+            
             const tableBody = document.getElementById("stadiumScoreboardBody");
             if (tableBody) {
                 tableBody.innerHTML = "";
                 for (let i = 0; i < selectedPlayerCount; i++) {
-                    let pName = playerNames[i] || `بازیکن ${i + 1}`; let pId = playerNationalIds[i] || "";
-                    let wonThisRound = playerScores[i] || 0; let currentBank = 0;
+                    let pName = playerNames[i] || `بازیکن ${i + 1}`;
+                    let pId = playerNationalIds[i] || "";
+                    let wonThisRound = playerScores[i] || 0;
+                    let currentBank = "";
                     
-                    if (isQuickRandomMode) { currentBank = "حالت مهمان"; } else {
+                    if (isQuickRandomMode) {
+                        currentBank = "حالت مهمان";
+                    } else {
                         let oldBank = (pId === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`pmarbles_${pId}`)) || 0);
                         let newBankValue = oldBank + wonThisRound;
+                        
                         if (pId === currentNationalId) {
-                            totalMarblesOwned = newBankValue; localStorage.setItem(`pmarbles_${pId}`, totalMarblesOwned); localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
-                        } else if (pId !== "") { localStorage.setItem(`pmarbles_${pId}`, newBankValue); }
+                            totalMarblesOwned = newBankValue;
+                            localStorage.setItem(`pmarbles_${pId}`, totalMarblesOwned);
+                            localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
+                        } else if (pId !== "") {
+                            localStorage.setItem(`pmarbles_${pId}`, newBankValue);
+                        }
                         currentBank = newBankValue + " تیله";
                     }
-                    let row = document.createElement("tr"); row.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
-                    row.innerHTML = `<td style="padding:12px 8px; font-weight:bold; color:#fff;">${pName}</td><td style="padding:12px 8px; color:#00b0ff; font-weight:bold;">${wonThisRound} تیله</td><td style="padding:12px 8px; color:#00e676; font-weight:bold;">${currentBank}</td>`;
+
+                    let row = document.createElement("tr");
+                    row.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
+                    row.innerHTML = `
+                        <td style="padding: 12px 8px; font-weight: bold; color: #fff;">${pName}</td>
+                        <td style="padding: 12px 8px; color: #00b0ff; font-weight: bold;">${wonThisRound} تیله</td>
+                        <td style="padding: 12px 8px; color: #00e676; font-weight: bold;">${currentBank}</td>
+                    `;
                     tableBody.appendChild(row);
                 }
             }
-            updateWalletUI(); document.getElementById("scoreboardScreen").style.display = "flex"; showGameToast("🎉 نتایج ثبت و کارنامه دائمی صادر شد!");
+            updateWalletUI();
+            document.getElementById("scoreboardScreen").style.display = "flex"; 
+            showGameToast("🎉 نتایج ثبت و کارنامه دائمی صادر شد!");
         }
         function restartGameFromScoreboard() { document.getElementById("scoreboardScreen").style.display = "none"; launchGameDirectly(); }
         function exitToMainMenu() { document.getElementById("scoreboardScreen").style.display = "none"; handleFinalExit(); }
@@ -822,7 +784,7 @@
         // 🏁 تابع راه‌اندازی موتور شبیه‌ساز و کاشت دقیق تیله دست در وسط پایین صفحه
         function runGameInitialization() { 
             if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; } 
-            setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; 
+            if (setupMenu) setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; 
             currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); 
             resizeCanvas(); 
             
@@ -935,7 +897,7 @@
         function updateNameInputs(count) { 
             namesContainer.innerHTML = ""; playerOrders = []; 
             const wheelSection = document.getElementById("wheelSection"); 
-            if (wheelSection) wheelSection.style.display = "none"; // مخفی بودن اولیه گردونه
+            if (wheelSection) wheelSection.style.display = "none";
             
             let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "حسن"; 
             let mainRow = document.createElement("div"); mainRow.className = "player-row-item"; 
@@ -956,7 +918,7 @@
             playerNames = tempInit; 
         }
 
-        // 🔐 بررسی خودکار کادرها جهت فعال‌سازی چرخنده بدون دکمه اضافی
+        // 🔐 پایش هوشمند و خودکار حساب‌ها و واریز ۱۰ تیله رایگان ورودی به اعضای جدید
         function autoCheckSubPlayerData(index, totalCount) {
             let idInput = document.getElementById(`subId_${index}`);
             let nameInput = document.getElementById(`subId_${index}_name`);
@@ -966,8 +928,19 @@
             
             if (idVal.length === 4 && nameVal !== "") {
                 let savedName = localStorage.getItem(`pname_${idVal}`);
-                if (savedName !== null && nameInput.value === "") { nameInput.value = savedName; nameVal = savedName; }
-                playerNames[index] = nameVal;
+                if (savedName === null) {
+                    // 🎉 ثبت‌نام درجا و شارژ هدیه بدون دکمه اضافی
+                    localStorage.setItem(`pname_${idVal}`, nameVal);
+                    localStorage.setItem(`pmarbles_${idVal}`, "10");
+                    localStorage.setItem(`pbirth_${idVal}`, "1405");
+                    showGameToast(`🎁 حساب ${nameVal} ساخته شد و ۱۰ تیله هدیه گرفت!`);
+                } else {
+                    if (nameInput.value !== savedName && idInput.dataset.loaded !== "true") {
+                        nameInput.value = savedName; nameVal = savedName;
+                        idInput.dataset.loaded = "true";
+                    }
+                }
+                playerNames[index] = nameVal; playerNationalIds[index] = idVal;
             } else { playerNames[index] = nameVal !== "" ? nameVal : `بازیکن ${index + 1}`; }
 
             let allPlayersReady = true;
@@ -984,7 +957,6 @@
                     wheelSection.style.display = "flex";
                     if (drawOrderBtn) drawOrderBtn.style.display = "block";
                     wheelSection.style.animation = "cardFade 0.4s ease-out";
-                    showGameToast("🎰 اطلاعات حساب‌ها کامل شد؛ گردونه فعال گردید!");
                 }
                 drawWheel(0);
             } else { if (wheelSection) wheelSection.style.display = "none"; }
@@ -1004,6 +976,40 @@
                 } 
             }); 
         }
+        // 🔐 تابع نجات ورود ۱۰۰٪ مستقل و خودکار به محض تایپ رقم چهارم بدون نیاز به توابع دیگر
+        function autoCheckLoginAndEnter(passwordValue) {
+            let uPass = passwordValue.trim();
+            const registerBtn = document.getElementById("navRegisterBtn");
+            if (registerBtn && uPass.length === 4) {
+                if (localStorage.getItem(`pname_${uPass}`) !== null) {
+                    registerBtn.style.opacity = "0"; registerBtn.style.pointerEvents = "none";
+                } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
+            }
+            if (uPass.length === 4) {
+                let savedName = localStorage.getItem(`pname_${uPass}`);
+                if (savedName !== null) {
+                    currentUsername = savedName; currentNationalId = uPass;
+                    totalMarblesOwned = parseInt(localStorage.getItem(`pmarbles_${uPass}`)) || 10;
+                    localStorage.setItem("currentUsername", currentUsername);
+                    localStorage.setItem("currentNationalId", currentNationalId);
+                    localStorage.setItem("totalMarblesOwned", totalMarblesOwned);
+                    try { if (typeof initAudio === 'function') initAudio(); } catch(e){}
+                    if (typeof playWelcomeMelodySound === 'function') playWelcomeMelodySound();
+                    showGameToast(`🎉 خوش آمدی ${savedName}!`);
+                    if(document.getElementById("loginScreen")) document.getElementById("loginScreen").style.display = "none";
+                    if(document.getElementById("loginGearBtn")) document.getElementById("loginGearBtn").style.display = "none";
+                    if(setupMenu) setupMenu.style.display = "flex";
+                    if(gearBtn) gearBtn.style.display = "flex";
+                    playerNames = [savedName]; playerNationalIds = [uPass];
+                    const walletUi = document.getElementById("walletValueUi");
+                    const welcomeUser = document.getElementById("welcomeUserName");
+                    if (welcomeUser) welcomeUser.innerText = `👤 بازیکن: ${savedName}`;
+                    if (walletUi) walletUi.innerText = `💰 بانک: ${totalMarblesOwned} تیله`;
+                    document.getElementById("passwordInput").value = "";
+                } else { showGameToast("❌ حسابی با این رمز یافت نشد! ثبت نام کنید."); }
+            }
+        }
+
         canvas.addEventListener("pointerdown", (e) => { 
             if (isMoving || player.inAir || !gameLoopRunning) return; 
             let pos = getEventPos(e); let dx = pos.x - player.x, dy = pos.y - player.y; 
@@ -1029,33 +1035,37 @@
         window.addEventListener("resize", () => { if (gameLoopRunning) resizeCanvas(); });
 
         function handleFinalExit() { 
-            stopAmbientSound(); canvas.style.display = "none"; gameHeader.style.display = "none"; 
-            setupMenu.style.display = "none"; gearBtn.style.display = "none"; 
-            if (typeof settingsDrawer !== 'undefined' && settingsDrawer) settingsDrawer.classList.remove("open"); 
-            if (typeof overlay !== 'undefined' && overlay) overlay.style.display = "none"; 
-            document.getElementById("loginScreen").style.display = "flex"; 
-            if(document.getElementById("loginGearBtn")) document.getElementById("loginGearBtn").style.display = "flex"; 
-            gameLoopRunning = false; 
+            stopAmbientSound(); if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none"; 
+            if (document.getElementById("scoreboardScreen")) document.getElementById("scoreboardScreen").style.display = "none";
+            if (isQuickRandomMode) {
+                if(setupMenu) setupMenu.style.display = "none";
+                document.getElementById("loginScreen").style.display = "flex"; 
+                if(document.getElementById("loginGearBtn")) document.getElementById("loginGearBtn").style.display = "flex"; 
+            } else {
+                if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex";
+            }
+            gameLoopRunning = false; updateWalletUI();
         }
 
-        // 🔌 خط نهایی شنود رویدادها و فعال‌سازی دکمه‌های ناوبری اصلی استادیوم
+        // 🔌 خط نهایی شنود رویدادها و فعال‌سازی دکمه‌های ناوبری اصلی استادیوم و نجات گیت‌هاب
         window.addEventListener("DOMContentLoaded", () => {
             const actStartBtn = document.getElementById("startBtn"); const actGearBtn = document.getElementById("gearBtn"); const actDrawer = document.getElementById("settingsDrawer"); const actOverlay = document.getElementById("overlay"); const actCloseDrawer = document.getElementById("closeDrawer");
-            if (actStartBtn) {
-                actStartBtn.addEventListener("click", () => {
-                    try { initAudio(); } catch(e){} isReturningToMenu = false;
-                    const countSelect = document.getElementById("marbleCountSelect");
-                    if (countSelect) { selectedCountVal = parseInt(countSelect.value) || 5; }
-                    launchGameDirectly();
+            const manualLogin = document.getElementById("manualLoginBtn"); const guestBtn = document.getElementById("quickStartBtn");
+            if(manualLogin) { manualLogin.addEventListener("click", () => { processSmartAuth('login'); }); }
+            if(guestBtn) {
+                guestBtn.addEventListener("click", () => {
+                    isQuickRandomMode = true; isReturningToMenu = false;
+                    document.getElementById("loginScreen").style.display = "none"; document.getElementById("loginGearBtn").style.display = "none";
+                    if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex";
+                    const groundKeys = Object.keys(grounds); selectedGroundVal = groundKeys[Math.floor(Math.random() * groundKeys.length)];
+                    currentGround = grounds[selectedGroundVal]; selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
+                    windX = selectedWeather === 'windy' ? 0.08 : (selectedWeather === 'rainy' ? 0.03 : 0); windY = selectedWeather === 'windy' ? 0.02 : (selectedWeather === 'rainy' ? 0.05 : 0);
+                    selectedCountVal = 5; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن مهمان"]; playerNationalIds = [""]; playerScores = []; updateWalletUI();
                 });
             }
+            if (actStartBtn) { actStartBtn.addEventListener("click", () => { try { initAudio(); } catch(e){} isReturningToMenu = false; launchGameDirectly(); }); }
             if (actGearBtn && actDrawer && actOverlay) { actGearBtn.addEventListener("click", () => { try { initAudio(); } catch(e){} actDrawer.classList.add("open"); actOverlay.style.display = "block"; generateMenuPreviews(); }); }
-            if (actCloseDrawer && actDrawer && actOverlay) { 
-                actCloseDrawer.addEventListener("click", () => { 
-                    const countSelect = document.getElementById("marbleCountSelect"); if (countSelect) { selectedCountVal = parseInt(countSelect.value) || 5; }
-                    actDrawer.classList.remove("open"); actOverlay.style.display = "none"; isQuickRandomMode = false; launchGameDirectly();
-                }); 
-            }
+            if (actCloseDrawer && actDrawer && actOverlay) { actCloseDrawer.addEventListener("click", () => { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; isQuickRandomMode = false; launchGameDirectly(); }); }
             if (actOverlay && actDrawer) { actOverlay.addEventListener("click", () => { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; }); }
             document.getElementById("groundGrid")?.addEventListener("click", (e) => { let item = e.target.closest(".scroll-item"); if (item) { document.querySelectorAll("#groundGrid .scroll-item").forEach(el => el.classList.remove("active")); item.classList.add("active"); selectedGroundVal = item.getAttribute("data-val"); currentGround = grounds[selectedGroundVal]; } });
             document.getElementById("weatherGrid")?.addEventListener("click", (e) => { let item = e.target.closest(".count-button-item"); if (item) { document.querySelectorAll("#weatherGrid .count-button-item").forEach(el => el.classList.remove("active")); item.classList.add("active"); selectedWeather = item.getAttribute("data-val"); if (typeof playWeatherPreviewSound === 'function') playWeatherPreviewSound(selectedWeather); } });
@@ -1063,28 +1073,6 @@
             document.getElementById("exitBtn")?.addEventListener("click", () => { handleFinalExit(); });
             updateNameInputs(1); generateMenuPreviews(); updateWalletUI();
         });
-		        // 🔌 تزریق اتصال زنده و قطعی برای باز کردن قفل دکمه‌های صفحه ورود روی گیت‌هاب پیجز
-        window.addEventListener("DOMContentLoaded", () => {
-            const loginBtn = document.querySelector("#loginScreen .stadium-btn.primary");
-            const guestBtn = document.getElementById("quickStartBtn");
-            
-            if (loginBtn) {
-                loginBtn.removeAttribute("onclick"); // حذف دستور قدیمی برای جلوگیری از تداخل
-                loginBtn.addEventListener("click", () => {
-                    try { initAudio(); } catch(e){}
-                    processSmartAuth('login');
-                });
-            }
-            
-            if (guestBtn) {
-                guestBtn.removeAttribute("onclick");
-                guestBtn.addEventListener("click", () => {
-                    try { initAudio(); } catch(e){}
-                    processQuickRandomAuth();
-                });
-            }
-        });
-
     </script>
 </body>
 </html>
