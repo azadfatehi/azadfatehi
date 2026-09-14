@@ -169,9 +169,9 @@
     <!-- 🔧 کشوی اختصاصی تنظیمات اتمسفر زمین و تعداد نفرات مسابقه -->
     <div class="drawer-overlay" id="overlay"></div>
     <div class="stadium-drawer" id="settingsDrawer">
-        <div class="stadium-title" style="font-size:16px; margin-bottom:15px;">🏟️ مدیریت اتمسفر و قوانین میدان</div>
+        <div class="stadium-title" style="font-size:16px; margin-bottom:15px;">🏟️ تنظیمات بازی </div>
         
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۱. انتخاب کف‌پوش میدان مسابقات:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">تو چه زمینی بازی کنیم؟</div>
         <div class="grid-preview" id="groundGrid">
             <div class="scroll-item active" data-val="grass"><canvas id="pre_grass"></canvas></div>
             <div class="scroll-item" data-val="carpet"><canvas id="pre_carpet"></canvas></div>
@@ -180,24 +180,24 @@
             <div class="scroll-item" data-val="dirt"><canvas id="pre_dirt"></canvas></div>
         </div>
 
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۲. شرایط آب‌وهوایی استادیوم:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">دوست داری تو چه هوایی بازی کنیم ؟</div>
         <div class="count-grid" id="weatherGrid">
             <div class="count-button-item active" data-val="sunny">☀️ آفتابی</div>
             <div class="count-button-item" data-val="windy">💨 توفانی</div>
             <div class="count-button-item" data-val="rainy">🌧️ بارانی</div>
             <div class="count-button-item" data-val="snowy">❄️ برفی</div>
         </div>
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۳. تعداد اعضای رسمی مسابقه:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">تعداد نفرات بازی</div>
         <select class="stadium-select" id="playerCountSelect" onchange="handlePlayerCountChange(this.value)">
-            <option value="1">👤 انفرادی (تک‌نفره با رکورد)</option>
-            <option value="2">👥 دو نفره (رقابتی متوالی)</option>
-            <option value="3">👨‍👦‍👦 سه نفره (دوره‌ای استادیوم)</option>
-            <option value="4">👨‍👨‍👦‍👦 چهار نفره (کلاسیک تیمی)</option>
+            <option value="1">👤 تکنفره </option>
+            <option value="2">👥دونفره</option>
+            <option value="3">👨‍👦‍👦سه نفره </option>
+            <option value="4">👨‍👨‍👦‍👦چهار نفره </option>
         </select>
 
         <!-- 🎰 سیستم قرعه‌کشی نوبت‌دهی (نمایش خودکار فقط پس از تکمیل اسامی) -->
         <div class="wheel-container" id="wheelSection" style="display:none;">
-            <div style="color:#ffeb3b; font-size:12px; font-weight:bold; margin-bottom:10px;">🎰 قرعه‌کشی رسمی نوبت شروع مسابقه</div>
+            <div style="color:#ffeb3b; font-size:12px; font-weight:bold; margin-bottom:10px;">ببینیم بازی با کی شروع شه!</div>
             <div class="wheel-canvas-box">
                 <div class="wheel-pointer-top"></div>
                 <canvas id="wheelCanvas" width="140" height="140"></canvas>
@@ -205,10 +205,10 @@
             <button class="stadium-btn primary" id="drawOrderBtn" style="padding:10px 20px; font-size:12px; border-radius:10px; display:none;" onclick="spinTheWheelOfStadium()">🎰 چرخاندن گردونه قرعه</button>
         </div>
 
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۴. مشخصات و ثبت امضای حساب بازیکنان:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">رمز و نام حریف ؟</div>
         <div id="namesContainer"></div>
 
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۵. تعداد کل تیله‌های کاشت وسط (هر نفر):</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">با چند تا تیله بریم بازی ؟</div>
         <select class="stadium-select" id="marbleCountSelect">
             <option value="2">۲ تیله</option>
             <option value="5" selected>۵ تیله</option>
@@ -216,13 +216,13 @@
             <option value="10">۱۰ تیله</option>
         </select>
 
-        <button class="stadium-btn success" id="closeDrawer" style="width:100%; font-size:15px; font-weight:900; margin-top:15px; border-radius:16px;">🔥 همه چی عالی شد! بریم میدان</button>
+        <button class="stadium-btn success" id="closeDrawer" style="width:100%; font-size:15px; font-weight:900; margin-top:15px; border-radius:16px;">همه چی عالی شد ! بریم </button>
     </div>
 
     <!-- 📊 جدول کارنامه نهایی مسابقات تراز وسط و شیک -->
     <div id="scoreboardScreen" style="display:none;">
         <div class="stadium-card">
-            <div class="stadium-title" style="color:#ffeb3b;">🏆 کارنامه نهایی مسابقات استادیوم</div>
+            <div class="stadium-title" style="color:#ffeb3b;">🏆 جدول بازی </div>
             <div style="overflow-x:auto; margin-bottom:20px;">
                 <table style="width:100%; color:#fff; border-collapse:collapse; font-size:13px; text-align:center;">
                     <thead>
@@ -1010,16 +1010,26 @@
             }
         }
 
-        canvas.addEventListener("pointerdown", (e) => { 
+        // 🚀 جایگزینی رویدادهای زنده لمسی جهت باز کردن قفل پرتاب و شلیک کمانی روی گوشی‌های موبایل
+        canvas.addEventListener("touchstart", (e) => { 
             if (isMoving || player.inAir || !gameLoopRunning) return; 
-            let pos = getEventPos(e); let dx = pos.x - player.x, dy = pos.y - player.y; 
-            if (Math.sqrt(dx * dx + dy * dy) < player.r * 2) { isAiming = true; dragStart = pos; dragEnd = pos; } 
-        });
+            e.preventDefault(); // پیشگیری از زوم و پرش صفحه مرورگر هنگام درگ انگشت
+            let touch = e.touches[0];
+            let pos = getEventPos(touch); 
+            let dx = pos.x - player.x, dy = pos.y - player.y; 
+            if (Math.sqrt(dx * dx + dy * dy) < player.r * 2.5) { isAiming = true; dragStart = pos; dragEnd = pos; } 
+        }, { passive: false });
 
-        canvas.addEventListener("pointermove", (e) => { if (isAiming) dragEnd = getEventPos(e); });
+        canvas.addEventListener("touchmove", (e) => { 
+            if (isAiming) {
+                e.preventDefault();
+                let touch = e.touches[0];
+                dragEnd = getEventPos(touch); 
+            }
+        }, { passive: false });
 
-        canvas.addEventListener("pointerup", (e) => { 
-            if (!isAiming) return; isAiming = false; 
+        canvas.addEventListener("touchend", (e) => { 
+            if (!isAiming) return; isAiming = false; e.preventDefault();
             let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; 
             let dragDist = Math.sqrt(dx * dx + dy * dy); 
             if (dragDist > 10) { 
@@ -1028,6 +1038,25 @@
                 player.vx = dx * 0.12; player.vy = dy * 0.12; 
                 player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; 
                 player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0; 
+                player.inAir = true; isMoving = true; isFirstShotOfTurn = false; 
+            } else { isMoving = false; player.inAir = false; } 
+        }, { passive: false });
+
+        // 💻 حفظ پشتیبانی از موس در کامپیوتر بدون تداخل با تاچ موبایل
+        canvas.addEventListener("mousedown", (e) => { 
+            if (isMoving || player.inAir || !gameLoopRunning) return; 
+            let pos = getEventPos(e); let dx = pos.x - player.x, dy = pos.y - player.y; 
+            if (Math.sqrt(dx * dx + dy * dy) < player.r * 2) { isAiming = true; dragStart = pos; dragEnd = pos; } 
+        });
+        canvas.addEventListener("mousemove", (e) => { if (isAiming) dragEnd = getEventPos(e); });
+        canvas.addEventListener("mouseup", (e) => { 
+            if (!isAiming) return; isAiming = false; 
+            let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; 
+            let dragDist = Math.sqrt(dx * dx + dy * dy); 
+            if (dragDist > 10) { 
+                try { playLaunchSound(); } catch(err){} 
+                player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12; 
+                player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0; 
                 player.inAir = true; isMoving = true; isFirstShotOfTurn = false; 
             } else { isMoving = false; player.inAir = false; } 
         });
@@ -1073,6 +1102,15 @@
             document.getElementById("exitBtn")?.addEventListener("click", () => { handleFinalExit(); });
             updateNameInputs(1); generateMenuPreviews(); updateWalletUI();
         });
+		// 📱 ریجستر کردن رسمی سرویس ورکر برای باز کردن قفل نصب مستقیم روی صفحه اصلی گوشی
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+            .then(reg => console.log("✅ سرویس‌ورکر استادیوم فعال شد:", reg.scope))
+            .catch(err => console.log("❌ خطا در ثبت سرویس‌ورکر:", err));
+    });
+}
+
     </script>
 </body>
 </html>
