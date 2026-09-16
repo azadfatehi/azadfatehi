@@ -175,7 +175,9 @@
     <div class="drawer-overlay" id="overlay"></div>
     <div class="stadium-drawer" id="settingsDrawer">
         <div class="stadium-title" style="font-size:16px; margin-bottom:15px;">🏟️ تنظیمات بازی </div>
-        
+                <!-- ❌ دکمه خروج و انصراف مینی‌مال جهت بازگشت بدون اعمال تغییرات -->
+        <div id="closeDrawer" style="position: absolute; top: 15px; left: 16px; font-size: 18px; cursor: pointer; color: #ff5252; font-weight: bold; z-index: 10; transition: transform 0.2s;" onclick="document.getElementById('settingsDrawer').classList.remove('open'); document.getElementById('settingsDrawer').style.display='none'; document.getElementById('overlay').style.display='none';">❌</div>
+
         <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">تو چه زمینی بازی کنیم؟</div>
         <div class="grid-preview" id="groundGrid">
             <div class="scroll-item active" data-val="grass"><canvas id="pre_grass"></canvas></div>
