@@ -1230,6 +1230,23 @@ window.addEventListener("load", function() {
         } else { isMoving = false; player.inAir = false; }
     }, { passive: false });
 });
+// 💰 پارت اصلاحی هدر: بازگردانی قطعی موجودی بانک تیله بازیکنان عضو پس از ورود
+window.addEventListener("load", function() {
+    if (typeof window.updateWalletUI === "function") {
+        let originalUpdateWalletUI = window.updateWalletUI;
+        window.updateWalletUI = function() {
+            // اجرا کردن منطق پایه‌ای تابع اصلی شما
+            originalUpdateWalletUI();
+            
+            // 🧠 جراحی هوشمند هدر: اگر کاربر مهمان نبود، بانک عددی او را اجباراً نمایش بده
+            const walletUi = document.getElementById("walletValueUi") || document.getElementById("wB") || document.getElementById("walletBadge");
+            if (walletUi && !isQuickRandomMode && currentNationalId !== "") {
+                let savedMarbles = localStorage.getItem(`pmarbles_${currentNationalId}`) || totalMarblesOwned || 10;
+                walletUi.innerText = `💰 بانک: ${savedMarbles} تیله`;
+            }
+        };
+    }
+});
 
     </script>
 </body>
