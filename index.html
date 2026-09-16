@@ -57,7 +57,10 @@
             position: fixed; top: 50%; left: 50%; 
             transform: translate(-50%, -50%) scale(0.9); 
             width: 92%; max-width: 390px; max-height: 85vh; 
-            background: linear-gradient(rgba(14, 14, 38, 0.88), rgba(6, 6, 21, 0.93)), url('menu_bg.jpg') center center / cover no-repeat !important;
+        /* 🌤️ روشن و شیشه‌ای کردن پس‌زمینه کشوها بدون تاری شدید */
+        backdrop-filter: blur(5px) !important; 
+        -webkit-backdrop-filter: blur(5px) !important;
+        background: rgba(14, 14, 38, 0.5) !important;
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border: 2px solid #00b0ff; border-radius: 24px; z-index: 200; padding: 24px; overflow-y: auto; opacity: 0; pointer-events: none;
             box-shadow: 0 0 30px rgba(0, 176, 255, 0.25), 0 20px 60px rgba(0,0,0,0.85);
