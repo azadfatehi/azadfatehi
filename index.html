@@ -104,6 +104,13 @@
         .order-badge { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
         .order-badge.assigned { background: rgba(0,230,118,0.15); border-color: #00e676; color: #00e676; }
     </style>
+	/* 🏆 اعمال اجباری شیشه نئونی مات و حذف قطعی صفحه سیاه */
+.stadium-drawer, #settingsDrawer, #loginMenuDrawer {
+    background: rgba(14, 14, 38, 0.75) !important;
+    backdrop-filter: blur(25px) !important;
+    -webkit-backdrop-filter: blur(25px) !important;
+}
+
 </head>
 <body>
 
@@ -1110,38 +1117,6 @@ if ("serviceWorker" in navigator) {
             .catch(err => console.log("❌ خطا در ثبت سرویس‌ورکر:", err));
     });
 }
-// 🔌 اصلاح نهایی: پاکسازی تداخل رویدادها و همگام‌سازی دقیق دکمه‌های همبرگری و مهمان
-window.addEventListener("load", function() {
-    let lBtn = document.getElementById("loginGearBtn");
-    let lDrw = document.getElementById("loginMenuDrawer");
-    let lOvl = document.getElementById("loginOverlay");
-    let gstB = document.getElementById("quickStartBtn");
-
-    // ☰ تنظیم اختصاصی دکمه همبرگری اول بازی بدون قاطی شدن
-    if (lBtn) {
-        lBtn.onclick = function(e) {
-            e.stopPropagation(); // جلوگیری از پخش شدن کلیک و قاطی شدن با دکمه مهمان
-            if (lOvl) lOvl.style.display = "block";
-            if (lDrw) {
-                lDrw.style.display = "block";
-                lDrw.style.opacity = "1";
-                lDrw.style.pointerEvents = "auto";
-                lDrw.style.transform = "translate(-50%, -50%) scale(1)";
-            }
-        };
-    }
-
-    // ⚡ تنظیم اختصاصی دکمه شروع سریع (مهمان) به صورت کاملاً مستقل
-    if (gstB) {
-        gstB.onclick = function(e) {
-            e.stopPropagation();
-            document.getElementById("loginScreen").style.display = "none";
-            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
-            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; 
-            if (typeof updateWalletUI === "function") updateWalletUI();
-        };
-    }
-});
 
     </script>
 </body>
