@@ -1110,6 +1110,26 @@ if ("serviceWorker" in navigator) {
             .catch(err => console.log("❌ خطا در ثبت سرویس‌ورکر:", err));
     });
 }
+// ⚡ پارت اصلاحی نهایی: شیشه‌ای کردن اجباری تنظیمات و نجات دکمه همبرگری از غیب شدن
+window.addEventListener("load", function() {
+    let sDrawer = document.getElementById("settingsDrawer");
+    if (sDrawer) {
+        // ۱. شیشه‌ای کردن پس‌زمینه بدون خراب کردن کدهای CSS بالادست
+        sDrawer.style.background = "rgba(10, 10, 26, 0.7)";
+        sDrawer.style.backdropFilter = "blur(20px)";
+        sDrawer.style.webkitBackdropFilter = "blur(20px)";
+        
+        // ۲. تراز کردن لایه‌ها برای اینکه منوی همبرگری و دکمه‌ها هرگز غیب نشوند
+        sDrawer.style.zIndex = "99999";
+        sDrawer.style.position = "fixed";
+    }
+    
+    // ۳. تضمین بالاترین لایه برای دکمه همبرگری اول بازی و منوی لاگین
+    let lBtn = document.getElementById("loginGearBtn");
+    if (lBtn) { lBtn.style.zIndex = "100000"; }
+    let lScreen = document.getElementById("loginScreen");
+    if (lScreen) { lScreen.style.zIndex = "9999"; }
+});
 
     </script>
 </body>
