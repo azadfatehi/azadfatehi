@@ -1224,6 +1224,37 @@ window.addEventListener("load", function() {
     let btnCloseDrw = document.getElementById("closeDrawer");
     if (btnCloseDrw) { btnCloseDrw.onclick = function() { launchGameDirectly(); }; }
 });
+// 🔥 پارت فوق جادویی: اصلاح موقعیت لایه‌ها و اوربیت کردن منوها روی عکس پس‌زمینه
+window.addEventListener("load", function() {
+    // اصلاح درجا و اجباری اولویت نمایش (z-index) منوهای کشویی در کل مرورگرها
+    let drawer1 = document.getElementById("loginMenuDrawer");
+    let drawer2 = document.getElementById("settingsDrawer");
+    let overlay1 = document.getElementById("loginOverlay");
+    let overlay2 = document.getElementById("overlay");
+    
+    if (drawer1) { drawer1.style.zIndex = "99999"; drawer1.style.position = "fixed"; }
+    if (drawer2) { drawer2.style.zIndex = "99999"; drawer2.style.position = "fixed"; }
+    if (overlay1) { overlay1.style.zIndex = "99998"; }
+    if (overlay2) { overlay2.style.zIndex = "99998"; }
+
+    // باز کردن مستقیم و مستقل دکمه همبرگری اول بازی بدون تداخل با لایه‌های مات
+    let btnLoginGear = document.getElementById("loginGearBtn");
+    if (btnLoginGear) {
+        btnLoginGear.onclick = function() {
+            if (drawer1) drawer1.classList.add("open");
+            if (overlay1) overlay1.style.display = "block";
+        };
+    }
+    // باز کردن دکمه شروع سریع مهمان
+    let guestBtn = document.getElementById("quickStartBtn");
+    if (guestBtn) {
+        guestBtn.onclick = function() {
+            document.getElementById("loginScreen").style.display = "none";
+            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
+            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; updateWalletUI();
+        };
+    }
+});
 
     </script>
 </body>
