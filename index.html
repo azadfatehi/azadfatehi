@@ -1130,6 +1130,42 @@ window.addEventListener("load", function() {
     let lScreen = document.getElementById("loginScreen");
     if (lScreen) { lScreen.style.zIndex = "9999"; }
 });
+// 🏆 پارت نهایی: اوربیت کردن شیشه منو روی پس‌زمینه و نوسازی اجباری استایل‌ها
+window.addEventListener("load", function() {
+    let sDrawer = document.getElementById("settingsDrawer");
+    let lDrawer = document.getElementById("loginMenuDrawer");
+    
+    // 💡 شکستن مستقیم قفل صفحه سیاه و اعمال اجباری شیشه نئونی مات
+    if (sDrawer) {
+        sDrawer.setAttribute("style", "background: rgba(10, 10, 26, 0.72) !important; backdrop-filter: blur(25px) !important; -webkit-backdrop-filter: blur(25px) !important; z-index: 99999 !important; position: fixed !important; display: none;");
+    }
+    if (lDrawer) {
+        lDrawer.setAttribute("style", "background: rgba(10, 10, 26, 0.72) !important; backdrop-filter: blur(25px) !important; -webkit-backdrop-filter: blur(25px) !important; z-index: 99999 !important; position: fixed !important; display: none;");
+    }
+
+    // 🔒 تضمین بقا و فعال ماندن همبرگری اول بازی بدون تداخل لایه‌های مات
+    let lBtn = document.getElementById("loginGearBtn");
+    if (lBtn) { lBtn.style.zIndex = "100000"; lBtn.style.position = "absolute"; }
+    let lScreen = document.getElementById("loginScreen");
+    if (lScreen) { lScreen.style.zIndex = "999"; }
+
+    // 🎨 متد زنده کردن و رندر پیش‌نمایش گرافیکی زمین‌های پنج‌گانه استادیوم
+    if (typeof generateMenuPreviews === "function") {
+        try { generateMenuPreviews(); } catch(e) {}
+    }
+});
+
+// 🔥 بازنویسی تابع باز کردن کشو جهت اعمال مستقیم کلاس‌ها بدون فریز شدن
+let originalGearBtn = document.getElementById("gearBtn");
+if (originalGearBtn) {
+    originalGearBtn.onclick = function() {
+        let sd = document.getElementById("settingsDrawer");
+        let ov = document.getElementById("overlay");
+        if (sd) { sd.style.display = "block"; sd.classList.add("open"); }
+        if (ov) ov.style.display = "block";
+        if (typeof generateMenuPreviews === "function") generateMenuPreviews();
+    };
+}
 
     </script>
 </body>
