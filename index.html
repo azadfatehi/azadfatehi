@@ -10,6 +10,7 @@
         body, html { width: 100%; height: 100%; overflow: hidden; background: #0a0a16; direction: rtl; }
         
         /* 🖼️ تنظیم قطعی پس‌زمینه زنده منوی ورود به عکس اختصاصی استادیوم */
+        /* 🖼️ اصلاح نهایی: روشن و واضح کردن کامل عکس پس‌زمینه استادیوم */
         #loginScreen { 
             position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; 
@@ -19,7 +20,7 @@
         #setupMenu { 
             position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
             display: none; flex-direction: column; justify-content: flex-start; align-items: center; 
-            z-index: 100; background: radial-gradient(circle at center, #1a1a3a 0%, #050510 100%); padding-top: 30px; 
+            z-index: 100; background: url('menu_bg.jpg') center center / cover no-repeat !important; padding-top: 30px; 
         }
         
         .stadium-card { background: rgba(20, 20, 45, 0.75); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 2px solid #00b0ff; border-radius: 32px; padding: 30px; width: 100%; max-width: 360px; text-align: center; box-shadow: 0 20px 50px rgba(0,0,0,0.6); animation: cardFade 0.6s cubic-bezier(0.2, 0.8, 0.2, 1); }
