@@ -1284,6 +1284,32 @@ window.addEventListener("load", function() {
     if(typeof generateMenuPreviews === "function") generateMenuPreviews();
     if(typeof updateWalletUI === "function") updateWalletUI();
 });
+// ⚡ پارت نهایی اصلاحی: بازنویسی اورژانسی و شکستن قطعی قفل تمام دکمه‌های استادیوم
+function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
+window.addEventListener("load", function() {
+    // 📐 اصلاح درجا و اجباری فرمول محاسبات تاچ موبایل و مَوس کامپیوتر
+    window.getEventPos = function(e) {
+        let r = canvas.getBoundingClientRect();
+        let touch = (e.touches && e.touches[0]) ? e.touches[0] : (e.changedTouches ? e.changedTouches[0] : e);
+        return { x: (touch.clientX - r.left) * (canvas.width / r.width), y: (touch.clientY - r.top) * (canvas.height / r.height) };
+    };
+    // ☰ فعال‌سازی مستقیم منوی همبرگری اول بازی و رفع باگ تار ماندن لایه صفحه
+    let lBtn = document.getElementById("loginGearBtn"), lDrw = document.getElementById("loginMenuDrawer"), lOvl = document.getElementById("loginOverlay");
+    if (lBtn) { lBtn.onclick = function() { if(lOvl) lOvl.style.display="block"; if(lDrw) { lDrw.style.opacity="1"; lDrw.style.pointerEvents="auto"; lDrw.style.transform="translate(-50%,-50%) scale(1)"; } }; }
+    
+    // 🔐 فعال‌سازی دکمه‌های ورود، ثبت‌نام و شروع سریع مهمان بدون فریز شدن در لایه‌ها
+    let subL = document.getElementById("manualLoginBtn"); if (subL) { subL.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth('login'); }; }
+    let subR = document.getElementById("authSubmitBtn"); if (subR) { subR.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth(authMode); }; }
+    let clsD = document.getElementById("closeDrawer"); if (clsD) { clsD.onclick = function() { if(typeof launchGameDirectly === "function") launchGameDirectly(); }; }
+    let gstB = document.getElementById("quickStartBtn");
+    if (gstB) {
+        gstB.onclick = function() {
+            document.getElementById("loginScreen").style.display = "none";
+            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
+            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; if(typeof updateWalletUI === "function") updateWalletUI();
+        };
+    }
+});
 
     </script>
 </body>
