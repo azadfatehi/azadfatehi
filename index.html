@@ -1255,6 +1255,35 @@ window.addEventListener("load", function() {
         };
     }
 });
+// 🏆 شاه‌کلید نهایی: فعال‌سازی تمام قابلیت‌های فیزیک، لاگین و همبرگری استادیوم
+function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
+window.addEventListener("load", function() {
+    // زنده کردن مستقیم دکمه همبرگری اول بازی و رفع باگ تار شدن لایه‌ها
+    let lBtn = document.getElementById("loginGearBtn"), lDrw = document.getElementById("loginMenuDrawer"), lOvl = document.getElementById("loginOverlay");
+    if (lBtn) { lBtn.onclick = function() { if(lOvl) lOvl.style.display="block"; if(lDrw) { lDrw.style.opacity="1"; lDrw.style.pointerEvents="auto"; lDrw.style.transform="translate(-50%,-50%) scale(1)"; } }; }
+    
+    // فعال‌سازی منوی همبرگری بعد از لاگین بازیکن
+    let mBtn = document.getElementById("gearBtn"), mDrw = document.getElementById("settingsDrawer"), mOvl = document.getElementById("overlay");
+    if (mBtn) { mBtn.onclick = function() { if(mOvl) mOvl.style.display="block"; if(mDrw) { mDrw.classList.add("open"); if(typeof generateMenuPreviews === "function") generateMenuPreviews(); } }; }
+
+    // اتصال مستقیم دکمه‌های ورود، ثبت‌نام و شروع بازی با حفظ تمام ویژگی‌های فیزیک
+    let subL = document.getElementById("manualLoginBtn"); if (subL) { subL.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth('login'); }; }
+    let subR = document.getElementById("authSubmitBtn"); if (subR) { subR.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth(authMode); }; }
+    let clsD = document.getElementById("closeDrawer"); if (clsD) { clsD.onclick = function() { if(typeof launchGameDirectly === "function") launchGameDirectly(); }; }
+    
+    // فعال‌سازی ورود مهمان (شروع سریع) با اتمسفر کامل
+    let gstB = document.getElementById("quickStartBtn");
+    if (gstB) {
+        gstB.onclick = function() {
+            document.getElementById("loginScreen").style.display = "none";
+            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
+            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; if(typeof updateWalletUI === "function") updateWalletUI();
+        };
+    }
+    if(typeof updateNameInputs === "function") updateNameInputs(1);
+    if(typeof generateMenuPreviews === "function") generateMenuPreviews();
+    if(typeof updateWalletUI === "function") updateWalletUI();
+});
 
     </script>
 </body>
