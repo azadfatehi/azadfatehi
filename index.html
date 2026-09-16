@@ -78,9 +78,17 @@
         .count-button-item { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; text-align: center; color: #fff; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .count-button-item.active { background: rgba(0,176,255,0.15); border-color: #00b0ff; box-shadow: 0 0 10px rgba(0,176,255,0.3); }
         /* 🕹️ نوسازی کامل نوار هدر حین بازی: شیشه‌ای مینی‌مال و بسیار کم‌جا */
+        /* 🕹️ پارت اول: جابه‌جایی هدر بازی به سمت راست با فاصله استاندارد از لبه صفحه */
         #gameHeader { 
-            position: absolute; top: 12px; left: 12px; 
-            display: none; flex-direction: row; gap: 8px; z-index: 120; 
+            position: absolute; 
+            top: 25px; 
+            right: 20px;     /* ↔️ تراز کردن دکمه‌ها در سمت راست صفحه */
+            left: auto;      /* ❌ لغو تراز قبلی سمت چپ */
+            display: none; 
+            flex-direction: column; 
+            gap: 10px; 
+            z-index: 120; 
+            background: none !important; 
         }
         
         /* 💎 جلوه خاص، شکیل و سایبرپونکی برای دکمه‌های حین مسابقه */
@@ -306,7 +314,8 @@
         let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
 
         // 🎒 تعریف شیء کیسه جوایز چرمی مسابقات در بالای صفحه
-        let prizeBag = { x: 70, y: 70, scale: 1, pulseTimer: 0 };
+        // 🎒 پارت دوم: انتقال کیسه جوایز چرمی مسابقات به سمت چپ بالا (جلوگیری از تداخل با دکمه‌ها) [INDEX]
+        let prizeBag = { x: 75, y: 70, scale: 1, pulseTimer: 0 };
 
         // ⚽ شیء فیزیکی مشخصات تیله دست اصلی بازیکن
         let player = { x: 200, y: 500, startX: 200, startY: 500, targetX: 200, targetY: 500, vx: 0, vy: 0, baseR: 16, r: 16, z: 0, arcHeight: 0, progress: 0, inAir: false, angleX: 0, angleY: 0 };
