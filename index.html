@@ -581,7 +581,7 @@
                     currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
                 }
                 hasBonusShot = false;
-                showGameToast(`🔄 نوبت سوخت! نفر بعدی: ${playerNames[currentPlayerIndex]} از نقطه شروع مسابقه`);
+               // showGameToast(`🔄 نوبت سوخت! نفر بعدی: ${playerNames[currentPlayerIndex]} از نقطه شروع مسابقه`);
                 
                 // 🚀 ریست کامل موقعیت به نقطه شروع (مرکز افقی و پایین صفحه) برای بازیکن بعدی
                 lastPlayerStopPos.x = canvas.width / 2;
@@ -1193,6 +1193,43 @@ if (settingsGearBtn) {
         if (typeof generateMenuPreviews === "function") generateMenuPreviews();
     };
 }
+// 🏆 بسته نهایی: اصلاح فیزیک فیثاغورس پرتاب اول و مهار فریز شدن موتور بازی
+window.addEventListener("load", function() {
+    // 📐 اصلاح درجا و قطعی فرمول محاسبات مختصات لمس گوشی و مَوس کامپیوتر
+    window.getEventPos = function(e) {
+        let r = canvas.getBoundingClientRect();
+        let touch = (e.touches && e.touches[0]) ? e.touches[0] : (e.changedTouches ? e.changedTouches[0] : e);
+        return { x: (touch.clientX - r.left) * (canvas.width / r.width), y: (touch.clientY - r.top) * (canvas.height / r.height) };
+    };
+
+    // 🏎️ اصلاح محاسبات فیثاغورس پرتاب مَوس جهت جلوگیری از تولید عدد نامعتبر و قفل بوم
+    canvas.addEventListener("mouseup", (e) => {
+        if (!isAiming) return; isAiming = false;
+        let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y;
+        let dragDist = Math.sqrt(dx * dx + dy * dy); // 📐 فرمول تصحیح شده فیثاغورس
+        if (dragDist > 10) {
+            if (isFirstShotOfTurn && playerScores.reduce((a, b) => a + b, 0) === 0) { if (typeof deductMarblesOnFirstShot === "function" && !deductMarblesOnFirstShot()) return; }
+            try { if (typeof playLaunchSound === "function") playLaunchSound(); } catch(err){}
+            player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12;
+            player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0;
+            player.inAir = true; isMoving = true; isFirstShotOfTurn = false;
+        } else { isMoving = false; player.inAir = false; }
+    });
+
+    // 🚀 اصلاح رویداد پرتاب لمسی با انگشت در گوشی موبایل
+    canvas.addEventListener("touchend", (e) => {
+        if (!isAiming) return; isAiming = false; e.preventDefault();
+        let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y;
+        let dragDist = Math.sqrt(dx * dx + dy * dy); // 📐 فرمول تصحیح شده برای تاچ گوشی
+        if (dragDist > 10) {
+            if (isFirstShotOfTurn && playerScores.reduce((a, b) => a + b, 0) === 0) { if (typeof deductMarblesOnFirstShot === "function" && !deductMarblesOnFirstShot()) return; }
+            try { if (typeof playLaunchSound === "function") playLaunchSound(); } catch(err){}
+            player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12;
+            player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0;
+            player.inAir = true; isMoving = true; isFirstShotOfTurn = false;
+        } else { isMoving = false; player.inAir = false; }
+    }, { passive: false });
+});
 
     </script>
 </body>
