@@ -278,10 +278,11 @@
         </div>
     </div>
     <!-- 🏟️ بوم و هدر اصلی بازی زنده استادیوم -->
+    <!-- 🕹️ هدر عمودی اصلاح‌شده: افزودن دکمه صرافی مرکزی به جمع کلیدهای بازی -->
     <div id="gameHeader">
-        <button id="backToMenuBtn">🔙 منو</button>
-        <div id="turnIndicator">نوبت: حسن</div>
-        <button id="exitBtn">🚪 خروج</button>
+        <button type="button" id="backToMenuBtn" onclick="if(typeof isReturningToMenu!=='undefined') isReturningToMenu=true; gameLoopRunning=false; handleFinalExit();">🔙 منوی اصلی</button>
+        <button type="button" id="shopBtn" onclick="if(typeof openCentralStadiumShop==='function') openCentralStadiumShop();">🏪 فروشگاه بازار</button>
+        <button type="button" id="exitBtn" onclick="handleFinalExit();">🚪 خروج قطعی</button>
     </div>
     <canvas id="canvas"></canvas>
 
