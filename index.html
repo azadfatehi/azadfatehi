@@ -9,7 +9,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; font-family: sans-serif; }
         body, html { width: 100%; height: 100%; overflow: hidden; background: #0a0a16; direction: rtl; }
         
-        /* 🖼️ تنظیم پس‌زمینه زنده منوی ورود به عکس اختصاصی استادیوم */
+        /* 🖼️ تنظیم قطعی پس‌زمینه زنده منوی ورود به عکس اختصاصی استادیوم */
         #loginScreen { 
             position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
             display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; 
@@ -51,12 +51,12 @@
         @keyframes spinRotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .stadium-select { width: 100%; padding: 14px; background: rgba(5,5,15,0.7); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: #fff; font-size: 14px; font-weight: bold; margin-bottom: 12px; outline: none; text-align: center; }
         
-        /* 🔧 منوی همبرگری و تنظیمات پیشرفته با تم شیشه‌ای مات روی عکس استادیوم شما */
-        #settingsDrawer.stadium-drawer, #loginMenuDrawer.stadium-drawer { 
+        /* 🔧 منوی همبرگری لاگین و تنظیمات به صورت کارت شیشه‌ای گیمینگ تراز وسط با تصویر پس‌زمینه */
+        .stadium-drawer { 
             position: fixed; top: 50%; left: 50%; 
             transform: translate(-50%, -50%) scale(0.9); 
             width: 92%; max-width: 390px; max-height: 85vh; 
-            background: linear-gradient(rgba(10, 10, 26, 0.88), rgba(5, 5, 15, 0.94)), url('menu_bg.jpg') center center / cover no-repeat !important;
+            background: linear-gradient(rgba(14, 14, 38, 0.88), rgba(6, 6, 21, 0.93)), url('menu_bg.jpg') center center / cover no-repeat !important;
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
             border: 2px solid #00b0ff; border-radius: 24px; z-index: 200; padding: 24px; overflow-y: auto; opacity: 0; pointer-events: none;
             box-shadow: 0 0 30px rgba(0, 176, 255, 0.25), 0 20px 60px rgba(0,0,0,0.85);
@@ -72,29 +72,7 @@
         .count-grid { display: flex; gap: 8px; margin-bottom: 15px; }
         .count-button-item { flex: 1; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; text-align: center; color: #fff; font-size: 13px; font-weight: bold; cursor: pointer; transition: all 0.2s; }
         .count-button-item.active { background: rgba(0,176,255,0.15); border-color: #00b0ff; box-shadow: 0 0 10px rgba(0,176,255,0.3); }
-        /* 🕹️ هدر عمودی و شیک دکمه‌های بازی در گوشه صفحه مخصوص دسترسی راحت در موبایل */
-        #gameHeader { 
-            position: absolute; top: 20px; left: 16px; 
-            display: none; flex-direction: column; 
-            gap: 12px; z-index: 120; background: none !important; 
-        }
-        
-        /* 💎 جلوه خاص، شکیل و نئونی سایبرپونکی برای دکمه‌های عمودی بازی */
-        #gameHeader button { 
-            width: 105px; padding: 12px 10px; 
-            background: rgba(14, 14, 38, 0.75);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            color: #fff; font-size: 12px; font-weight: 900; 
-            border: 2px solid #00b0ff; border-radius: 14px; cursor: pointer;
-            box-shadow: 0 0 15px rgba(0, 176, 255, 0.2), inset 0 1px 2px rgba(255,255,255,0.2);
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); text-align: center;
-        }
-        #gameHeader button:active { transform: scale(0.92); box-shadow: 0 0 5px #00b0ff; }
-        #exitBtn { color: #ff5252 !important; border-color: #ff5252 !important; box-shadow: 0 0 15px rgba(255,82,82,0.2) !important; }
-        #exitBtn:active { box-shadow: 0 0 5px #ff5252 !important; }
-        #shopBtn { color: #ffd700 !important; border-color: #ffd700 !important; box-shadow: 0 0 15px rgba(255,215,0,0.2) !important; }
-        #shopBtn:active { box-shadow: 0 0 5px #ffd700 !important; }
-
+        #gameHeader { position: absolute; top: 0; left: 0; width: 100%; padding: 12px 16px; display: none; justify-content: space-between; align-items: center; z-index: 50; background: linear-gradient(to bottom, rgba(10,10,22,0.85) 0%, rgba(10,10,22,0) 100%); }
         /* 📊 تراز کردن کامل کارنامه نهایی در مرکز صفحه و حذف تداخل‌های پس‌زمینه */
         #scoreboardScreen { 
             position: absolute; width: 100%; height: 100%; top: 0; left: 0; 
@@ -102,28 +80,37 @@
             z-index: 150; background: url('menu_bg.jpg') center center / cover no-repeat !important; padding: 20px; 
         }
         #scoreboardScreen .stadium-card { width: 100%; max-width: 380px; margin: 0 auto; background: rgba(14, 14, 38, 0.9); border: 2px solid #ffeb3b; box-shadow: 0 0 35px rgba(255, 235, 59, 0.2), 0 20px 50px rgba(0,0,0,0.9); }
-        #mobileTurnBadge { position: absolute; top: 20px; right: 16px; color: #fff; font-size: 13px; font-weight: 900; background: rgba(0,0,0,0.6); padding: 10px 16px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.1); z-index: 120; display: none; }
 
+        /* 🕹️ بازطراحی لوکس دکمه‌های ناوبری هدر بالای میدان بازی */
+        #exitBtn, #backToMenuBtn { background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); color: #ff5252; border: 1px solid rgba(255,82,82,0.4); border-radius: 10px; padding: 6px 14px; font-size: 13px; font-weight: 900; cursor: pointer; transition: all 0.2s; text-shadow: 0 0 5px rgba(255,82,82,0.3); }
+        #backToMenuBtn { color: #00b0ff; border-color: rgba(0,176,255,0.4); text-shadow: 0 0 5px rgba(0,176,255,0.3); }
+        #exitBtn:active, #backToMenuBtn:active { transform: scale(0.92); background: rgba(255,255,255,0.15); }
+        #turnIndicator { color: #fff; font-size: 13px; font-weight: 900; background: rgba(0,0,0,0.4); padding: 8px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.05); }
         #canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; background: #141423; }
+        .gear-corner-btn { position: absolute; top: 16px; left: 16px; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); display: none; justify-content: center; align-items: center; cursor: pointer; color: #fff; font-size: 20px; z-index: 110; }
         
-        /* ⚙️ استایل نئونی دکمه همبرگری پشتیبانی صفحه لاگین اول بازی */
-        .gear-corner-btn { 
-            position: absolute; top: 20px; left: 16px; 
-            width: 44px; height: 44px; border-radius: 12px; 
-            background: rgba(14, 14, 38, 0.75); backdrop-filter: blur(10px);
-            border: 2px solid #00b0ff; display: flex; 
-            justify-content: center; align-items: center; 
-            cursor: pointer; color: #fff; font-size: 20px; z-index: 110; 
-            box-shadow: 0 0 15px rgba(0, 176, 255, 0.3);
-        }
+        .custom-popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 300; display: none; justify-content: center; align-items: center; padding: 20px; backdrop-filter: blur(8px); }
+        .custom-popup-box { background: #12122c; border: 1px solid rgba(255,255,255,0.1); border-radius: 28px; padding: 25px; width: 100%; max-width: 320px; text-align: center; box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+        .popup-icon { font-size: 38px; display: block; margin-bottom: 12px; }
+        .popup-text { color: #fff; font-size: 14px; font-weight: bold; line-height: 1.6; margin-bottom: 20px; }
+        .popup-btn { width: 100%; padding: 14px; border: none; border-radius: 12px; font-size: 14px; font-weight: 900; cursor: pointer; }
+        .popup-btn.success { background: #00e676; color: #fff; }
+        
+        .game-toast { position: fixed; top: 75px; left: 50%; transform: translateX(-50%) translateY(-20px); background: rgba(0, 230, 118, 0.95); color: #fff; padding: 10px 20px; border-radius: 14px; font-size: 13px; font-weight: bold; z-index: 400; opacity: 0; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2); box-shadow: 0 8px 25px rgba(0,230,118,0.3); pointer-events: none; }
+        .game-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .player-row-item { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255,255,255,0.07); border-radius: 16px; padding: 12px; margin-bottom: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.3); }
+        .player-inputs { display: flex; gap: 8px; align-items: center; }
+        .player-inputs input { flex: 1; padding: 10px; background: rgba(5,5,15,0.6); border: 1px solid rgba(255,255,255,0.08); border-radius: 10px; color: #fff; font-size: 13px; text-align: center; outline: none; }
+        .order-badge { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: 10px; border-radius: 10px; color: #fff; font-size: 12px; font-weight: bold; text-align: center; }
+        .order-badge.assigned { background: rgba(0,230,118,0.15); border-color: #00e676; color: #00e676; }
     </style>
 </head>
 <body>
 
     <!-- 🏟️ صفحه اصلی مدیریت و احراز هویت بازیکنان استادیوم -->
     <div id="loginScreen">
-        <!-- ⚙️ منوی همبرگری مستقل با رویداد مستقیم کلیک خطی جهت باز کردن کشوی راهنمای اول بازی -->
-        <div id="loginGearBtn" class="gear-corner-btn" onclick="try { initAudio(); } catch(e){} document.getElementById('loginMenuDrawer').classList.add('open'); document.getElementById('loginOverlay').style.display='block';">☰</div>
+        <!-- ⚙️ منوی همبرگری گوشه بالا سمت چپ صفحه لاگین -->
+        <div id="loginGearBtn" class="gear-corner-btn" style="display: flex; top: 20px; left: 20px;" onclick="document.getElementById('loginMenuDrawer').classList.add('open'); document.getElementById('loginOverlay').style.display='block';">☰</div>
         
         <div class="stadium-card">
             <div class="stadium-title" id="authFormTitle">🏟️ به میدان تیله‌بازی خوش آمدید</div>
@@ -136,7 +123,7 @@
             
             <div class="btn-group" id="authActionButtons">
                 <button class="stadium-btn secondary" id="navRegisterBtn" onclick="switchAuthModeToRegister()">ثبت نام جدید</button>
-                <button class="stadium-btn primary" id="manualLoginBtn" onclick="processSmartAuth('login')">ورود به حساب</button>
+                <button class="stadium-btn primary" id="manualLoginBtn">ورود به حساب</button>
             </div>
             
             <button class="stadium-btn success" id="authSubmitBtn" style="display:none; width:100%; margin-bottom:12px;" onclick="processSmartAuth(authMode)">تایید و ثبت نام</button>
@@ -147,20 +134,16 @@
         </div>
     </div>
 
-    <!-- 🔧 کشوی همبرگری پشتیبان صفحه لاگین با لایه تاریک و دکمه‌های مستقیم خطی -->
-    <!-- 🔧 پارت اصلاحی: منوی همبرگری مستقل بدون نیاز به کدهای فرعی جاوااسکریپت -->
-    <div class="drawer-overlay" id="loginOverlay" style="display:none;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';"></div>
-    
+    <!-- 🔧 کشوی همبرگری پشتیبان صفحه لاگین بدون دکمه پاکسازی حافظه -->
+    <div class="drawer-overlay" id="loginOverlay" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';"></div>
     <div class="stadium-drawer" id="loginMenuDrawer">
         <div class="stadium-title" style="font-size:16px; color: #ffeb3b; text-shadow: 0 0 10px rgba(255,235,59,0.3);">⚙️ پشتیبانی و راهنمای استادیوم</div>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="switchAuthModeToForgot();">🔑 فراموشی و بازیابی رمز حساب</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('📬 پشتیبانی: support@marblestadium.ir', '📞', 'تایید', false)">📞 تماس با تیم پشتیبانی</button>
-        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('شبیه‌ساز مسابقات اصیل تیله‌بازی نسخه استادیوم ملی ۱۴۰۵ با فیزیک واقعی چمن', '🎮', 'تایید', false)">ℹ️ درباره میدان استادیوم</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none'; switchAuthModeToForgot();">🔑 فراموشی و بازیابی رمز حساب</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('📬 پل ارتباطی با استادیوم ملی تیله‌بازی: support@marblestadium.ir', '📞', 'تایید و برگشت', false)">📞 تماس با تیم پشتیبانی</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:12px; text-align:right;" onclick="showCustomPopup('شبیه‌ساز مسابقات اصیل تیله‌بازی نسخه ارتقا یافته استادیوم ملی ۱۴۰۵ با فیزیک واقعی چمن و سیمان', '🎮', 'تایید و برگشت', false)">ℹ️ درباره میدان استادیوم</button>
+        <button class="stadium-btn secondary" style="width:100%; margin-bottom:20px; text-align:right;" onclick="showCustomPopup('ممنون از حمایت شما بازیکن گرامی! درگاه‌های حمایتی به زودی فعال می‌شوند.', '💖', 'تایید و برگشت', false)">☕ حمایت از توسعه‌دهنده</button>
         <button class="stadium-btn primary" style="width:100%;" onclick="document.getElementById('loginMenuDrawer').classList.remove('open'); document.getElementById('loginOverlay').style.display='none';">بستن پنجره راهنما</button>
     </div>
-
-    <!-- ⚙️ دکمه همبرگری اول بازی اصلاح شده با دستور مستقیم و بدون باگ تداخل -->
-    <div id="loginGearBtn" class="gear-corner-btn" style="position: absolute; top: 20px; left: 16px; cursor: pointer; z-index: 110;" onclick="document.getElementById('loginMenuDrawer').classList.add('open'); document.getElementById('loginOverlay').style.display='block';">☰</div>
     <!-- 🏟️ بازسازی کامل منوی اصلی تدارکات و راه‌اندازی استادیوم مسابقه -->
     <div id="setupMenu">
         
@@ -170,8 +153,8 @@
             <span id="welcomeUserName">👤 بازیکن: رضا</span>
             <!-- 💰 بانک در وسط -->
             <span id="walletValueUi" style="color:#00e676;">💰 بانک: ۶ تیله</span>
-            <!-- ☰ منوی همبرگری در سمت چپ با رویداد مستقیم خطی جهت باز کردن قطعی کشوی تنظیمات بدون فریز شدن -->
-            <div id="gearBtn" title="تنظیمات پیشرفته استادیوم" style="cursor: pointer; font-size: 22px; padding: 0 5px; color: #00b0ff;" onclick="try { initAudio(); } catch(e){} document.getElementById('settingsDrawer').classList.add('open'); document.getElementById('overlay').style.display = 'block'; if (typeof generateMenuPreviews === 'function') generateMenuPreviews();">☰</div>
+            <!-- ☰ منوی همبرگری در سمت چپ -->
+            <div id="gearBtn" title="تنظیمات پیشرفته استادیوم">☰</div>
         </div>
         
         <!-- 🎯 دکمه شروع دایره‌ای بزرگ جذاب شما کاملاً متمرکز در وسط صفحه -->
@@ -184,11 +167,11 @@
     </div>
 
     <!-- 🔧 کشوی اختصاصی تنظیمات اتمسفر زمین و تعداد نفرات مسابقه -->
-    <div class="drawer-overlay" id="overlay" onclick="document.getElementById('settingsDrawer').classList.remove('open'); document.getElementById('overlay').style.display='none';"></div>
+    <div class="drawer-overlay" id="overlay"></div>
     <div class="stadium-drawer" id="settingsDrawer">
-        <div class="stadium-title" style="font-size:16px; margin-bottom:15px;">🏟️ مدیریت اتمسفر و قوانین میدان</div>
+        <div class="stadium-title" style="font-size:16px; margin-bottom:15px;">🏟️ تنظیمات بازی </div>
         
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۱. انتخاب کف‌پوش میدان مسابقات:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">تو چه زمینی بازی کنیم؟</div>
         <div class="grid-preview" id="groundGrid">
             <div class="scroll-item active" data-val="grass"><canvas id="pre_grass"></canvas></div>
             <div class="scroll-item" data-val="carpet"><canvas id="pre_carpet"></canvas></div>
@@ -197,24 +180,24 @@
             <div class="scroll-item" data-val="dirt"><canvas id="pre_dirt"></canvas></div>
         </div>
 
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۲. شرایط آب‌وهوایی استادیوم:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">دوست داری تو چه هوایی بازی کنیم ؟</div>
         <div class="count-grid" id="weatherGrid">
             <div class="count-button-item active" data-val="sunny">☀️ آفتابی</div>
             <div class="count-button-item" data-val="windy">💨 توفانی</div>
             <div class="count-button-item" data-val="rainy">🌧️ بارانی</div>
             <div class="count-button-item" data-val="snowy">❄️ برفی</div>
         </div>
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۳. تعداد اعضای رسمی مسابقه:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">تعداد نفرات بازی</div>
         <select class="stadium-select" id="playerCountSelect" onchange="handlePlayerCountChange(this.value)">
-            <option value="1">👤 انفرادی (تک‌نفره با رکورد)</option>
-            <option value="2">👥 دو نفره (رقابتی متوالی)</option>
-            <option value="3">👨‍👦‍👦 سه نفره (دوره‌ای استادیوم)</option>
-            <option value="4">👨‍👨‍👦‍👦 چهار نفره (کلاسیک تیمی)</option>
+            <option value="1">👤 تکنفره </option>
+            <option value="2">👥دونفره</option>
+            <option value="3">👨‍👦‍👦سه نفره </option>
+            <option value="4">👨‍👨‍👦‍👦چهار نفره </option>
         </select>
 
         <!-- 🎰 سیستم قرعه‌کشی نوبت‌دهی (نمایش خودکار فقط پس از تکمیل اسامی) -->
         <div class="wheel-container" id="wheelSection" style="display:none;">
-            <div style="color:#ffeb3b; font-size:12px; font-weight:bold; margin-bottom:10px;">🎰 قرعه‌کشی رسمی نوبت شروع مسابقه</div>
+            <div style="color:#ffeb3b; font-size:12px; font-weight:bold; margin-bottom:10px;">ببینیم بازی با کی شروع شه!</div>
             <div class="wheel-canvas-box">
                 <div class="wheel-pointer-top"></div>
                 <canvas id="wheelCanvas" width="140" height="140"></canvas>
@@ -222,10 +205,10 @@
             <button class="stadium-btn primary" id="drawOrderBtn" style="padding:10px 20px; font-size:12px; border-radius:10px; display:none;" onclick="spinTheWheelOfStadium()">🎰 چرخاندن گردونه قرعه</button>
         </div>
 
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۴. مشخصات و ثبت امضای حساب بازیکنان:</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">رمز و نام حریف ؟</div>
         <div id="namesContainer"></div>
 
-        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">۵. تعداد کل تیله‌های کاشت وسط (هر نفر):</div>
+        <div style="color:#b0bec5; font-size:12px; font-weight:bold; margin-bottom:8px; text-align:right;">با چند تا تیله بریم بازی ؟</div>
         <select class="stadium-select" id="marbleCountSelect">
             <option value="2">۲ تیله</option>
             <option value="5" selected>۵ تیله</option>
@@ -233,13 +216,13 @@
             <option value="10">۱۰ تیله</option>
         </select>
 
-        <button class="stadium-btn success" id="closeDrawer" style="width:100%; font-size:15px; font-weight:900; margin-top:15px; border-radius:16px;">🔥 همه چی عالی شد! بریم میدان</button>
+        <button class="stadium-btn success" id="closeDrawer" style="width:100%; font-size:15px; font-weight:900; margin-top:15px; border-radius:16px;">همه چی عالی شد ! بریم </button>
     </div>
 
     <!-- 📊 جدول کارنامه نهایی مسابقات تراز وسط و شیک -->
     <div id="scoreboardScreen" style="display:none;">
         <div class="stadium-card">
-            <div class="stadium-title" style="color:#ffeb3b;">🏆 کارنامه نهایی مسابقات استادیوم</div>
+            <div class="stadium-title" style="color:#ffeb3b;">🏆 جدول بازی </div>
             <div style="overflow-x:auto; margin-bottom:20px;">
                 <table style="width:100%; color:#fff; border-collapse:collapse; font-size:13px; text-align:center;">
                     <thead>
@@ -258,13 +241,12 @@
             </div>
         </div>
     </div>
-    <!-- 🏟️ باکس دکمه‌های عمودی گیمینگ در گوشه صفحه و نشانگر نوبت مجزا -->
+    <!-- 🏟️ بوم و هدر اصلی بازی زنده استادیوم -->
     <div id="gameHeader">
-        <button id="backToMenuBtn">🔙 منوی اصلی</button>
-        <button id="shopBtn" onclick="openCentralStadiumShop()">🏪 فروشگاه</button>
-        <button id="exitBtn">🚪 خروج از بازی</button>
+        <button id="backToMenuBtn">🔙 منو</button>
+        <div id="turnIndicator">نوبت: حسن</div>
+        <button id="exitBtn">🚪 خروج</button>
     </div>
-    <div id="mobileTurnBadge">نوبت: حسن</div>
     <canvas id="canvas"></canvas>
 
     <!-- ⚠️ کادر پاپ‌آ‌پ اخطار و پیام‌های سیستم استادیوم -->
@@ -289,15 +271,14 @@
         let gameLoopRunning = false; let isMoving = false; let isAiming = false; let isWheelSpinning = false;
         let isReturningToMenu = false; let hasBonusShot = false; let isFirstShotOfTurn = true;
         let hitSuccessInTurn = false; let targetOutInTurn = false; let isQuickRandomMode = false;
-        let singlePlayerMissCount = 0; // شمارنده اختصاصی شلیک‌های متوالی ناموفق برای حالت تک‌نفره
         let playerNames = ["حسن"]; let playerNationalIds = [""]; let playerScores = []; let playerOrders = [];
         let weatherParticles = []; let windLines = []; let bagAnimations = [];
         let windX = 0; let windY = 0; let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
         let lastPlayerStopPos = { x: 200, y: 500 }; let localSocket = null;
         let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
 
-        // 🎒 تعریف شیء کیسه جوایز چرمی مسابقات در بالای صفحه (مختصات به راست بالا برای عدم تداخل با دکمه‌ها ست شد)
-        let prizeBag = { x: window.innerWidth - 80, y: 70, scale: 1, pulseTimer: 0 };
+        // 🎒 تعریف شیء کیسه جوایز چرمی مسابقات در بالای صفحه
+        let prizeBag = { x: 70, y: 70, scale: 1, pulseTimer: 0 };
 
         // ⚽ شیء فیزیکی مشخصات تیله دست اصلی بازیکن
         let player = { x: 200, y: 500, startX: 200, startY: 500, targetX: 200, targetY: 500, vx: 0, vy: 0, baseR: 16, r: 16, z: 0, arcHeight: 0, progress: 0, inAir: false, angleX: 0, angleY: 0 };
@@ -340,15 +321,15 @@
         function updateWalletUI() {
             const walletUi = document.getElementById("walletValueUi");
             const welcomeUser = document.getElementById("welcomeUserName");
-            const turnBadge = document.getElementById("mobileTurnBadge");
+            const indicator = document.getElementById("turnIndicator");
             
             if (welcomeUser) welcomeUser.innerText = `👤 بازیکن: ${currentUsername || "مهمان"}`;
             if (walletUi) {
                 walletUi.innerText = isQuickRandomMode ? "💰 بانک: حالت مهمان" : `💰 بانک: ${totalMarblesOwned} تیله`;
             }
-            if (turnBadge && gameLoopRunning) {
+            if (indicator && gameLoopRunning) {
                 let name = playerNames[currentPlayerIndex] || `بازیکن ${currentPlayerIndex + 1}`;
-                turnBadge.innerText = `نوبت: ${name} ${hasBonusShot ? "🎯" : ""}`;
+                indicator.innerText = `نوبت: ${name} ${hasBonusShot ? "(شلیک جایزه 🎯)" : ""}`;
             }
         }
         function resetAuthFormView() {
@@ -491,36 +472,31 @@
             } catch(e) {}
         }
 
-        // 🔊 تولید صدای واقعی و موجی تشویق پرشور تماشاچیان استادیوم ملی
         function playCheeringSound() {
             try {
                 initAudio(); let now = audioCtx.currentTime;
-                for(let i=0; i<15; i++) {
+                for(let i=0; i<12; i++) {
                     let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-                    osc.type = i % 2 === 0 ? "sine" : "triangle";
-                    osc.frequency.setValueAtTime(280 + (i * 18) + Math.random()*40, now);
-                    osc.frequency.exponentialRampToValueAtTime(450 + (i * 5), now + 1.2);
-                    gain.gain.setValueAtTime(0.06, now); 
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+                    osc.type = "triangle";
+                    osc.frequency.setValueAtTime(240 + (i * 30) + Math.random()*25, now);
+                    osc.frequency.linearRampToValueAtTime(380 + (i * 12), now + 1.5);
+                    gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
                     osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(now); osc.stop(now + 1.25);
+                    osc.start(now); osc.stop(now + 1.5);
                 }
             } catch(e){}
         }
 
-        // 🔊 تولید صدای جمعی افسوس و آه تماشاچیان به خاطر خطای شلیک بازیکن
         function playDisappointmentSound() {
             try {
                 initAudio(); let now = audioCtx.currentTime;
-                for(let i=0; i<10; i++) {
+                for(let i=0; i<8; i++) {
                     let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-                    osc.type = "sine"; 
-                    osc.frequency.setValueAtTime(190 + (i * 6), now);
-                    osc.frequency.linearRampToValueAtTime(90 + (i * 2), now + 0.9);
-                    gain.gain.setValueAtTime(0.12, now); 
-                    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.95);
+                    osc.type = "sine"; osc.frequency.setValueAtTime(160 + (i * 8), now);
+                    osc.frequency.linearRampToValueAtTime(75 + (i * 2), now + 1.1);
+                    gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.15);
                     osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(now); osc.stop(now + 0.98);
+                    osc.start(now); osc.stop(now + 1.15);
                 }
             } catch(e){}
         }
@@ -533,95 +509,55 @@
         function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 100, p.y + 12); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } if (selectedWeather === "windy" || selectedWeather === "rainy" || selectedWeather === "snowy") { windLines.forEach(w => { ctx.fillStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.fillRect(w.x, w.y, w.w, w.h); }); } ctx.restore(); }
         function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
         
-        // 🖌️ تابع رندر هوشمند خط داوری کادر قلمرو بر اساس جنس بستر زمین (اسپری روی چمن، نخ روی فرش و گچ روی آسفالت)
+        // 🖌️ تابع رسمی رسم مستطیل کادر گچی قلمرو وسط زمین
         function drawStadiumPenRect() {
             ctx.save(); let cX = canvas.width / 2; let cY = canvas.height / 2 - 80;
             let rW = (selectedCountVal * 14 * selectedPlayerCount) + 140; let rH = 170; 
             let rectX = cX - rW / 2; let rectY = cY - rH / 2;
-            if (selectedGroundVal === "grass") {
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.85)"; ctx.lineWidth = 3.5;
-                ctx.shadowBlur = 6; ctx.shadowColor = "rgba(255,255,255,0.4)";
-            } else if (selectedGroundVal === "carpet") {
-                ctx.strokeStyle = "rgba(245, 245, 240, 0.9)"; ctx.lineWidth = 4;
-                ctx.setLineDash(); ctx.shadowBlur = 3; ctx.shadowColor = "rgba(0,0,0,0.3)";
-            } else if (selectedGroundVal === "asphalt" || selectedGroundVal === "cement") {
-                ctx.strokeStyle = "rgba(255, 255, 255, 0.9)"; ctx.lineWidth = 5;
-                ctx.shadowBlur = 4; ctx.shadowColor = "rgba(255,255,255,0.2)";
+            if (selectedGroundVal === "asphalt" || selectedGroundVal === "cement") {
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.85)"; ctx.lineWidth = 4;
             } else if (selectedGroundVal === "dirt") {
-                ctx.strokeStyle = "rgba(43, 24, 16, 0.85)"; ctx.lineWidth = 5.5;
-                ctx.shadowBlur = 2; ctx.shadowColor = "rgba(0,0,0,0.5)";
-            }
+                ctx.strokeStyle = "rgba(62, 39, 35, 0.7)"; ctx.lineWidth = 5;
+            } else { ctx.strokeStyle = "rgba(255, 235, 59, 0.6)"; ctx.lineWidth = 3; }
             ctx.strokeRect(rectX, rectY, rW, rH); ctx.restore(); return { x: rectX, y: rectY, w: rW, h: rH };
         }
-        // 🏟️ چرخه نوبت‌دهی رسمی: موفق ادامه از محل توقف / ناموفق تعویض نوبت یا خروج قطعی پس از ۳ خطا
+        // 🏟️ چرخه رسمی نوبت‌دهی استادیوم: پرتاب ناموفق به نقطه شروع / پرتاب موفق ادامه از محل توقف
         function resetRound() {
             isMoving = false; player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
             let activeTargets = targets.filter(t => !t.isOut).length;
             if (activeTargets === 0) { setTimeout(showFinalScoreboard, 200); return; }
             
-            // 🎯 قانون اول: شلیک موفق (حداقل یک تیله در این پرتاب از خط بیرون رفته است)
+            // 🎯 قانون اول: اگر حداقل یک تیله در این نوبت از خط مستطیل مرز بیرون رفته باشد
             if (targetOutInTurn) {
-                playCheeringSound(); // پخش صدای تشویق تماشاچیان
+                try { playCheeringSound(); } catch(e){}
                 hasBonusShot = true;
-                singlePlayerMissCount = 0; // ریست کامل شمارنده خطا به خاطر شلیک موفق
+                showGameToast(`🎯 شلیک موفق! ادامه نوبت ${playerNames[currentPlayerIndex]} از محل توقف تیله`);
                 
-                // قفل شدن تیله دست در محل توقف فعلی روی زمین جهت ادامه پرتاب همین بازیکن
+                // تیله دست دقیقاً در همان محل توقف فعلی روی زمین قفل می‌شود
                 lastPlayerStopPos.x = player.x;
                 lastPlayerStopPos.y = player.y;
             } 
-            // 🔄 قانون دوم: شلیک ناموفق (هیچ تیله‌ای در این پرتاب بیرون نشده و نوبت سوخته است)
+            // 🔄 قانون دوم: اگر هیچ تیله‌ای بیرون نرفته باشد (نوبت سوخته و تعویض بازیکن)
             else {
-                playDisappointmentSound(); // پخش صدای افسوس تماشاچیان
-                hasBonusShot = false;
-                
-                // 👥 اگر بازی چندنفره است، نوبت عوض شده و نفر بعدی از نقطه شروع می‌آید
+                try { playDisappointmentSound(); } catch(e){}
                 if (selectedPlayerCount > 1 && !isQuickRandomMode) {
                     currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
-                    
-                    // بازگشت موقعیت به نقطه شروع اولیه در پایین صفحه برای بازیکن بعدی
-                    lastPlayerStopPos.x = canvas.width / 2;
-                    lastPlayerStopPos.y = canvas.height - 100;
                 }
+                hasBonusShot = false;
+                showGameToast(`🔄 نوبت سوخت! نفر بعدی: ${playerNames[currentPlayerIndex]} از نقطه شروع مسابقه`);
                 
-                // 👤 اگر بازی تک‌نفره یا شروع سریع است، شمارنده خطای متوالی پایش می‌شود
-                if (selectedPlayerCount === 1 || isQuickRandomMode) {
-                    singlePlayerMissCount++;
-                    
-                    // 🚨 خروج کامل و قطعی به منو پس از ۳ پرتاب ناموفق متوالی بدون فریز شدن بوم
-                    if (singlePlayerMissCount >= 3) {
-                        singlePlayerMissCount = 0;
-                        gameLoopRunning = false; // متوقف کردن فوری موتور بازی برای جلوگیری از قفل شدن
-                        let pName = playerNames[currentPlayerIndex] || "بازیکن";
-                        
-                        setTimeout(() => {
-                            showCustomPopup(
-                                `😔 ${pName} جان، متاسفم نتونستید تیله‌ای بیرون کنید!`, 
-                                "🏟️", 
-                                "خروج و بازگشت به منوی استادیوم", 
-                                true, 
-                                function() { handleFinalExit(); } // کدهای نجات و بازگشت به منوی اصلی
-                            );
-                        }, 150);
-                        return;
-                    }
-                    
-                    // در پرتاب اول یا دوم خطا، موقعیت تیله دست به پایین صفحه (نقطه شروع) برمی‌گردد
-                    lastPlayerStopPos.x = canvas.width / 2;
-                    lastPlayerStopPos.y = canvas.height - 100;
-                }
+                // 🚀 ریست کامل موقعیت به نقطه شروع (مرکز افقی و پایین صفحه) برای بازیکن بعدی
+                lastPlayerStopPos.x = canvas.width / 2;
+                lastPlayerStopPos.y = canvas.height - 100;
             }
             
-            // اعمال دقیق مختصات جدید تعیین‌شده در ساختار فیزیکی تیله دست
+            // بارگذاری مختصات نهایی و پایدار شلیک در ساختار فیزیکی تیله دست
             player.x = lastPlayerStopPos.x; player.y = lastPlayerStopPos.y;
             player.startX = player.x; player.startY = player.y;
             player.targetX = player.x; player.targetY = player.y;
             player.angleX = 0; player.angleY = 0;
             
-            // 🔐 ریست کامل وضعیت پرتاب جهت پایش صحیح پرتاب بعدی و رفع باگ اخطار زودهنگام
-            isFirstShotOfTurn = true; 
-            hitSuccessInTurn = false; 
-            targetOutInTurn = false; 
-            
+            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false;
             if (!isQuickRandomMode) updateWalletUI();
         }
 
@@ -637,20 +573,12 @@
             prizeBag.pulseTimer = 12;
         }
 
-        // 📐 ماشین حساب کاملاً مستقل و مجهز جهت پیشگیری از خطای محاسباتی انواع رزولوشن گوشی
-        function getEventPos(e) { 
-            let r = canvas.getBoundingClientRect(); 
-            let clientX = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-            let clientY = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-            return { 
-                x: (clientX - r.left) * (canvas.width / r.width), 
-                y: (clientY - r.top) * (canvas.height / r.height) 
-            }; 
-        }
-        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; box.w = canvas.width; box.h = canvas.height; prizeBag.x = canvas.width - 80; }
+        function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches.clientX; cY = e.touches.clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches.clientX; cY = e.changedTouches.clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; box.w = canvas.width; box.h = canvas.height; }
         
         function gameLoop() {
-            if (!gameLoopRunning || canvas.style.display === "none") { gameLoopRunning = false; return; }
+            if (canvas.style.display === "none") { gameLoopRunning = false; return; }
+            gameLoopRunning = true;
 
             // 🔮 محاسبات پرواز سه‌بعدی تیله دست با ترمز شدید و مهار شتاب پرواز در هوا
             if (player.inAir) {
@@ -672,6 +600,7 @@
                             let dx = t.x - player.x, dy = t.y - player.y; 
                             if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) { 
                                 hitAny = true; hitSuccessInTurn = true; 
+                                // محاسبه ضربه و سرعت پس زدن تیله‌ها متناسب با چسبندگی بستر زمین
                                 let speedFactor = currentGround.soundType === "soft" ? 0.52 : 0.68;
                                 let hitSpeed = (Math.sqrt(player.vx*player.vx + player.vy*player.vy) || 4.5) * speedFactor; 
                                 playClickSound(hitSpeed / 3.5); 
@@ -688,39 +617,34 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             if (imgBg.complete && imgBg.naturalWidth !== 0) { ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); } else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
             drawDynamicBorder();
-            // 📐 محاسبه ابعاد و مشخصات زنده مستطیل کادر مرز قلمرو مسابقه [INDEX]
+            // 📐 محاسبه ابعاد و مشخصات زنده مستطیل کادر مرز قلمرو مسابقه
             let pen = drawStadiumPenRect();
             let anyMarbleMoving = player.inAir || Math.abs(player.vx) > 0.05 || Math.abs(player.vy) > 0.05;
 
-            // 🎯 بررسی اصطکاک حرکت و منطق خروج تیله‌های هدف از چهار ضلع مستطیل گچی قلمرو [INDEX]
+            // 🎯 بررسی اصطکاک حرکت و منطق خروج تیله‌های هدف از چهار ضلع مستطیل گچی قلمرو
             targets.forEach(t => {
                 if (!t.isOut) {
                     t.x += t.vx; t.y += t.vy; 
-                    // افزایش چسبندگی اصطکاک برای ترمز طبیعی و سنگین تیله روی چمن و خاک [INDEX]
+                    // افزایش چسبندگی اصطکاک برای ترمز طبیعی و سنگین تیله روی چمن و خاک
                     t.vx *= (currentGround.friction * 0.95); t.vy *= (currentGround.friction * 0.95);
                     
                     let tSpeed = Math.sqrt(t.vx*t.vx + t.vy*t.vy);
                     t.angleX += tSpeed * 0.04;
                     if (tSpeed > 0.05) { anyMarbleMoving = true; } else { t.vx = 0; t.vy = 0; }
                     
-                    // 📐 بررسی خروج واقعی از اضلاع کادر مستطیل وسط زمین [INDEX]
+                    // 📐 بررسی خروج واقعی از اضلاع کادر مستطیل وسط زمین
                     if (t.x < pen.x || t.x > (pen.x + pen.w) || t.y < pen.y || t.y > (pen.y + pen.h)) {
-                        t.isOut = true; 
-                        targetOutInTurn = true; // فعال‌سازی قطعی پرتاب موفق جهت حفظ نوبت [INDEX]
-                        
-                        // 📊 ثبت دقیق امتیاز: هر تیله‌ای که بیرون می‌رود ۱ امتیاز مستقیم به بانک بازیکن واریز می‌کند [INDEX]
+                        t.isOut = true; targetOutInTurn = true; // ثبت موفقیت شلیک در این پرتاب
+                        triggerMarbleToBagAnimation(t.x, t.y); // اجرای فوری پرواز انیمیشنی به کیسه جوایز
                         if (!isQuickRandomMode) {
-                            if (playerScores[currentPlayerIndex] === undefined) { playerScores[currentPlayerIndex] = 0; }
-                            playerScores[currentPlayerIndex]++; 
+                            if (playerScores[currentPlayerIndex] !== undefined) { playerScores[currentPlayerIndex]++; } else { playerScores[currentPlayerIndex] = 1; }
                         }
-                        
-                        triggerMarbleToBagAnimation(t.x, t.y); // اجرای فوری پرواز انیمیشنی به کیسه جوایز [INDEX]
                         if (targets.filter(targetItem => !targetItem.isOut).length === 0) { setTimeout(showFinalScoreboard, 200); }
                     }
                 }
             });
 
-            // 🏎️ غلتش وزین و برخورد الاستیک تیله دست با دیوارهای چهارگانه کل صفحه گوشی [INDEX]
+            // 🏎️ غلتش وزین و برخورد الاستیک تیله دست با دیوارهای چهارگانه کل صفحه گوشی
             if (!player.inAir && isMoving) {
                 player.x += player.vx; player.y += player.vy; 
                 player.vx *= (currentGround.friction * 0.95); player.vy *= (currentGround.friction * 0.95);
@@ -761,7 +685,7 @@
                 if (anim.progress >= 1) { bagAnimations.splice(i, 1); try { playClickSound(1.2); } catch(e){} }
             }
 
-            // 🎒 رسم گرافیکی چرمی کیسه جوایز استادیوم تراز شده در بالای صفحه سمت راست
+            // 🎒 رسم گرافیکی چرمی کیسه جوایز استادیوم در بالای صفحه
             ctx.save(); ctx.translate(prizeBag.x, prizeBag.y); ctx.scale(prizeBag.scale, prizeBag.scale);
             ctx.shadowBlur = 15; ctx.shadowColor = "rgba(0,0,0,0.6)";
             ctx.fillStyle = "#8d6e63"; ctx.beginPath();
@@ -800,14 +724,12 @@
             updateWeatherParticles(); drawWeather(); requestAnimationFrame(gameLoop);
         }
 
-        // 📊 کارنامه رسمی استادیوم با محاسبه دقیق سود/زیان خالص بر اساس مقدار کاشت وسط [INDEX]
+        // 📊 تابع صدور رسمی کارنامه نهایی و کسر/واریز دقیق تیله‌های بانک بازیکنان
         function showFinalScoreboard() {
             gameLoopRunning = false; 
             if(canvas) canvas.style.display = "none"; 
             if(gameHeader) gameHeader.style.display = "none";
             if(setupMenu) setupMenu.style.display = "none"; 
-            const turnBadge = document.getElementById("mobileTurnBadge");
-            if (turnBadge) turnBadge.style.display = "none";
             
             const tableBody = document.getElementById("stadiumScoreboardBody");
             if (tableBody) {
@@ -815,14 +737,14 @@
                 for (let i = 0; i < selectedPlayerCount; i++) {
                     let pName = playerNames[i] || `بازیکن ${i + 1}`;
                     let pId = playerNationalIds[i] || "";
-                    let wonThisRound = playerScores[i] || 0; 
+                    let wonThisRound = playerScores[i] || 0;
                     let currentBank = "";
                     
                     if (isQuickRandomMode) {
                         currentBank = "حالت مهمان";
                     } else {
-                        let baseBank = (pId === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`pmarbles_${pId}`)) || 0);
-                        let newBankValue = baseBank + wonThisRound;
+                        let oldBank = (pId === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`pmarbles_${pId}`)) || 0);
+                        let newBankValue = oldBank + wonThisRound;
                         
                         if (pId === currentNationalId) {
                             totalMarblesOwned = newBankValue;
@@ -834,14 +756,11 @@
                         currentBank = newBankValue + " تیله";
                     }
 
-                    let netResult = wonThisRound - selectedCountVal;
-                    let resultText = netResult >= 0 ? ` (+${netResult} سود)` : ` (${netResult} زیان)`;
-
                     let row = document.createElement("tr");
                     row.style.borderBottom = "1px solid rgba(255,255,255,0.05)";
                     row.innerHTML = `
                         <td style="padding: 12px 8px; font-weight: bold; color: #fff;">${pName}</td>
-                        <td style="padding: 12px 8px; color: #00b0ff; font-weight: bold;">${wonThisRound} تیله ${resultText}</td>
+                        <td style="padding: 12px 8px; color: #00b0ff; font-weight: bold;">${wonThisRound} تیله</td>
                         <td style="padding: 12px 8px; color: #00e676; font-weight: bold;">${currentBank}</td>
                     `;
                     tableBody.appendChild(row);
@@ -849,13 +768,9 @@
             }
             updateWalletUI();
             document.getElementById("scoreboardScreen").style.display = "flex"; 
-            showGameToast("🎉 کارنامه مالی با احتساب سود و زیان کاشت وسط صادر شد!");
+            showGameToast("🎉 نتایج ثبت و کارنامه دائمی صادر شد!");
         }
-        function restartGameFromScoreboard() { 
-            document.getElementById("scoreboardScreen").style.display = "none"; 
-            playerScores = Array(selectedPlayerCount).fill(0); 
-            preloadAssetsAndLaunch(); 
-        }
+        function restartGameFromScoreboard() { document.getElementById("scoreboardScreen").style.display = "none"; launchGameDirectly(); }
         function exitToMainMenu() { document.getElementById("scoreboardScreen").style.display = "none"; handleFinalExit(); }
         
         function preloadAssetsAndLaunch() { 
@@ -868,22 +783,8 @@
 
         // 🏁 تابع راه‌اندازی موتور شبیه‌ساز و کاشت دقیق تیله دست در وسط پایین صفحه
         function runGameInitialization() { 
-            singlePlayerMissCount = 0; 
             if (gameLoopRunning) { resizeCanvas(); loadLevel(1); return; } 
-            if (setupMenu) setupMenu.style.display = "none"; canvas.style.display = "block"; 
-            if (gameHeader) { gameHeader.style.display = "flex"; gameHeader.style.flexDirection = "column"; }
-            
-            // 👤 روشن شدن نشانگر نوبت فقط و فقط در مسابقات چندنفره رسمی (حذف در حالت تک‌نفره و مهمان) [INDEX]
-            const turnBadge = document.getElementById("mobileTurnBadge");
-            if (turnBadge) {
-                if (selectedPlayerCount > 1 && !isQuickRandomMode) {
-                    turnBadge.style.display = "block";
-                } else {
-                    turnBadge.style.display = "none"; 
-                }
-            }
-            
-            if(gearBtn) gearBtn.style.display = "none"; 
+            if (setupMenu) setupMenu.style.display = "none"; canvas.style.display = "block"; gameHeader.style.display = "flex"; gearBtn.style.display = "none"; 
             currentPlayerIndex = 0; playerScores = Array(selectedPlayerCount).fill(0); 
             resizeCanvas(); 
             
@@ -903,19 +804,38 @@
             const countSelect = document.getElementById("marbleCountSelect");
             if (countSelect) { selectedCountVal = parseInt(countSelect.value) || 5; }
             
+            // 🚪 بستن فوری کشو و لایه تاریک برای جلوگیری از تداخل و افتادن منوها روی یکدیگر
             const actDrawer = document.getElementById("settingsDrawer");
             const actOverlay = document.getElementById("overlay");
             if (actDrawer) actDrawer.classList.remove("open");
             if (actOverlay) actOverlay.style.display = "none";
             
+            // 🔒 حفظ و همگام‌سازی نهایی اسامی بازیکنان تایپ‌شده درون حافظه موقت بازی قبل از لود شدن بوم
             let currentValidName = currentUsername || localStorage.getItem("currentUsername") || "حسن";
-            if (playerNames.length === 0 || playerNames === "بازیکن ۱") {
+            if (playerNames.length === 0 || playerNames[0] === "بازیکن ۱") {
                 playerNames = [currentValidName];
                 for (let i = 1; i < selectedPlayerCount; i++) {
                     let val = document.getElementById(`subId_${i}_name`)?.value.trim();
                     playerNames.push(val ? val : `بازیکن ${i + 1}`);
                 }
             }
+            
+            if (isQuickRandomMode) { preloadAssetsAndLaunch(); return; } 
+            for (let i = 0; i < selectedPlayerCount; i++) { 
+                let id = playerNationalIds[i] || ""; 
+                let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`pmarbles_${id}`)) || 0); 
+                if (pMarbles < selectedCountVal) { 
+                    showCustomPopup(`❌ موجودی تیله بازیکن ${playerNames[i]} کافی نیست! حداقل ${selectedCountVal} تیله نیاز است.`, `🏪`, `متوجه شدم`, true); 
+                    return; 
+                } 
+                if (id === currentNationalId) { 
+                    totalMarblesOwned -= selectedCountVal; 
+                    localStorage.setItem(`pmarbles_${id}`, totalMarblesOwned); 
+                    localStorage.setItem("totalMarblesOwned", totalMarblesOwned); 
+                } else if (id !== "") { 
+                    localStorage.setItem(`pmarbles_${id}`, pMarbles - selectedCountVal); 
+                } 
+            } 
             preloadAssetsAndLaunch(); 
         }
         function handlePlayerCountChange(val) {
@@ -948,6 +868,7 @@
                 else { 
                     currentWheelAngle = targetAngle % (Math.PI * 2); isWheelSpinning = false; 
                     let sliceAngle = (Math.PI * 2) / selectedPlayerCount; 
+                    // 🎯 فرمول ریاضی تراز شدن نوک عقربه با قاچ برنده مسابقه
                     let normalized = (Math.PI * 2 - (currentWheelAngle % (Math.PI * 2))) % (Math.PI * 2); 
                     let luckyIndex = Math.floor(normalized / sliceAngle) % selectedPlayerCount; 
                     
@@ -1008,7 +929,7 @@
             if (idVal.length === 4 && nameVal !== "") {
                 let savedName = localStorage.getItem(`pname_${idVal}`);
                 if (savedName === null) {
-                    // 🎉 ثبت‌نام درجا و شارژ هدیه بدون نیاز به دکمه اضافی
+                    // 🎉 ثبت‌نام درجا و شارژ هدیه بدون دکمه اضافی
                     localStorage.setItem(`pname_${idVal}`, nameVal);
                     localStorage.setItem(`pmarbles_${idVal}`, "10");
                     localStorage.setItem(`pbirth_${idVal}`, "1405");
@@ -1055,7 +976,7 @@
                 } 
             }); 
         }
-        // 🔐 تابع نجات ورود ۱۰۰٪ مستقل و خودکار به محض تایپ رقم چهارم رمز عبور [INDEX]
+        // 🔐 تابع نجات ورود ۱۰۰٪ مستقل و خودکار به محض تایپ رقم چهارم بدون نیاز به توابع دیگر
         function autoCheckLoginAndEnter(passwordValue) {
             let uPass = passwordValue.trim();
             const registerBtn = document.getElementById("navRegisterBtn");
@@ -1089,34 +1010,10 @@
             }
         }
 
-        // 💰 کسر هزینه شرط‌بندی کاشت وسط استادیوم فقط در لحظه شلیک واقعی پرتاب اول [INDEX]
-        function deductMarblesOnFirstShot() {
-            if (isQuickRandomMode) return true;
-            for (let i = 0; i < selectedPlayerCount; i++) {
-                let id = playerNationalIds[i] || ""; 
-                let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`pmarbles_${id}`)) || 0); 
-                if (pMarbles < selectedCountVal) { 
-                    showCustomPopup(`❌ موجودی تیله بازیکن ${playerNames[i]} کافی نیست!`, `🏪`, `برگشت به منو`, true, function() { handleFinalExit(); });
-                    return false; 
-                } 
-            }
-            for (let i = 0; i < selectedPlayerCount; i++) {
-                let id = playerNationalIds[i] || ""; 
-                let pMarbles = (id === currentNationalId) ? totalMarblesOwned : (parseInt(localStorage.getItem(`pmarbles_${id}`)) || 0); 
-                if (id === currentNationalId) { 
-                    totalMarblesOwned -= selectedCountVal; 
-                    localStorage.setItem(`pmarbles_${id}`, totalMarblesOwned); 
-                    localStorage.setItem("totalMarblesOwned", totalMarblesOwned); 
-                } else if (id !== "") { localStorage.setItem(`pmarbles_${id}`, pMarbles - selectedCountVal); } 
-            }
-            updateWalletUI(); return true;
-        }
-        // 🚀 رویدادهای زنده و پیشرفته لمسی جهت باز کردن قطعی قفل پرتاب روی گوشی‌های موبایل [INDEX]
+        // 🚀 جایگزینی رویدادهای زنده لمسی جهت باز کردن قفل پرتاب و شلیک کمانی روی گوشی‌های موبایل
         canvas.addEventListener("touchstart", (e) => { 
             if (isMoving || player.inAir || !gameLoopRunning) return; 
-            e.preventDefault(); 
-            // 🔒 اصلاح طلایی: گرفتن اولین لایه لمس انگشت از آرایه جهت پیشگیری از قفل فیزیک بازی [INDEX]
-            if (!e.touches || e.touches.length === 0) return;
+            e.preventDefault(); // پیشگیری از زوم و پرش صفحه مرورگر هنگام درگ انگشت
             let touch = e.touches[0];
             let pos = getEventPos(touch); 
             let dx = pos.x - player.x, dy = pos.y - player.y; 
@@ -1124,192 +1021,95 @@
         }, { passive: false });
 
         canvas.addEventListener("touchmove", (e) => { 
-            if (isAiming) { 
-                e.preventDefault(); 
-                if (!e.touches || e.touches.length === 0) return;
+            if (isAiming) {
+                e.preventDefault();
                 let touch = e.touches[0];
                 dragEnd = getEventPos(touch); 
-            } 
+            }
         }, { passive: false });
 
         canvas.addEventListener("touchend", (e) => { 
             if (!isAiming) return; isAiming = false; e.preventDefault();
-            let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; let dragDist = Math.sqrt(dx * dx + dy * dy); 
+            let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; 
+            let dragDist = Math.sqrt(dx * dx + dy * dy); 
             if (dragDist > 10) { 
-                if (isFirstShotOfTurn && playerScores.reduce((a, b) => a + b, 0) === 0) { if (!deductMarblesOnFirstShot()) return; }
+                try { playLaunchSound(); } catch(err){} 
+                player.startX = player.x; player.startY = player.y; 
+                player.vx = dx * 0.12; player.vy = dy * 0.12; 
+                player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; 
+                player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0; 
+                player.inAir = true; isMoving = true; isFirstShotOfTurn = false; 
+            } else { isMoving = false; player.inAir = false; } 
+        }, { passive: false });
+
+        // 💻 حفظ پشتیبانی از موس در کامپیوتر بدون تداخل با تاچ موبایل
+        canvas.addEventListener("mousedown", (e) => { 
+            if (isMoving || player.inAir || !gameLoopRunning) return; 
+            let pos = getEventPos(e); let dx = pos.x - player.x, dy = pos.y - player.y; 
+            if (Math.sqrt(dx * dx + dy * dy) < player.r * 2) { isAiming = true; dragStart = pos; dragEnd = pos; } 
+        });
+        canvas.addEventListener("mousemove", (e) => { if (isAiming) dragEnd = getEventPos(e); });
+        canvas.addEventListener("mouseup", (e) => { 
+            if (!isAiming) return; isAiming = false; 
+            let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; 
+            let dragDist = Math.sqrt(dx * dx + dy * dy); 
+            if (dragDist > 10) { 
                 try { playLaunchSound(); } catch(err){} 
                 player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12; 
                 player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0; 
                 player.inAir = true; isMoving = true; isFirstShotOfTurn = false; 
             } else { isMoving = false; player.inAir = false; } 
-        }, { passive: false });
-        // 💻 پشتیبانی کاملاً تراز شده از موس در کامپیوتر بدون تداخل با موبایل
-        canvas.addEventListener("mousedown", (e) => { if (isMoving || player.inAir || !gameLoopRunning) return; let pos = getEventPos(e); let dx = pos.x - player.x, dy = pos.y - player.y; if (Math.sqrt(dx * dx + dy * dy) < player.r * 2) { isAiming = true; dragStart = pos; dragEnd = pos; } });
-        canvas.addEventListener("mousemove", (e) => { if (isAiming) dragEnd = getEventPos(e); });
-        canvas.addEventListener("mouseup", (e) => { if (!isAiming) return; isAiming = false; let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y; let dragDist = Math.sqrt(dx * dx + dy * dy); if (dragDist > 10) { if (isFirstShotOfTurn && playerScores.reduce((a, b) => a + b, 0) === 0) { if (!deductMarblesOnFirstShot()) return; } try { playLaunchSound(); } catch(err){} player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12; player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0; player.inAir = true; isMoving = true; isFirstShotOfTurn = false; } else { isMoving = false; player.inAir = false; } });
+        });
+
         window.addEventListener("resize", () => { if (gameLoopRunning) resizeCanvas(); });
-        
+
         function handleFinalExit() { 
             stopAmbientSound(); if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none"; 
-            if (document.getElementById("scoreboardScreen")) document.getElementById("scoreboardScreen").style.display = "none"; 
-            document.getElementById("mobileTurnBadge").style.display = "none"; 
-            if (isQuickRandomMode) { 
-                if(setupMenu) setupMenu.style.display = "none"; 
+            if (document.getElementById("scoreboardScreen")) document.getElementById("scoreboardScreen").style.display = "none";
+            if (isQuickRandomMode) {
+                if(setupMenu) setupMenu.style.display = "none";
                 document.getElementById("loginScreen").style.display = "flex"; 
                 if(document.getElementById("loginGearBtn")) document.getElementById("loginGearBtn").style.display = "flex"; 
-            } else { 
-                if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex"; 
-            } 
-            gameLoopRunning = false; updateWalletUI(); 
+            } else {
+                if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex";
+            }
+            gameLoopRunning = false; updateWalletUI();
         }
-        
-        function openCentralStadiumShop() { try { initAudio(); } catch(e){} showCustomPopup("به بازار مرکزی استادیوم خوش آمدید! کاتالوگ پوسته‌های لاکچری تیله‌ها و لایسنس میدان‌ها به زودی در این بخش فعال خواهد شد.", "🏪", "بازگشت به میدان", false); }
 
-        // 🏆 اصلاح طلایی: اتصال درجا و ۱۰۰٪ مستقل رویداد کلیک‌ها به دکمه‌های بدنه بدون تداخل
-        function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
+        // 🔌 خط نهایی شنود رویدادها و فعال‌سازی دکمه‌های ناوبری اصلی استادیوم و نجات گیت‌هاب
         window.addEventListener("DOMContentLoaded", () => {
             const actStartBtn = document.getElementById("startBtn"); const actGearBtn = document.getElementById("gearBtn"); const actDrawer = document.getElementById("settingsDrawer"); const actOverlay = document.getElementById("overlay"); const actCloseDrawer = document.getElementById("closeDrawer");
             const manualLogin = document.getElementById("manualLoginBtn"); const guestBtn = document.getElementById("quickStartBtn");
-            const loginBtn = document.getElementById("loginGearBtn"); const loginDrawer = document.getElementById("loginMenuDrawer"); const loginOverlay = document.getElementById("loginOverlay");
-
-            if (loginBtn) { loginBtn.onclick = function() { document.getElementById("loginMenuDrawer").classList.add("open"); document.getElementById("loginOverlay").style.display = "block"; }; }
-            if (manualLogin) { manualLogin.onclick = function() { processSmartAuth('login'); }; }
-            if (guestBtn) { guestBtn.onclick = function() { isQuickRandomMode = true; document.getElementById("loginScreen").style.display = "none"; document.getElementById("loginGearBtn").style.display = "none"; if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex"; const groundKeys = Object.keys(grounds); selectedGroundVal = groundKeys[Math.floor(Math.random() * groundKeys.length)]; currentGround = grounds[selectedGroundVal]; selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)]; windX = selectedWeather === 'windy' ? 0.08 : (selectedWeather === 'rainy' ? 0.03 : 0); windY = selectedWeather === 'windy' ? 0.02 : (selectedWeather === 'rainy' ? 0.05 : 0); selectedCountVal = 5; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن مهمان"]; playerNationalIds = [""]; playerScores = []; updateWalletUI(); }; }
-            if (actStartBtn) { actStartBtn.onclick = function() { try { initAudio(); } catch(e){} launchGameDirectly(); }; }
-            if (actGearBtn) { actGearBtn.onclick = function() { actDrawer.classList.add("open"); actOverlay.style.display = "block"; generateMenuPreviews(); }; }
-            if (actCloseDrawer) { actCloseDrawer.onclick = function() { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; isQuickRandomMode = false; launchGameDirectly(); }; }
-            if (actOverlay) { actOverlay.onclick = function() { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; document.getElementById("loginMenuDrawer").classList.remove("open"); document.getElementById("loginOverlay").style.display = "none"; }; }
-            
+            if(manualLogin) { manualLogin.addEventListener("click", () => { processSmartAuth('login'); }); }
+            if(guestBtn) {
+                guestBtn.addEventListener("click", () => {
+                    isQuickRandomMode = true; isReturningToMenu = false;
+                    document.getElementById("loginScreen").style.display = "none"; document.getElementById("loginGearBtn").style.display = "none";
+                    if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex";
+                    const groundKeys = Object.keys(grounds); selectedGroundVal = groundKeys[Math.floor(Math.random() * groundKeys.length)];
+                    currentGround = grounds[selectedGroundVal]; selectedWeather = ["sunny", "windy", "rainy", "snowy"][Math.floor(Math.random() * 4)];
+                    windX = selectedWeather === 'windy' ? 0.08 : (selectedWeather === 'rainy' ? 0.03 : 0); windY = selectedWeather === 'windy' ? 0.02 : (selectedWeather === 'rainy' ? 0.05 : 0);
+                    selectedCountVal = 5; selectedPlayerCount = 1; currentPlayerIndex = 0; playerNames = ["بازیکن مهمان"]; playerNationalIds = [""]; playerScores = []; updateWalletUI();
+                });
+            }
+            if (actStartBtn) { actStartBtn.addEventListener("click", () => { try { initAudio(); } catch(e){} isReturningToMenu = false; launchGameDirectly(); }); }
+            if (actGearBtn && actDrawer && actOverlay) { actGearBtn.addEventListener("click", () => { try { initAudio(); } catch(e){} actDrawer.classList.add("open"); actOverlay.style.display = "block"; generateMenuPreviews(); }); }
+            if (actCloseDrawer && actDrawer && actOverlay) { actCloseDrawer.addEventListener("click", () => { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; isQuickRandomMode = false; launchGameDirectly(); }); }
+            if (actOverlay && actDrawer) { actOverlay.addEventListener("click", () => { actDrawer.classList.remove("open"); actOverlay.style.display = "none"; }); }
             document.getElementById("groundGrid")?.addEventListener("click", (e) => { let item = e.target.closest(".scroll-item"); if (item) { document.querySelectorAll("#groundGrid .scroll-item").forEach(el => el.classList.remove("active")); item.classList.add("active"); selectedGroundVal = item.getAttribute("data-val"); currentGround = grounds[selectedGroundVal]; } });
             document.getElementById("weatherGrid")?.addEventListener("click", (e) => { let item = e.target.closest(".count-button-item"); if (item) { document.querySelectorAll("#weatherGrid .count-button-item").forEach(el => el.classList.remove("active")); item.classList.add("active"); selectedWeather = item.getAttribute("data-val"); if (typeof playWeatherPreviewSound === 'function') playWeatherPreviewSound(selectedWeather); } });
-            document.getElementById("backToMenuBtn")?.addEventListener("click", () => { isReturningToMenu = true; gameLoopRunning = false; if (typeof stopAmbientSound === "function") stopAmbientSound(); if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none"; if(setupMenu) setupMenu.style.display = "flex"; if(document.getElementById("gearBtn")) document.getElementById("gearBtn").style.display = "flex"; if (document.getElementById("mobileTurnBadge")) document.getElementById("mobileTurnBadge").style.display = "none"; updateWalletUI(); });
+            document.getElementById("backToMenuBtn")?.addEventListener("click", () => { isReturningToMenu = true; gameLoopRunning = false; if (typeof stopAmbientSound === "function") stopAmbientSound(); if(canvas) canvas.style.display = "none"; if(gameHeader) gameHeader.style.display = "none"; if(setupMenu) setupMenu.style.display = "flex"; if(document.getElementById("gearBtn")) document.getElementById("gearBtn").style.display = "flex"; updateWalletUI(); });
             document.getElementById("exitBtn")?.addEventListener("click", () => { handleFinalExit(); });
-            
             updateNameInputs(1); generateMenuPreviews(); updateWalletUI();
         });
-        if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").then(reg => console.log("✅ SW active")).catch(err => {}); }); }
-    // ⚡ پارت نهایی اصلاحی: همگام‌سازی اجباری و شکستن قفل دکمه همبرگری و لاگین
-function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
-window.addEventListener("load", function() {
-    // ⚙️ باز کردن قطعی منوی همبرگری پشتیبان اول بازی
-    let btnLoginGear = document.getElementById("loginGearBtn");
-    if (btnLoginGear) {
-        btnLoginGear.onclick = function() {
-            document.getElementById("loginMenuDrawer").classList.add("open");
-            document.getElementById("loginOverlay").style.display = "block";
-        };
-    }
-    // ⚙️ باز کردن منوی تنظیمات همبرگری بعد از ورود به حساب
-    let btnMainGear = document.getElementById("gearBtn");
-    if (btnMainGear) {
-        btnMainGear.onclick = function() {
-            document.getElementById("settingsDrawer").classList.add("open");
-            document.getElementById("overlay").style.display = "block";
-            if (typeof generateMenuPreviews === "function") generateMenuPreviews();
-        };
-    }
-    // 🔐 فعال‌سازی دکمه‌های ورود، ثبت‌نام و شروع بازی مهمان
-    let subLogin = document.getElementById("manualLoginBtn");
-    if (subLogin) { subLogin.onclick = function() { processSmartAuth('login'); }; }
-    let subReg = document.getElementById("authSubmitBtn");
-    if (subReg) { subReg.onclick = function() { processSmartAuth(authMode); }; }
-    let guestBtn = document.getElementById("quickStartBtn");
-    if (guestBtn) {
-        guestBtn.onclick = function() {
-            isQuickRandomMode = true; document.getElementById("loginScreen").style.display = "none";
-            if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex";
-            selectedGroundVal = "grass"; currentGround = grounds.grass; selectedPlayerCount = 1; playerNames = ["مهمان"]; updateWalletUI();
-        };
-    }
-    let btnCloseDrw = document.getElementById("closeDrawer");
-    if (btnCloseDrw) { btnCloseDrw.onclick = function() { launchGameDirectly(); }; }
-});
-// 🔥 پارت فوق جادویی: اصلاح موقعیت لایه‌ها و اوربیت کردن منوها روی عکس پس‌زمینه
-window.addEventListener("load", function() {
-    // اصلاح درجا و اجباری اولویت نمایش (z-index) منوهای کشویی در کل مرورگرها
-    let drawer1 = document.getElementById("loginMenuDrawer");
-    let drawer2 = document.getElementById("settingsDrawer");
-    let overlay1 = document.getElementById("loginOverlay");
-    let overlay2 = document.getElementById("overlay");
-    
-    if (drawer1) { drawer1.style.zIndex = "99999"; drawer1.style.position = "fixed"; }
-    if (drawer2) { drawer2.style.zIndex = "99999"; drawer2.style.position = "fixed"; }
-    if (overlay1) { overlay1.style.zIndex = "99998"; }
-    if (overlay2) { overlay2.style.zIndex = "99998"; }
-
-    // باز کردن مستقیم و مستقل دکمه همبرگری اول بازی بدون تداخل با لایه‌های مات
-    let btnLoginGear = document.getElementById("loginGearBtn");
-    if (btnLoginGear) {
-        btnLoginGear.onclick = function() {
-            if (drawer1) drawer1.classList.add("open");
-            if (overlay1) overlay1.style.display = "block";
-        };
-    }
-    // باز کردن دکمه شروع سریع مهمان
-    let guestBtn = document.getElementById("quickStartBtn");
-    if (guestBtn) {
-        guestBtn.onclick = function() {
-            document.getElementById("loginScreen").style.display = "none";
-            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
-            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; updateWalletUI();
-        };
-    }
-});
-// 🏆 شاه‌کلید نهایی: فعال‌سازی تمام قابلیت‌های فیزیک، لاگین و همبرگری استادیوم
-function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
-window.addEventListener("load", function() {
-    // زنده کردن مستقیم دکمه همبرگری اول بازی و رفع باگ تار شدن لایه‌ها
-    let lBtn = document.getElementById("loginGearBtn"), lDrw = document.getElementById("loginMenuDrawer"), lOvl = document.getElementById("loginOverlay");
-    if (lBtn) { lBtn.onclick = function() { if(lOvl) lOvl.style.display="block"; if(lDrw) { lDrw.style.opacity="1"; lDrw.style.pointerEvents="auto"; lDrw.style.transform="translate(-50%,-50%) scale(1)"; } }; }
-    
-    // فعال‌سازی منوی همبرگری بعد از لاگین بازیکن
-    let mBtn = document.getElementById("gearBtn"), mDrw = document.getElementById("settingsDrawer"), mOvl = document.getElementById("overlay");
-    if (mBtn) { mBtn.onclick = function() { if(mOvl) mOvl.style.display="block"; if(mDrw) { mDrw.classList.add("open"); if(typeof generateMenuPreviews === "function") generateMenuPreviews(); } }; }
-
-    // اتصال مستقیم دکمه‌های ورود، ثبت‌نام و شروع بازی با حفظ تمام ویژگی‌های فیزیک
-    let subL = document.getElementById("manualLoginBtn"); if (subL) { subL.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth('login'); }; }
-    let subR = document.getElementById("authSubmitBtn"); if (subR) { subR.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth(authMode); }; }
-    let clsD = document.getElementById("closeDrawer"); if (clsD) { clsD.onclick = function() { if(typeof launchGameDirectly === "function") launchGameDirectly(); }; }
-    
-    // فعال‌سازی ورود مهمان (شروع سریع) با اتمسفر کامل
-    let gstB = document.getElementById("quickStartBtn");
-    if (gstB) {
-        gstB.onclick = function() {
-            document.getElementById("loginScreen").style.display = "none";
-            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
-            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; if(typeof updateWalletUI === "function") updateWalletUI();
-        };
-    }
-    if(typeof updateNameInputs === "function") updateNameInputs(1);
-    if(typeof generateMenuPreviews === "function") generateMenuPreviews();
-    if(typeof updateWalletUI === "function") updateWalletUI();
-});
-// ⚡ پارت نهایی اصلاحی: بازنویسی اورژانسی و شکستن قطعی قفل تمام دکمه‌های استادیوم
-function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
-window.addEventListener("load", function() {
-    // 📐 اصلاح درجا و اجباری فرمول محاسبات تاچ موبایل و مَوس کامپیوتر
-    window.getEventPos = function(e) {
-        let r = canvas.getBoundingClientRect();
-        let touch = (e.touches && e.touches[0]) ? e.touches[0] : (e.changedTouches ? e.changedTouches[0] : e);
-        return { x: (touch.clientX - r.left) * (canvas.width / r.width), y: (touch.clientY - r.top) * (canvas.height / r.height) };
-    };
-    // ☰ فعال‌سازی مستقیم منوی همبرگری اول بازی و رفع باگ تار ماندن لایه صفحه
-    let lBtn = document.getElementById("loginGearBtn"), lDrw = document.getElementById("loginMenuDrawer"), lOvl = document.getElementById("loginOverlay");
-    if (lBtn) { lBtn.onclick = function() { if(lOvl) lOvl.style.display="block"; if(lDrw) { lDrw.style.opacity="1"; lDrw.style.pointerEvents="auto"; lDrw.style.transform="translate(-50%,-50%) scale(1)"; } }; }
-    
-    // 🔐 فعال‌سازی دکمه‌های ورود، ثبت‌نام و شروع سریع مهمان بدون فریز شدن در لایه‌ها
-    let subL = document.getElementById("manualLoginBtn"); if (subL) { subL.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth('login'); }; }
-    let subR = document.getElementById("authSubmitBtn"); if (subR) { subR.onclick = function() { if(typeof processSmartAuth === "function") processSmartAuth(authMode); }; }
-    let clsD = document.getElementById("closeDrawer"); if (clsD) { clsD.onclick = function() { if(typeof launchGameDirectly === "function") launchGameDirectly(); }; }
-    let gstB = document.getElementById("quickStartBtn");
-    if (gstB) {
-        gstB.onclick = function() {
-            document.getElementById("loginScreen").style.display = "none";
-            if (document.getElementById("setupMenu")) document.getElementById("setupMenu").style.display = "flex";
-            isQuickRandomMode = true; selectedPlayerCount = 1; playerNames = ["مهمان"]; if(typeof updateWalletUI === "function") updateWalletUI();
-        };
-    }
-});
+		// 📱 ریجستر کردن رسمی سرویس ورکر برای باز کردن قفل نصب مستقیم روی صفحه اصلی گوشی
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js")
+            .then(reg => console.log("✅ سرویس‌ورکر استادیوم فعال شد:", reg.scope))
+            .catch(err => console.log("❌ خطا در ثبت سرویس‌ورکر:", err));
+    });
+}
 
     </script>
 </body>
