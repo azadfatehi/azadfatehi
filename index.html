@@ -962,20 +962,32 @@
             } else { if (wheelSection) wheelSection.style.display = "none"; }
         }
 
-        function generateMenuPreviews() { 
-            const items = ["grass", "carpet", "asphalt", "cement", "dirt"]; 
-            items.forEach(val => { 
-                const pCanvas = document.getElementById(`pre_${val}`); 
-                if (pCanvas) { 
-                    const pCtx = pCanvas.getContext("2d"); pCanvas.width = 70; pCanvas.height = 70; 
-                    pCtx.fillStyle = grounds[val].fallbackColor || "#333"; pCtx.fillRect(0, 0, pCanvas.width, pCanvas.height); 
-                    pCtx.fillStyle = "rgba(255, 255, 255, 0.05)"; 
-                    for (let i = 0; i < 25; i++) { pCtx.fillRect(Math.random() * 70, Math.random() * 70, Math.random() * 5 + 1, Math.random() * 5 + 1); } 
-                    pCtx.fillStyle = "rgba(255,255,255,0.75)"; pCtx.font = "bold 9px sans-serif"; pCtx.textAlign = "center"; 
-                    pCtx.fillText(val.toUpperCase(), 35, 60); 
-                } 
-            }); 
-        }
+function generateMenuPreviews() { 
+    const items = ["grass", "carpet", "asphalt", "cement", "dirt"]; 
+    items.forEach(val => { 
+        const pCanvas = document.getElementById(`pre_${val}`); 
+        if (pCanvas) { 
+            const pCtx = pCanvas.getContext("2d"); 
+            pCanvas.width = 70; pCanvas.height = 70; 
+            pCtx.clearRect(0, 0, 70, 70);
+            
+            // 🖼️ لود مستقیم تصاویر اصلی زمین‌ها به جای رنگ‌های طوسی و قرمز قدیمی
+            let img = new Image();
+            img.src = grounds[val].src || `${val}.jpg`;
+            img.onload = function() {
+                pCtx.drawImage(img, 0, 0, 70, 70);
+                pCtx.fillStyle = "rgba(255,255,255,0.75)"; pCtx.font = "bold 9px sans-serif"; 
+                pCtx.textAlign = "center"; pCtx.fillText(val.toUpperCase(), 35, 60);
+            };
+            img.onerror = function() {
+                // رنگ پشتیبان در صورت عدم دسترسی آنی به تصویر
+                pCtx.fillStyle = grounds[val].fallbackColor || "#333"; pCtx.fillRect(0, 0, 70, 70);
+                pCtx.fillStyle = "rgba(255,255,255,0.75)"; pCtx.font = "bold 9px sans-serif"; 
+                pCtx.textAlign = "center"; pCtx.fillText(val.toUpperCase(), 35, 60);
+            };
+        } 
+    }); 
+}
         // 🔐 تابع نجات ورود ۱۰۰٪ مستقل و خودکار به محض تایپ رقم چهارم بدون نیاز به توابع دیگر
         function autoCheckLoginAndEnter(passwordValue) {
             let uPass = passwordValue.trim();
