@@ -1188,6 +1188,43 @@
             updateNameInputs(1); generateMenuPreviews(); updateWalletUI();
         });
         if ("serviceWorker" in navigator) { window.addEventListener("load", () => { navigator.serviceWorker.register("./sw.js").then(reg => console.log("✅ SW active")).catch(err => {}); }); }
+    // ⚡ پارت نهایی اصلاحی: همگام‌سازی اجباری و شکستن قفل دکمه همبرگری و لاگین
+function autoCheckLoginAndEnter(val) { checkUserExistenceAuto(val); }
+window.addEventListener("load", function() {
+    // ⚙️ باز کردن قطعی منوی همبرگری پشتیبان اول بازی
+    let btnLoginGear = document.getElementById("loginGearBtn");
+    if (btnLoginGear) {
+        btnLoginGear.onclick = function() {
+            document.getElementById("loginMenuDrawer").classList.add("open");
+            document.getElementById("loginOverlay").style.display = "block";
+        };
+    }
+    // ⚙️ باز کردن منوی تنظیمات همبرگری بعد از ورود به حساب
+    let btnMainGear = document.getElementById("gearBtn");
+    if (btnMainGear) {
+        btnMainGear.onclick = function() {
+            document.getElementById("settingsDrawer").classList.add("open");
+            document.getElementById("overlay").style.display = "block";
+            if (typeof generateMenuPreviews === "function") generateMenuPreviews();
+        };
+    }
+    // 🔐 فعال‌سازی دکمه‌های ورود، ثبت‌نام و شروع بازی مهمان
+    let subLogin = document.getElementById("manualLoginBtn");
+    if (subLogin) { subLogin.onclick = function() { processSmartAuth('login'); }; }
+    let subReg = document.getElementById("authSubmitBtn");
+    if (subReg) { subReg.onclick = function() { processSmartAuth(authMode); }; }
+    let guestBtn = document.getElementById("quickStartBtn");
+    if (guestBtn) {
+        guestBtn.onclick = function() {
+            isQuickRandomMode = true; document.getElementById("loginScreen").style.display = "none";
+            if(setupMenu) setupMenu.style.display = "flex"; if(gearBtn) gearBtn.style.display = "flex";
+            selectedGroundVal = "grass"; currentGround = grounds.grass; selectedPlayerCount = 1; playerNames = ["مهمان"]; updateWalletUI();
+        };
+    }
+    let btnCloseDrw = document.getElementById("closeDrawer");
+    if (btnCloseDrw) { btnCloseDrw.onclick = function() { launchGameDirectly(); }; }
+});
+
     </script>
 </body>
 </html>
