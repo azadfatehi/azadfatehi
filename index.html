@@ -1291,6 +1291,16 @@ window.addEventListener("load", function() {
         };
     }
 });
+		// 🔇 خفه‌کردن قطعی صدای شلیک قدیمی بالادست جهت حذف نویز و صدای اضافه پرتاب
+window.addEventListener("load", function() {
+    // بازنویسی تابع قدیمی به یک تابع خالی بدون خروجی صوتی
+    if (typeof window.playLaunchSound === "function" || typeof playLaunchSound === "function") {
+        window.playLaunchSound = function() { 
+            // ❌ این تابع قدیمی کاملاً بی‌صدا شد تا با صداهای جدید تداخل نکند
+        };
+    }
+});
+
     </script>
 </body>
 </html>
