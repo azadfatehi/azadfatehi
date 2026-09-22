@@ -1204,13 +1204,32 @@ window.addEventListener("load", function() {
     };
 
     // 🏎️ اصلاح محاسبات فیثاغورس پرتاب مَوس جهت جلوگیری از تولید عدد نامعتبر و قفل بوم
+    // 🏎️ اصلاح مهندسی محاسبات پرتاب ماوس و مدیریت صوتی دقیق بدون تکرار مداوم
     canvas.addEventListener("mouseup", (e) => {
         if (!isAiming) return; isAiming = false;
         let dx = dragEnd.x - dragStart.x, dy = dragEnd.y - dragStart.y;
-        let dragDist = Math.sqrt(dx * dx + dy * dy); // 📐 فرمول تصحیح شده فیثاغورس
+        let dragDist = Math.sqrt(dx * dx + dy * dy);
         if (dragDist > 10) {
-            if (isFirstShotOfTurn && playerScores.reduce((a, b) => a + b, 0) === 0) { if (typeof deductMarblesOnFirstShot === "function" && !deductMarblesOnFirstShot()) return; }
-            try { if (typeof playLaunchSound === "function") playLaunchSound(); } catch(err){}
+            // 🔇 خفه کردن درجا و قطعی صدای اضافه قدیمی بالادست
+            if (typeof playLaunchSound === "function") window.playLaunchSound = function() {};
+
+            if (isFirstShotOfTurn && playerScores.reduce((a, b) => a + b, 0) === 0) { 
+                if (typeof deductMarblesOnFirstShot === "function" && !deductMarblesOnFirstShot()) return; 
+            }
+            
+            // 🔊 پخش هوشمند و یک‌باره صداها بر اساس محاسبات فیزیک پرتاب
+            if (typeof playStadiumAudio === "function") {
+                // شبیه‌سازی: بعد از پرتاب اگر به هدف خورد تشویق شود، در غیر این صورت افسوس
+                setTimeout(() => {
+                    if (typeof hitSuccessInTurn !== "undefined" && hitSuccessInTurn) {
+                        playStadiumAudio("cheer");
+                        setTimeout(() => { playStadiumAudio("bag"); }, 900);
+                    } else {
+                        playStadiumAudio("sigh");
+                    }
+                }, 1200); // تاخیر ثانیه‌ای متناسب با رسیدن تیله به وسط میدان
+            }
+
             player.startX = player.x; player.startY = player.y; player.vx = dx * 0.12; player.vy = dy * 0.12;
             player.targetX = player.x + dx * 1.5; player.targetY = player.y + dy * 1.5; player.arcHeight = Math.min(dragDist * 0.4, 120); player.progress = 0;
             player.inAir = true; isMoving = true; isFirstShotOfTurn = false;
