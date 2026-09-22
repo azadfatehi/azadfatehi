@@ -1248,52 +1248,49 @@ window.addEventListener("load", function() {
         };
     }
 });
-// 🔊 بسته صوتی هوشمند: پخش صدای کیسه جوایز، تشویق و افسوس تماشاگران استادیوم
+// 🔊 بسته صوتی هوشمند اصلاح‌شده: پخش فقط یک‌باره صداها و مهار باگ تکرار مداوم تشویق‌ها
 window.addEventListener("load", function() {
-    // ۱. تابع کمکی تولید یا پخش صداهای استاندارد سیستم جهت جلوگیری از کرش مرورگر
+    let isCheerPlayed = false; // 🔒 کلید ایمنی جهت قفل کردن صدای تشویق و جلوگیری از تکرار مجدد
+
     window.playStadiumAudio = function(type) {
         let audioSrc = "";
-        if (type === "bag") audioSrc = "marble_bag.mp3";      // 💰 صدای ریختن تیله در کیسه
-        if (type === "cheer") audioSrc = "cheer.mp3";          // 🎉 صدای تشویق شدید اصابت
-        if (type === "sigh") audioSrc = "sigh.mp3";            // 😔 صدای افسوس تماشاگران برای خطا
+        if (type === "bag") audioSrc = "glass_marbles_clink.mp3";   // 🔮 صدای کریستالی تیله‌ها
+        if (type === "cheer") audioSrc = "cheer.mp3";               // 🎉 صدای تشویق اصابت
+        if (type === "sigh") audioSrc = "sigh.mp3";                 // 😔 صدای افسوس تماشاگران
         
         if (audioSrc !== "") {
             let snd = new Audio(audioSrc);
-            snd.volume = 0.6;
-            snd.play().catch(e => console.log("🔊 پخش صدا منتظر اولین تعامل کاربر"));
+            snd.volume = 0.5;
+            snd.play().catch(e => {});
         }
     };
 
-    // ۲. جراحی هوشمند منطق برخوردها و امتیازدهی جهت زنده کردن صداها
     if (typeof window.resetRound === "function") {
         let originalResetRound = window.resetRound;
         window.resetRound = function() {
-            // تشخیص وضعیت شلیک قبل از ریست شدن راند مسابقه
             if (typeof hitSuccessInTurn !== "undefined") {
                 if (hitSuccessInTurn) {
-                    // 🎉 شلیک موفق: تشویق تماشاچیان و سپس جابه‌جایی تیله در کیسه جوایز
-                    playStadiumAudio("cheer");
-                    setTimeout(() => { playStadiumAudio("bag"); }, 800);
+                    // 🎉 شلیک موفق: فقط اگر قبلاً پخش نشده، یک‌بار تشویق کن و قفل را ببند
+                    if (!isCheerPlayed) {
+                        isCheerPlayed = true;
+                        playStadiumAudio("cheer");
+                        setTimeout(() => { playStadiumAudio("bag"); }, 900);
+                    }
                 } else if (!hitSuccessInTurn && !player.inAir && typeof isFirstShotOfTurn !== "undefined" && !isFirstShotOfTurn) {
-                    // 😔 شلیک ناموفق: صدای افسوس یکپارچه استادیوم
-                    playStadiumAudio("sigh");
+                    if (!isCheerPlayed) {
+                        isCheerPlayed = true;
+                        playStadiumAudio("sigh");
+                    }
                 }
             }
-            // اجرای بقیه متدهای اصلی و گرافیکی بازی شما
+            // 🔓 باز کردن مجدد قفل صوتی فقط زمانی که راند کاملاً ریست و آماده پرتاب بعدی شد
+            if (player.progress === 0 && !player.inAir && !isMoving) {
+                isCheerPlayed = false;
+            }
             originalResetRound();
         };
     }
 });
-
-// ۳. فعال‌سازی صدای کیسه جوایز به محض باز شدن کارنامه یا واریزهای صرافی
-let originalOpenCentralStadiumShop = window.openCentralStadiumShop;
-if (typeof originalOpenCentralStadiumShop === "function") {
-    window.openCentralStadiumShop = function() {
-        playStadiumAudio("bag");
-        originalOpenCentralStadiumShop();
-    };
-}
-
     </script>
 </body>
 </html>
