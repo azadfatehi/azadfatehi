@@ -312,7 +312,7 @@
         let weatherParticles = []; let windLines = []; let bagAnimations = [];
         let windX = 0; let windY = 0; let dragStart = { x: 0, y: 0 }; let dragEnd = { x: 0, y: 0 };
         let lastPlayerStopPos = { x: 200, y: 500 }; let localSocket = null;
-        // let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
+        let audioCtx = null; let ambientSource = null; let ambientFilter = null; let ambientGain = null;
 
         // 🎒 تعریف شیء کیسه جوایز چرمی مسابقات در بالای صفحه
         // 🎒 پارت دوم: انتقال کیسه جوایز چرمی مسابقات به سمت چپ بالا (جلوگیری از تداخل با دکمه‌ها) [INDEX]
@@ -468,50 +468,193 @@
             }
         }
 
-function checkUserExistenceAuto(passwordValue) {
-    const registerBtn = document.getElementById("navRegisterBtn"); if (!registerBtn) return;
-    let uPass = passwordValue.trim();
-    if (uPass.length === 4) {
-        let savedName = localStorage.getItem(`pname_${uPass}`);
-        if (savedName !== null) {
-            registerBtn.style.opacity = "0"; registerBtn.style.pointerEvents = "none";
-            showGameToast(`👋 خوش آمدی ${savedName}! آماده ورود به استادیوم.`);
-        } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
-    } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
-}
-function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) {} }
-function playWelcomeMelodySound() { try { initAudio(); let now = audioCtx.currentTime; const notes = [523.25, 659.25, 783.99]; notes.forEach((freq, index) => { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(freq, now + (index * 0.08)); gain.gain.setValueAtTime(0.15, now + (index * 0.08)); gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.5); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.55); }); } catch(e) {} }
-function playLaunchSound() { } // 🔇 خفه کردن قطعی صدای اضافه و خش‌خش پرتاب قدیمی بالادست
+        function checkUserExistenceAuto(passwordValue) {
+            const registerBtn = document.getElementById("navRegisterBtn");
+            if (!registerBtn) return;
+            let uPass = passwordValue.trim();
+            if (uPass.length === 4) {
+                let savedName = localStorage.getItem(`pname_${uPass}`);
+                if (savedName !== null) {
+                    registerBtn.style.opacity = "0"; registerBtn.style.pointerEvents = "none";
+                    showGameToast(`👋 خوش آمدی ${savedName}! آماده ورود به استادیوم.`);
+                } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
+            } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
+        }
+        function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) {} }
+        
+        function playWelcomeMelodySound() { try { initAudio(); let now = audioCtx.currentTime; const notes = [523.25, 659.25, 783.99]; notes.forEach((freq, index) => { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(freq, now + (index * 0.08)); gain.gain.setValueAtTime(0.15, now + (index * 0.08)); gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.5); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.55); }); } catch(e) {} }
+        function playLaunchSound() { try { initAudio(); let now = audioCtx.currentTime; let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "triangle"; osc.frequency.setValueAtTime(140, now); osc.frequency.exponentialRampToValueAtTime(380, now + 0.12); gain.gain.setValueAtTime(0.25, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.14); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.14); } catch(e){} }
+        
+        // 🔊 صدای برخورد هوشمند (تق تیز شیشه‌ای برای سیمان و آسفالت، افکت بم و خفه برای چمن و فرش)
+        function playClickSound(intensity = 0.5) {
+            try {
+                initAudio(); let now = audioCtx.currentTime;
+                let vol = Math.max(0.1, Math.min(intensity * 1.1, 0.9));
+                let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                
+                if (currentGround.soundType === "soft") {
+                    osc.type = "sine"; // فرکانس سینوسی بم و نرم کاملاً منطبق بر بافت پرزهای فرش و چمن
+                    osc.frequency.setValueAtTime(450 + (vol * 80), now);
+                    osc.frequency.exponentialRampToValueAtTime(180, now + 0.02);
+                    gain.gain.setValueAtTime(vol * 0.45, now);
+                } else {
+                    osc.type = "triangle"; // فرکانس تیز ترای‌انگل برای شبیه‌سازی تق سنگی سیمان و آسفالت
+                    osc.frequency.setValueAtTime(1400 + (vol * 150), now);
+                    osc.frequency.exponentialRampToValueAtTime(400, now + 0.016);
+                    gain.gain.setValueAtTime(vol * 0.35, now);
+                }
+                
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022);
+                osc.connect(gain); gain.connect(audioCtx.destination);
+                osc.start(now); osc.stop(now + 0.025);
+            } catch(e) {}
+        }
 
-// 🔊 صدای برخورد هوشمند (تق تیز شیشه‌ای برای سیمان و آسفالت، افکت بم و خفه برای چمن و فرش)
-function playClickSound(intensity = 0.5) {
-    try {
-        initAudio(); let now = audioCtx.currentTime; let vol = Math.max(0.1, Math.min(intensity * 1.1, 0.9));
-        let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
-        if (currentGround.soundType === "soft") { osc.type = "sine"; osc.frequency.setValueAtTime(450 + (vol * 80), now); osc.frequency.exponentialRampToValueAtTime(180, now + 0.02); gain.gain.setValueAtTime(vol * 0.45, now); } 
-        else { osc.type = "triangle"; osc.frequency.setValueAtTime(1400 + (vol * 150), now); osc.frequency.exponentialRampToValueAtTime(400, now + 0.016); gain.gain.setValueAtTime(vol * 0.35, now); }
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.022); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 0.025);
-    } catch(e) {}
-}
+        function playCheeringSound() {
+            try {
+                initAudio(); let now = audioCtx.currentTime;
+                for(let i=0; i<12; i++) {
+                    let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                    osc.type = "triangle";
+                    osc.frequency.setValueAtTime(240 + (i * 30) + Math.random()*25, now);
+                    osc.frequency.linearRampToValueAtTime(380 + (i * 12), now + 1.5);
+                    gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(now); osc.stop(now + 1.5);
+                }
+            } catch(e){}
+        }
 
-// 🔒 سیستم هوشمند زمان‌دار: مهار لوپ تشویق‌ها و افسوس‌ها (اجازه پخش زیر ۳ ثانیه داده نمی‌شود)
-let lastStadiumVoiceTime = 0;
-function playCheeringSound() {
-    let nowTime = Date.now(); if (nowTime - lastStadiumVoiceTime < 3000) return; lastStadiumVoiceTime = nowTime;
-    try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<12; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "triangle"; osc.frequency.setValueAtTime(240 + (i * 30) + Math.random()*25, now); osc.frequency.linearRampToValueAtTime(380 + (i * 12), now + 1.5); gain.gain.setValueAtTime(0.08, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.5); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.5); } } catch(e){}
-    try { if(typeof playStadiumAudio === "function") playStadiumAudio("bag"); } catch(e){} // 🔮 شلیک آنی صدای کریستالی رفتن تیله به کیسه
-}
-function playDisappointmentSound() {
-    let nowTime = Date.now(); if (nowTime - lastStadiumVoiceTime < 3000) return; lastStadiumVoiceTime = nowTime;
-    try { initAudio(); let now = audioCtx.currentTime; for(let i=0; i<8; i++) { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(160 + (i * 8), now); osc.frequency.linearRampToValueAtTime(75 + (i * 2), now + 1.1); gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.15); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now); osc.stop(now + 1.15); } } catch(e){}
-}
-function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
-function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
-function playWeatherPreviewSound(type) { startAmbientSound(type); }
-function initWeatherParticles() { weatherParticles = []; let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80); let wW = window.innerWidth || canvas.width || 400; let wH = window.innerHeight || canvas.height || 600; for(let i=0; i<count; i++) { weatherParticles.push({ x: Math.random() * wW, y: Math.random() * wH, v: selectedWeather === "rainy" ? (Math.random() * 4 + 4) : (Math.random() * 1.2 + 0.8), r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.2) : (Math.random() * 1.8 + 1.8), opacity: Math.random() * 0.4 + 0.2 }); } }
-function initWindLines() { windLines = []; if (selectedWeather === "sunny") return; let count = selectedWeather === "windy" ? 20 : 8; let wW = canvas.width || window.innerWidth || 400; let wH = canvas.height || window.innerHeight || 600; for (let i = 0; i < count; i++) { windLines.push({ x: Math.random() * wW, y: Math.random() * wH, w: Math.random() * 70 + 30, h: Math.random() * 1.2 + 0.4, v: Math.random() * 3 + 2, opacity: Math.random() * 0.15 + 0.05 }); } }
-function updateWeatherParticles() { weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 10; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } }); windLines.forEach(w => { w.x += w.v + windX * 15; w.y += windY * 4; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } }); }
-function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 100, p.y + 12); ctx.stroke(); }); } else if(selectedWeather === "windy") { windLines.forEach(w => { ctx.strokeStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.lineWidth = w.h; ctx.beginPath(); ctx.moveTo(w.x, w.y); ctx.lineTo(w.x + w.w, w.y); ctx.stroke(); }); } ctx.restore(); 
+        function playDisappointmentSound() {
+            try {
+                initAudio(); let now = audioCtx.currentTime;
+                for(let i=0; i<8; i++) {
+                    let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain();
+                    osc.type = "sine"; osc.frequency.setValueAtTime(160 + (i * 8), now);
+                    osc.frequency.linearRampToValueAtTime(75 + (i * 2), now + 1.1);
+                    gain.gain.setValueAtTime(0.15, now); gain.gain.exponentialRampToValueAtTime(0.001, now + 1.15);
+                    osc.connect(gain); gain.connect(audioCtx.destination);
+                    osc.start(now); osc.stop(now + 1.15);
+                }
+            } catch(e){}
+        }
+        function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
+        function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
+        function playWeatherPreviewSound(type) { startAmbientSound(type); }
+        function initWeatherParticles() { weatherParticles = []; let count = selectedWeather === "sunny" ? 0 : (selectedWeather === "rainy" ? 120 : 80); let wW = window.innerWidth || canvas.width || 400; let wH = window.innerHeight || canvas.height || 600; for(let i=0; i<count; i++) { weatherParticles.push({ x: Math.random() * wW, y: Math.random() * wH, v: selectedWeather === "rainy" ? (Math.random() * 4 + 4) : (Math.random() * 1.2 + 0.8), r: selectedWeather === "rainy" ? (Math.random() * 1 + 1.2) : (Math.random() * 1.8 + 1.8), opacity: Math.random() * 0.4 + 0.2 }); } }
+        function initWindLines() { windLines = []; if (selectedWeather === "sunny") return; let count = selectedWeather === "windy" ? 20 : 8; let wW = canvas.width || window.innerWidth || 400; let wH = canvas.height || window.innerHeight || 600; for (let i = 0; i < count; i++) { windLines.push({ x: Math.random() * wW, y: Math.random() * wH, w: Math.random() * 70 + 30, h: Math.random() * 1.2 + 0.4, v: Math.random() * 3 + 2, opacity: Math.random() * 0.15 + 0.05 }); } }
+        function updateWeatherParticles() { weatherParticles.forEach(p => { p.y += p.v; p.x += windX * 10; if(p.y > canvas.height) { p.y = -10; p.x = Math.random() * canvas.width; } }); windLines.forEach(w => { w.x += w.v + windX * 15; w.y += windY * 4; if (w.x > canvas.width) { w.x = -w.w; w.y = Math.random() * canvas.height; } }); }
+        function drawWeather() { ctx.save(); if(selectedWeather === "rainy") { weatherParticles.forEach(p => { ctx.strokeStyle = `rgba(174, 219, 255, ${p.opacity})`; ctx.lineWidth = p.r; ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x + windX * 100, p.y + 12); ctx.stroke(); }); } else if(selectedWeather === "snowy") { weatherParticles.forEach(p => { ctx.fillStyle = `rgba(255, 255, 255, ${p.opacity})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill(); }); } if (selectedWeather === "windy" || selectedWeather === "rainy" || selectedWeather === "snowy") { windLines.forEach(w => { ctx.fillStyle = `rgba(255, 255, 255, ${w.opacity})`; ctx.fillRect(w.x, w.y, w.w, w.h); }); } ctx.restore(); }
+        function showGameToast(message) { let toast = document.getElementById("gameToast"); if (!toast) { toast = document.createElement("div"); toast.id = "gameToast"; toast.className = "game-toast"; document.body.appendChild(toast); } toast.innerText = message; toast.classList.add("show"); setTimeout(() => { toast.classList.remove("show"); }, 1500); }
+        
+        // 🖌️ تابع رسمی رسم مستطیل کادر گچی قلمرو وسط زمین
+        function drawStadiumPenRect() {
+            ctx.save(); let cX = canvas.width / 2; let cY = canvas.height / 2 - 80;
+            let rW = (selectedCountVal * 14 * selectedPlayerCount) + 140; let rH = 170; 
+            let rectX = cX - rW / 2; let rectY = cY - rH / 2;
+            if (selectedGroundVal === "asphalt" || selectedGroundVal === "cement") {
+                ctx.strokeStyle = "rgba(255, 255, 255, 0.85)"; ctx.lineWidth = 4;
+            } else if (selectedGroundVal === "dirt") {
+                ctx.strokeStyle = "rgba(62, 39, 35, 0.7)"; ctx.lineWidth = 5;
+            } else { ctx.strokeStyle = "rgba(255, 235, 59, 0.6)"; ctx.lineWidth = 3; }
+            ctx.strokeRect(rectX, rectY, rW, rH); ctx.restore(); return { x: rectX, y: rectY, w: rW, h: rH };
+        }
+        // 🏟️ چرخه رسمی نوبت‌دهی استادیوم: پرتاب ناموفق به نقطه شروع / پرتاب موفق ادامه از محل توقف
+        function resetRound() {
+            isMoving = false; player.vx = 0; player.vy = 0; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR;
+            let activeTargets = targets.filter(t => !t.isOut).length;
+            if (activeTargets === 0) { setTimeout(showFinalScoreboard, 200); return; }
+            
+            // 🎯 قانون اول: اگر حداقل یک تیله در این نوبت از خط مستطیل مرز بیرون رفته باشد
+            if (targetOutInTurn) {
+                try { playCheeringSound(); } catch(e){}
+                hasBonusShot = true;
+               // showGameToast(`🎯 شلیک موفق! ادامه نوبت ${playerNames[currentPlayerIndex]} از محل توقف تیله`);
+                
+                // تیله دست دقیقاً در همان محل توقف فعلی روی زمین قفل می‌شود
+                lastPlayerStopPos.x = player.x;
+                lastPlayerStopPos.y = player.y;
+            } 
+            // 🔄 قانون دوم: اگر هیچ تیله‌ای بیرون نرفته باشد (نوبت سوخته و تعویض بازیکن)
+            else {
+                try { playDisappointmentSound(); } catch(e){}
+                if (selectedPlayerCount > 1 && !isQuickRandomMode) {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % selectedPlayerCount;
+                }
+                hasBonusShot = false;
+               // showGameToast(`🔄 نوبت سوخت! نفر بعدی: ${playerNames[currentPlayerIndex]} از نقطه شروع مسابقه`);
+                
+                // 🚀 ریست کامل موقعیت به نقطه شروع (مرکز افقی و پایین صفحه) برای بازیکن بعدی
+                lastPlayerStopPos.x = canvas.width / 2;
+                lastPlayerStopPos.y = canvas.height - 100;
+            }
+            
+            // بارگذاری مختصات نهایی و پایدار شلیک در ساختار فیزیکی تیله دست
+            player.x = lastPlayerStopPos.x; player.y = lastPlayerStopPos.y;
+            player.startX = player.x; player.startY = player.y;
+            player.targetX = player.x; player.targetY = player.y;
+            player.angleX = 0; player.angleY = 0;
+            
+            isFirstShotOfTurn = true; hitSuccessInTurn = false; targetOutInTurn = false;
+            if (!isQuickRandomMode) updateWalletUI();
+        }
+
+        function drawDynamicBorder() { ctx.save(); ctx.lineWidth = 4; ctx.strokeStyle = "rgba(255, 255, 255, 0.15)"; ctx.strokeRect(box.x, box.y, box.w, box.h); ctx.restore(); }
+        
+        function loadLevel(lvl) { 
+            targets = []; let totalMarblesToPlace = selectedCountVal * selectedPlayerCount; if (isQuickRandomMode) { totalMarblesToPlace = selectedCountVal * 1; }
+            let centerY = canvas.height / 2 - 80; let targetRadius = 14; let targetDiameter = targetRadius * 2; let totalWidth = totalMarblesToPlace * targetDiameter; let startX = (canvas.width / 2) - (totalWidth / 2) + targetRadius; 
+            for (let i = 0; i < totalMarblesToPlace; i++) { targets.push({ x: startX + (i * targetDiameter), y: centerY + (Math.sin(i) * 5), r: targetRadius, vx: 0, vy: 0, angleX: 0, angleY: 0, isOut: false }); } 
+        }
+        function triggerMarbleToBagAnimation(startX, startY) {
+            bagAnimations.push({ x: startX, y: startY, startX: startX, startY: startY, targetX: prizeBag.x, targetY: prizeBag.y, progress: 0, speed: 0.015, arcHeight: 110 });
+            prizeBag.pulseTimer = 12;
+        }
+
+        function getEventPos(e) { let r = canvas.getBoundingClientRect(); let cX = e.clientX, cY = e.clientY; if (e.touches && e.touches.length > 0) { cX = e.touches.clientX; cY = e.touches.clientY; } else if (e.changedTouches && e.changedTouches.length > 0) { cX = e.changedTouches.clientX; cY = e.changedTouches.clientY; } return { x: (cX - r.left) * (canvas.width / r.width), y: (cY - r.top) * (canvas.height / r.height) }; }
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; box.w = canvas.width; box.h = canvas.height; }
+        
+        function gameLoop() {
+            if (canvas.style.display === "none") { gameLoopRunning = false; return; }
+            gameLoopRunning = true;
+
+            // 🔮 محاسبات پرواز سه‌بعدی تیله دست با ترمز شدید و مهار شتاب پرواز در هوا
+            if (player.inAir) {
+                player.progress += 0.018; 
+                player.x = player.startX + (player.targetX - player.startX) * player.progress + windX * player.progress * 8; 
+                player.y = player.startY + (player.targetY - player.startY) * player.progress + windY * player.progress * 8; 
+                player.z = Math.sin(player.progress * Math.PI) * player.arcHeight; 
+                player.r = player.baseR + player.z * 0.25; 
+                
+                let speedMag = Math.sqrt(player.vx*player.vx + player.vy*player.vy);
+                player.angleX += speedMag * 0.03;
+
+                if (player.progress >= 1) {
+                    player.x = player.targetX; player.y = player.targetY; player.z = 0; player.progress = 0; player.inAir = false; player.r = player.baseR; 
+                    playClickSound(0.4); let hitAny = false;
+                    
+                    targets.forEach(t => { 
+                        if (!t.isOut) { 
+                            let dx = t.x - player.x, dy = t.y - player.y; 
+                            if (Math.sqrt(dx*dx + dy*dy) < (player.r + t.r)) { 
+                                hitAny = true; hitSuccessInTurn = true; 
+                                // محاسبه ضربه و سرعت پس زدن تیله‌ها متناسب با چسبندگی بستر زمین
+                                let speedFactor = currentGround.soundType === "soft" ? 0.52 : 0.68;
+                                let hitSpeed = (Math.sqrt(player.vx*player.vx + player.vy*player.vy) || 4.5) * speedFactor; 
+                                playClickSound(hitSpeed / 3.5); 
+                                let angle = Math.atan2(dy, dx);
+                                t.vx = Math.cos(angle) * (hitSpeed * 1.1); 
+                                t.vy = Math.sin(angle) * (hitSpeed * 1.1); 
+                            } 
+                        } 
+                    });
+                    if (!hitAny) { player.vx *= 0.5; player.vy *= 0.5; }
+                }
+            }
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (imgBg.complete && imgBg.naturalWidth !== 0) { ctx.drawImage(imgBg, 0, 0, canvas.width, canvas.height); } else { ctx.fillStyle = currentGround.fallbackColor; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+            drawDynamicBorder();
             // 📐 محاسبه ابعاد و مشخصات زنده مستطیل کادر مرز قلمرو مسابقه
             let pen = drawStadiumPenRect();
             let anyMarbleMoving = player.inAir || Math.abs(player.vx) > 0.05 || Math.abs(player.vy) > 0.05;
