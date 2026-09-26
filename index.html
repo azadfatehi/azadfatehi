@@ -1349,6 +1349,26 @@ if (type === "bag") {
         }, 900); // ۹۰۰ میلی‌ثانیه بعد از شنیده شدن صدا، جدول شیک بالا می‌آید
     }
 }
+// 🧹 پارت نهایی: پاکسازی کامل حافظه حرکت تیله دست حین استارت مسابقه جدید
+if (document.getElementById("restartBtn") || document.getElementById("playAgainBtn")) {
+    const rBtn = document.getElementById("restartBtn") || document.getElementById("playAgainBtn");
+    if (rBtn) {
+        let originalRestartClick = rBtn.onclick;
+        rBtn.onclick = function(e) {
+            // ۱. صفر کردن مطلق تمام سرعت‌ها و بردارهای حرکتی عقب‌مانده دست قبل
+            if (typeof player !== "undefined" && player) {
+                player.vx = 0; player.vy = 0;
+                player.progress = 0; player.inAir = false;
+            }
+            if (typeof isMoving !== "undefined") isMoving = false;
+            if (typeof isAiming !== "undefined") isAiming = false;
+            
+            // ۲. اجرای منسجم دستور ریستارت اصلی خودت
+            if (typeof originalRestartClick === "function") originalRestartClick(e);
+            else if (typeof initGame === "function") initGame();
+        };
+    }
+}
 
     </script>
 </body>
