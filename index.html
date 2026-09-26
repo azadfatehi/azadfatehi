@@ -1319,6 +1319,16 @@ window.addEventListener("load", function() {
         };
     }
 });
+// 🔇 خفه‌کردن قطعی صدای غلت خوردن (Rolling) تیله‌ها جهت ریشه‌کن کردن نویز پس‌زمینه
+window.addEventListener("load", function() {
+    // 🧠 لغو و بی‌صدا کردن توابع قدیمی غلتش تیله روی بوم بازی
+    if (typeof window.playRollingSound === "function" || typeof playRollingSound === "function") {
+        window.playRollingSound = function() {};
+    }
+    if (typeof window.stopRollingSound === "function" || typeof stopRollingSound === "function") {
+        window.stopRollingSound = function() {};
+    }
+});
 
     </script>
 </body>
