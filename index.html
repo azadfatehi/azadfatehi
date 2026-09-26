@@ -1323,7 +1323,7 @@ window.addEventListener("load", function() {
         if (type !== "bag" && now - audioCooldown < 2500) return; 
         
         let audioSrc = "";
-        if (type === "bag") audioSrc = "glass_marbles_clink.mp3";   // 🔮 صدای واقعی و کریستالی تیله‌ها [INDEX]
+        if (type === "bag") audioSrc = "marble_bag.mp3";   // 🔮 صدای واقعی و کریستالی تیله‌ها [INDEX]
         if (type === "cheer") audioSrc = "cheer.mp3";               // 🎉 صدای تشویق اصابت [INDEX]
         if (type === "sigh") audioSrc = "sigh.mp3";                 // 😔 صدای افسوس تماشاگران [INDEX]
         
@@ -1335,25 +1335,20 @@ window.addEventListener("load", function() {
         }
     };
 });
-	// ⏱️ پارت اصلاح زمان‌بندی: توقف نمایش جدول امتیاز تا زمان ایست کامل آخرین تیله مسابقه [INDEX]
-window.addEventListener("load", function() {
-    if (typeof window.checkGameEnd === "function") {
-        let originalCheckGameEnd = window.checkGameEnd;
-        window.checkGameEnd = function() {
-            // 🧠 جراحی زمان‌بندی: اگر تیله هنوز در هواست یا در حال حرکت است، جدول را باز نکن! [INDEX]
-            if (typeof player !== "undefined" && (player.inAir || (typeof isMoving !== "undefined" && isMoving))) {
-                // تکرار چک کردن در فریم‌های بعدی تا ایست کامل [INDEX]
-                setTimeout(window.checkGameEnd, 100); 
-                return;
-            }
-            
-            // 🏆 به محض ایست کامل آخرین تیله و رفتن داخل کیسه، حالا جدول امتیازات را با تاخیر شیک باز کن [INDEX]
-            setTimeout(function() {
-                originalCheckGameEnd();
-            }, 800); 
-        };
+		// ⏱️ تصحیح زمان‌بندی جدول: باز شدن کارنامه دقیقاً پس از صدای جینگ‌جینگ آخرین تیله
+if (type === "bag") {
+    audioSrc = "glass_marbles_clink.mp3";
+    
+    // 🧠 بررسی هوشمند: اگر تعداد تیله‌های میدان مسابقه صفر شده است
+    if (typeof marbles !== "undefined" && marbles.length === 0) {
+        setTimeout(() => {
+            // صدا زدن مستقیم لایه تابلوی نتایج استادیوم شما بدون تداخل
+            let scorePanel = document.getElementById("scoreboardScreen") || document.getElementById("endGamePanel");
+            if (scorePanel) scorePanel.style.display = "flex";
+            gameLoopRunning = false;
+        }, 900); // ۹۰۰ میلی‌ثانیه بعد از شنیده شدن صدا، جدول شیک بالا می‌آید
     }
-});
+}
 
     </script>
 </body>
