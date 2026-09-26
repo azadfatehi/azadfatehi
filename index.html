@@ -1335,7 +1335,26 @@ window.addEventListener("load", function() {
         }
     };
 });
-	
+	// ⏱️ پارت اصلاح زمان‌بندی: توقف نمایش جدول امتیاز تا زمان ایست کامل آخرین تیله مسابقه [INDEX]
+window.addEventListener("load", function() {
+    if (typeof window.checkGameEnd === "function") {
+        let originalCheckGameEnd = window.checkGameEnd;
+        window.checkGameEnd = function() {
+            // 🧠 جراحی زمان‌بندی: اگر تیله هنوز در هواست یا در حال حرکت است، جدول را باز نکن! [INDEX]
+            if (typeof player !== "undefined" && (player.inAir || (typeof isMoving !== "undefined" && isMoving))) {
+                // تکرار چک کردن در فریم‌های بعدی تا ایست کامل [INDEX]
+                setTimeout(window.checkGameEnd, 100); 
+                return;
+            }
+            
+            // 🏆 به محض ایست کامل آخرین تیله و رفتن داخل کیسه، حالا جدول امتیازات را با تاخیر شیک باز کن [INDEX]
+            setTimeout(function() {
+                originalCheckGameEnd();
+            }, 800); 
+        };
+    }
+});
+
     </script>
 </body>
 </html>
