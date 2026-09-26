@@ -1310,26 +1310,32 @@ window.addEventListener("load", function() {
         };
     }
 });
-		// 🔇 خفه‌کردن قطعی صدای شلیک قدیمی بالادست جهت حذف نویز و صدای اضافه پرتاب
-window.addEventListener("load", function() {
-    // بازنویسی تابع قدیمی به یک تابع خالی بدون خروجی صوتی
-    if (typeof window.playLaunchSound === "function" || typeof playLaunchSound === "function") {
-        window.playLaunchSound = function() { 
-            // ❌ این تابع قدیمی کاملاً بی‌صدا شد تا با صداهای جدید تداخل نکند
-        };
-    }
-});
-// 🔇 خفه‌کردن قطعی صدای غلت خوردن (Rolling) تیله‌ها جهت ریشه‌کن کردن نویز پس‌زمینه
-window.addEventListener("load", function() {
-    // 🧠 لغو و بی‌صدا کردن توابع قدیمی غلتش تیله روی بوم بازی
-    if (typeof window.playRollingSound === "function" || typeof playRollingSound === "function") {
-        window.playRollingSound = function() {};
-    }
-    if (typeof window.stopRollingSound === "function" || typeof stopRollingSound === "function") {
-        window.stopRollingSound = function() {};
-    }
-});
+	// 🔊 بسته جامع صوتی: احیای قطعی صدای کیسه تیله و ریشه‌کن کردن نویزهای اضافه بالادست
+window.playLaunchSound = function() {}; // 🔇 خفه‌کردن درجا و اجباری صدای اضافه پرتاب قدیمی [INDEX]
+window.playRollingSound = function() {}; // 🔇 خفه‌کردن درجا و اجباری صدای خش‌خش غلتش قدیمی [INDEX]
 
+window.addEventListener("load", function() {
+    let audioCooldown = 0; // 🔒 قفل هوشمند زمان‌دار برای جلوگیری از اورلپ و نویز صداها [INDEX]
+    
+    window.playStadiumAudio = function(type) {
+        let now = Date.now();
+        // مهار تکرارهای ثانیه‌ای چرخه بازی (زیر ۲.۵ ثانیه اجازه پخش مجدد نده) [INDEX]
+        if (type !== "bag" && now - audioCooldown < 2500) return; 
+        
+        let audioSrc = "";
+        if (type === "bag") audioSrc = "glass_marbles_clink.mp3";   // 🔮 صدای واقعی و کریستالی تیله‌ها [INDEX]
+        if (type === "cheer") audioSrc = "cheer.mp3";               // 🎉 صدای تشویق اصابت [INDEX]
+        if (type === "sigh") audioSrc = "sigh.mp3";                 // 😔 صدای افسوس تماشاگران [INDEX]
+        
+        if (audioSrc !== "") {
+            if (type !== "bag") audioCooldown = now;
+            let snd = new Audio(audioSrc);
+            snd.volume = type === "bag" ? 0.75 : 0.45; // بالا بردن قدرت صدای کریستالی تیله‌ها
+            snd.play().catch(e => {});
+        }
+    };
+});
+	
     </script>
 </body>
 </html>
