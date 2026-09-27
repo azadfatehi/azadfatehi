@@ -480,12 +480,12 @@
                 } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
             } else { registerBtn.style.opacity = "1"; registerBtn.style.pointerEvents = "auto"; }
         }
-        function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) {} }
+      //  function initAudio() { try { if (!audioCtx) { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume(); } } catch (error) {} }
         
         function playWelcomeMelodySound() { try { initAudio(); let now = audioCtx.currentTime; const notes = [523.25, 659.25, 783.99]; notes.forEach((freq, index) => { let osc = audioCtx.createOscillator(); let gain = audioCtx.createGain(); osc.type = "sine"; osc.frequency.setValueAtTime(freq, now + (index * 0.08)); gain.gain.setValueAtTime(0.15, now + (index * 0.08)); gain.gain.exponentialRampToValueAtTime(0.0001, now + (index * 0.08) + 0.5); osc.connect(gain); gain.connect(audioCtx.destination); osc.start(now + (index * 0.08)); osc.stop(now + (index * 0.08) + 0.55); }); } catch(e) {} }
         
         // 🔊 صدای برخورد هوشمند (تق تیز شیشه‌ای برای سیمان و آسفالت، افکت بم و خفه برای چمن و فرش)
-        function playClickSound(intensity = 0.5) {
+      //  function playClickSound(intensity = 0.5) {
             try {
                 initAudio(); let now = audioCtx.currentTime;
                 let vol = Math.max(0.1, Math.min(intensity * 1.1, 0.9));
@@ -509,7 +509,7 @@
             } catch(e) {}
         }
 
-        function playCheeringSound() {
+     //   function playCheeringSound() {
             try {
                 initAudio(); let now = audioCtx.currentTime;
                 for(let i=0; i<12; i++) {
@@ -522,6 +522,7 @@
                     osc.start(now); osc.stop(now + 1.5);
                 }
             } catch(e){}
+        }}
         function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
         function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
         function playWeatherPreviewSound(type) { startAmbientSound(type); }
