@@ -522,7 +522,7 @@
                     osc.start(now); osc.stop(now + 1.5);
                 }
             } catch(e){}
-        }}
+        }
         function startAmbientSound(weather) { try { initAudio(); stopAmbientSound(); let bufferSize = audioCtx.sampleRate * 2; let buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate); let data = buffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; } ambientSource = audioCtx.createBufferSource(); ambientSource.buffer = buffer; ambientSource.loop = true; ambientFilter = audioCtx.createBiquadFilter(); ambientGain = audioCtx.createGain(); if (weather === "sunny") { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(120, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.04, audioCtx.currentTime); } else if (weather === "windy") { ambientFilter.type = "bandpass"; ambientFilter.frequency.setValueAtTime(380, audioCtx.currentTime); ambientFilter.Q.setValueAtTime(4, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.28, audioCtx.currentTime); } else { ambientFilter.type = "lowpass"; ambientFilter.frequency.setValueAtTime(750, audioCtx.currentTime); ambientGain.gain.setValueAtTime(0.22, audioCtx.currentTime); } ambientSource.connect(ambientFilter); ambientFilter.connect(ambientGain); ambientGain.connect(audioCtx.destination); ambientSource.start(0); } catch(e){} }
         function stopAmbientSound() { try { if (ambientSource) { ambientSource.stop(); ambientSource.disconnect(); ambientSource = null; } } catch(e){} }
         function playWeatherPreviewSound(type) { startAmbientSound(type); }
